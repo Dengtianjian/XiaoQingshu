@@ -6,23 +6,32 @@
     <view class="search-entry"></view>
   </view>
 </view>
-
 <!-- 语录&签到 -->
 <view class="quote-signin">
-  <view class="quote">
-    没有人能改变你，别人只能影响你，能改变你的只有你自己。
-  </view>
-  <view class="signin">
-    SignIn
-  </view>
+  <view class="quote">没有人能改变你，别人只能影响你，能改变你的只有你自己。</view>
+  <view class="signin">SignIn</view>
 </view>
-
 <!-- 轮播图 -->
 <view>
-  <swiper class="banner-swiper" autoplay="{{true}}">
+  <swiper class="banner-swiper" autoplay="{{true}}" circular>
     <block wx:for="{{bannerSwiper}}" wx:key="index">
       <swiper-item class="banner-swiper-item">
         <image class="banner-swiper-item-image" src="{{ item.image }}" mode="widthFix"></image>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>
+<!-- 信息流 -->
+<view class="post">
+  <view class="post-tabbar">
+    <block wx:for="{{ postSwiper.tabbar }}" wx:key="item">
+      <view class="post-tabbar-item {{ postSwiper.current==index?'post-tabbar-item-active':'' }}" bindtap="switchPostSwiper" data-index="{{ index }}" >{{ item }}</view>
+    </block>
+  </view>
+  <swiper class="post-swiper" bindchange="postSwiperSwitch" current="{{ postSwiper.current }}">
+    <block wx:for="{{postSwiper.tabbar}}" wx:key="index">
+      <swiper-item class="banner-swiper-item">
+        {{ item }}
       </swiper-item>
     </block>
   </swiper>

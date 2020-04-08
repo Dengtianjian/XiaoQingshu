@@ -62,3 +62,41 @@
 .banner-swiper .banner-swiper-item-image {
   width: 100%;
 }
+.post {
+  margin-top: 26rpx;
+  padding: 0 var(--main-container-padding);
+}
+.post .post-tabbar {
+  display: flex;
+  align-items: center;
+  height: 70rpx;
+  width: 100%;
+}
+.post .post-tabbar .post-tabbar-item {
+  position: relative;
+  padding: 0 24rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  color: var(--main-font-light-color);
+  transition: all 0.2s linear;
+}
+.post .post-tabbar .post-tabbar-item::after {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 0;
+  height: 4rpx;
+  background: var(--main-color);
+  transition: all 0.2s linear;
+  border-radius: 4rpx;
+  content: "";
+}
+.post .post-tabbar .post-tabbar-item.post-tabbar-item-active {
+  color: var(--main-color);
+}
+.post .post-tabbar .post-tabbar-item.post-tabbar-item-active::after {
+  width: 28%;
+}

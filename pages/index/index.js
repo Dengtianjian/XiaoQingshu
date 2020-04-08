@@ -23,6 +23,24 @@ Page({
       },{
         image:"/material/images/home/banner_swiper_4.png",
       }
-    ]
+    ],
+    postSwiper:{
+      current:0,
+      tabbar:[
+        "All",
+        "QA",
+        "Note"
+      ]
+    }
+  },
+  postSwiperSwitch(e){
+    this.setData({
+      "postSwiper.current":e.detail.current
+    });
+  },
+  switchPostSwiper(e){
+    this.setData({
+      "postSwiper.current":e.currentTarget.dataset.index
+    });
   }
 })

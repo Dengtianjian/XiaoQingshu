@@ -68,4 +68,42 @@
   }
 }
 
-
+// 帖子数据流
+.post {
+  margin-top:26rpx;
+  padding:0 var(--main-container-padding);
+  .post-tabbar {
+    display:flex;
+    align-items:center;
+    height:70rpx;
+    width:100%;
+    .post-tabbar-item {
+      position:relative;
+      padding:0 24rpx;
+      height:70rpx;
+      line-height:70rpx;
+      color:var(--main-font-light-color);
+      transition:all 0.2s linear;
+      &::after {
+        display:block;
+        position:absolute;
+        bottom:0;
+        left:0;
+        right:0;
+        margin:0 auto;
+        width:0;
+        height:4rpx;
+        background:var(--main-color);
+        transition:all 0.2s linear;
+        border-radius:4rpx;
+        content:"";
+      }
+      &.post-tabbar-item-active {
+        color:var(--main-color);
+        &::after {
+          width:28%;
+        }
+      }
+    }
+  }
+}

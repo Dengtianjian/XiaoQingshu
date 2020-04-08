@@ -3,7 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 46px;
+  height: 108rpx;
   background: white;
   border-top:1px solid rgb(241, 241, 241);
   display: flex;
@@ -20,8 +20,8 @@
 }
 
 .tab-bar-item cover-image {
-  width: 20px;
-  height: 20px;
+  width: 50rpx;
+  height: 50rpx;
 }
 .tab-bar-item-active cover-image {
   background:red;
@@ -29,5 +29,6 @@
 }
 
 .tab-bar-item cover-view {
-  font-size: 10px;
+  margin-top:10rpx;
+  font-size: 20rpx;
 }

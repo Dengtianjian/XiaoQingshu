@@ -6,5 +6,6 @@ page {
   --main-container-padding:30rpx;
   --main-color:#428CED;
   --main-font-color:#333333;
+  --main-font-light-color:#999999;
 }
 
