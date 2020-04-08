@@ -100,3 +100,6 @@
 .post .post-tabbar .post-tabbar-item.post-tabbar-item-active::after {
   width: 28%;
 }
+.post .post-swiper {
+  margin-top: 30rpx;
+}
