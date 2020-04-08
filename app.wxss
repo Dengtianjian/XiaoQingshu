@@ -1,5 +1,10 @@
-pages {
+page {
   position: relative;
   z-index: 9999998;
   background: #fff;
+
+  --main-container-padding:30rpx;
+  --main-color:#428CED;
+  --main-font-color:#333333;
 }
+

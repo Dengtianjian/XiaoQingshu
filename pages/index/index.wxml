@@ -1,2 +1,29 @@
-<!--index.wxml-->
-<button bind:tap="show">Click</button>
+<!-- index.wxml -->
+<!-- 顶部导航栏 -->
+<view class="navigation-bar" style="height: {{height*2+20}}px;">
+  <view class="navigation-bar-status-bar" style="height: {{height}}px;"></view>
+  <view class="navigator-bar-safe-area" style="height:{{ (height*2+23)-height }}px">
+    <view class="search-entry"></view>
+  </view>
+</view>
+
+<!-- 语录&签到 -->
+<view class="quote-signin">
+  <view class="quote">
+    没有人能改变你，别人只能影响你，能改变你的只有你自己。
+  </view>
+  <view class="signin">
+    SignIn
+  </view>
+</view>
+
+<!-- 轮播图 -->
+<view>
+  <swiper class="banner-swiper" autoplay="{{true}}">
+    <block wx:for="{{bannerSwiper}}" wx:key="index">
+      <swiper-item class="banner-swiper-item">
+        <image class="banner-swiper-item-image" src="{{ item.image }}" mode="widthFix"></image>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>

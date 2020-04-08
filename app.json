@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/school/school",
+    "pages/class/class",
+    "pages/mine/mine"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -9,15 +11,32 @@
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black"
   },
-  "tabBar":{
-    "custom":true,
-    "list":[
+  "tabBar": {
+    "custom": true,
+    "list": [
       {
-        "pagePath":"pages/index/index",
-        "text":"首页"
-      },{
-        "pagePath": "pages/logs/logs",
-        "text": "记录"
+        "pagePath": "pages/index/index",
+        "iconPath": "/material/tabbar/home.png",
+        "selectedIconPath": "/material/tabbar/home.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/school/school",
+        "iconPath": "/material/tabbar/school.png",
+        "selectedIconPath": "/material/tabbar/school.png",
+        "text": "学校"
+      },
+      {
+        "pagePath": "pages/class/class",
+        "iconPath": "/material/tabbar/class.png",
+        "selectedIconPath": "/material/tabbar/class.png",
+        "text": "班级"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "iconPath": "/material/tabbar/mine.png",
+        "selectedIconPath": "/material/tabbar/mine.png",
+        "text": "自己"
       }
     ]
   },

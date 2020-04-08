@@ -5,29 +5,24 @@ Component({
     selectedColor: "#3cc51f",
     list: [{
       pagePath: "/pages/index/index",
-      iconPath: "/image/icon_component.png",
-      selectedIconPath: "/image/icon_component_HL.png",
-      text: "组件"
+      iconPath: "/material/tabbar/home.png",
+      selectedIconPath: "/material/tabbar/home.png",
+      text: "首页"
     }, {
-        pagePath: "/pages/logs/logs",
-      iconPath: "/image/icon_API.png",
-      selectedIconPath: "/image/icon_API_HL.png",
-      text: "接口"
+        pagePath: "/pages/school/school",
+        iconPath: "/material/tabbar/school.png",
+        selectedIconPath: "/material/tabbar/school.png",
+        text: "学校"
       }, {
-        pagePath: "/index/index2",
-        iconPath: "/image/icon_API.png",
-        selectedIconPath: "/image/icon_API_HL.png",
-        text: "接口"
+        pagePath: "/pages/class/class",
+        iconPath: "/material/tabbar/class.png",
+        selectedIconPath: "/material/tabbar/class.png",
+        text: "班级"
       }, {
-        pagePath: "/index/index2",
-        iconPath: "/image/icon_API.png",
-        selectedIconPath: "/image/icon_API_HL.png",
-        text: "接口"
-      }, {
-        pagePath: "/index/index2",
-        iconPath: "/image/icon_API.png",
-        selectedIconPath: "/image/icon_API_HL.png",
-        text: "接口"
+        pagePath: "/pages/mine/mine",
+        iconPath: "/material/tabbar/mine.png",
+        selectedIconPath: "/material/tabbar/mine.png",
+        text: "自己"
       }]
   },
   attached() {
