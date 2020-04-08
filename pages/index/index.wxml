@@ -2,10 +2,11 @@
 <!-- 顶部导航栏 -->
 <view class="navigation-bar" style="height: {{height*2+20}}px;">
   <view class="navigation-bar-status-bar" style="height: {{height}}px;"></view>
-  <view class="navigator-bar-safe-area" style="height:{{ (height*2+23)-height }}px">
+  <view class="navigator-bar-safe-area" style="height:{{ (height*2+24)-height }}px">
     <view class="search-entry"></view>
   </view>
 </view>
+<view class="navigation-bar-placeholder" style="height: {{height*2+20}}px;"></view>
 <!-- 语录&签到 -->
 <view class="quote-signin">
   <view class="quote">没有人能改变你，别人只能影响你，能改变你的只有你自己。</view>
@@ -25,13 +26,39 @@
 <view class="post">
   <view class="post-tabbar">
     <block wx:for="{{ postSwiper.tabbar }}" wx:key="item">
-      <view class="post-tabbar-item {{ postSwiper.current==index?'post-tabbar-item-active':'' }}" bindtap="switchPostSwiper" data-index="{{ index }}" >{{ item }}</view>
+      <view class="post-tabbar-item {{ postSwiper.current==index?'post-tabbar-item-active':'' }}" bindtap="switchPostSwiper" data-index="{{ index }}">
+        {{ item }}
+      </view>
     </block>
   </view>
-  <swiper class="post-swiper" bindchange="postSwiperSwitch" current="{{ postSwiper.current }}">
+  <swiper class="post-swiper" bindchange="postSwiperSwitch" current="{{ postSwiper.current }}" style="height:{{ postSwiper.height }}px">
     <block wx:for="{{postSwiper.tabbar}}" wx:key="index">
-      <swiper-item class="banner-swiper-item">
-        {{ item }}
+      <swiper-item class="post-swiper-item post-swiper-item-{{ index }}">
+        <view class="post-item">
+          <view class="post-author">
+            <image class="post-author-avatar" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1586945353&t=2c73e6effc0e5b9686d2cd7b3229f65f"></image>
+            <text class="post-author-nickname">Cheery</text>
+          </view>
+          <view class="post-title">4 月 4 日举行全国性哀悼活动，哀悼抗疫牺牲烈士和逝世同胞...</view>
+          <view class="post-body">
+            <view class="post-body-description">
+              为表达全国各族人民对抗击新冠肺炎疫情斗争牺牲烈士和逝世同胞的深切哀悼，国务院发布公...
+            </view>
+            <image class="post-body-image" src="http://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1586945353&t=3e5e91de9ba76f62acde1bf931435083"></image>
+          </view>
+          <view class="post-footer">
+            <view class="post-attribute">
+              <view class="post-attribute-item post-attribute-item-qa">
+                <text class="post-attribute-item-icon qcicon qcicon-wenda"></text>
+                <text class="post-attribute-item-name">问答</text>
+              </view>
+              <view class="post-attribute-item">
+                <text class="post-attribute-item-icon">#</text>
+                <text class="post-attribute-item-name">话题</text>
+              </view>
+            </view>
+          </view>
+        </view>
       </swiper-item>
     </block>
   </swiper>
