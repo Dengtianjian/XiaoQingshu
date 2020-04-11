@@ -1,2 +1,16 @@
 <!--pages/school.wxml-->
-<text>pages/school.wxml</text>
+<!-- 顶部导航栏 -->
+<view class="navigation-bar" style="height: {{height*2+20}}px;">
+  <view style="height: {{height}}px;"></view>     <!-- have deleted the inexistent class -->
+  <view class="navigator-bar-safe-area" style="height:{{ (height*2+24)-height }}px"></view>
+</view>
+<view class="navigation-bar-placeholder" style="height: {{height*2+20}}px;"></view>
+<!-- 图片&加入学校按钮 -->
+<view class="not-join-school-content">
+    <view>
+    <image class="not-join-school-picture" src="../../material/images/school_center_picture.png" ></image>
+    </view>
+    <view>
+        <button class="add-school-button">选择学校</button>
+    </view>
+</view>
