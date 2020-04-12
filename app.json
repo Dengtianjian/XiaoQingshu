@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/publish_post/publish_post",
     "pages/index/index",
     "pages/school/school",
     "pages/class/class",

@@ -8,6 +8,14 @@ page {
   --main-container-padding:30rpx;
   --main-color:#428CED;
   --main-font-color:#333333;
+  --main-font-color2:#666666;
   --main-font-light-color:#999999;
 }
 
+view,text {
+  box-sizing: border-box;
+}
+
+form {
+  display:block;
+}

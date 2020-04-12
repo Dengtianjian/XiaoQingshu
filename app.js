@@ -1,4 +1,8 @@
 //app.js
+wx.cloud.init({
+  env: "develogment-env"
+})
+
 App({
   onLaunch: function (options) {
     // 判断是否由分享进入小程序

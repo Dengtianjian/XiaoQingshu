@@ -1,9 +1,6 @@
 //index.js
 //获取应用实例
 const app = getApp();
-wx.cloud.init({
-  env: "develogment-env"
-})
 
 Page({
   onLoad() {
@@ -22,17 +19,6 @@ Page({
   },
   data: {
     height: 0,
-    bannerSwiper: [
-      {
-        image: "/material/images/home/banner_swiper_1.png",
-      }, {
-        image: "/material/images/home/banner_swiper_2.png",
-      }, {
-        image: "/material/images/home/banner_swiper_3.png",
-      }, {
-        image: "/material/images/home/banner_swiper_4.png",
-      }
-    ],
     postSwiper: {
       current: 0,
       height: 0,
@@ -41,7 +27,26 @@ Page({
         "QA",
         "Note"
       ]
+    },
+    publish:{
+      hidden:true,
+      postType:[
+        {
+          icon:"/material/icon/topic_type_icon.png",
+          name:"topic",
+          title:"话题"
+        },{
+          icon:"/material/icon/qa_type_icon.png",
+          name:"topic",
+          title:"qa"
+        },{
+          icon:"/material/icon/note_type_icon.png",
+          name:"note",
+          title:"笔记"
+        }
+      ]
     }
+
   },
   postSwiperSwitch(e) {
     this.setData({
@@ -51,6 +56,12 @@ Page({
   switchPostSwiper(e) {
     this.setData({
       "postSwiper.current": e.currentTarget.dataset.index
+    });
+  },
+  displayPublishPopup(e){
+    let dataset=e.currentTarget.dataset;
+    this.setData({
+      "publish.hidden":dataset.mode=="show"?false:true
     });
   }
 })

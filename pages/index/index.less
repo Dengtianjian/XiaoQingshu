@@ -198,3 +198,70 @@
     }
   }
 }
+
+/* 发布入口 */
+.publish-entrance {
+  position:fixed;
+  z-index:10;
+  right:20rpx;
+  bottom:280rpx;
+  width:90rpx;
+  height:90rpx;
+  line-height:90rpx;
+  text-align:center;
+  color:white;
+  background:var(--main-color);
+  border-radius:50%;
+  box-shadow:0 6rpx 10rpx rgba(0,0,0,0.18);
+  .publish-entrance-icon {
+    font-size:50rpx;
+  }
+}
+.publish-type-select {
+  position:fixed;
+  z-index:20;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  .publish-type-select-title {
+    text-align:center;
+    font-size:40rpx;
+    color:var(--main-font-color);
+  }
+  .publish-type-select-mask {
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:linear-gradient(to top,white 60%,rgba(255,255,255,0.1));
+  }
+  .publish-type-select-wrap {
+    position:absolute;
+    bottom:160rpx;
+    z-index:21;
+    padding:0 var(--main-container-padding);
+    width:100%;
+    text-align:center;
+  }
+  .publish-type-select-list
+  {
+    display:flex;
+    justify-content: space-around;
+    margin-top:48rpx;
+    .publish-type-select-item {
+      width:25%;
+      text-align:center;
+    }
+    .publish-type-select-item-icon {
+      width:120rpx;
+      height:120rpx;
+      border-radius:10rpx;
+    }
+    .publish-type-select-item-text {
+      padding:0 6rpx;
+      margin-top:10rpx;
+      font-size:28rpx;
+      color:var(--main-font-light-color);
+    }
+  }
+}

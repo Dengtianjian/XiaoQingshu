@@ -1,0 +1,12 @@
+<!-- pages/publish_post/publish_post.wxml -->
+<form class="publish-post-form" bindsubmit="publishPost">
+  <input class="publish-post-form-item publish-post-title" type="text" name="title" placeholder="请在这里输入问题" placeholder-style="color:var(--main-font-color);" />
+  <textarea  class="publish-post-form-item publish-post-content" name="content" placeholder="输入正文"></textarea>
+  <view class="image-upload">
+    <view class="image-upload-list">
+
+    </view>
+    <view class="image-upload-button"></view>
+  </view>
+  <button type="primary" form-type="submit">发布</button>
+</form>

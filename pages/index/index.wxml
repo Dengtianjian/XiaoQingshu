@@ -12,16 +12,6 @@
   <view class="quote">没有人能改变你，别人只能影响你，能改变你的只有你自己。</view>
   <view class="signin">SignIn</view>
 </view>
-<!-- 轮播图 -->
-<view>
-  <swiper class="banner-swiper" autoplay="{{true}}" circular>
-    <block wx:for="{{bannerSwiper}}" wx:key="index">
-      <swiper-item class="banner-swiper-item">
-        <image class="banner-swiper-item-image" src="{{ item.image }}" mode="widthFix"></image>
-      </swiper-item>
-    </block>
-  </swiper>
-</view>
 <!-- 信息流 -->
 <view class="post">
   <view class="post-tabbar">
@@ -41,9 +31,7 @@
           </view>
           <view class="post-title">4 月 4 日举行全国性哀悼活动，哀悼抗疫牺牲烈士和逝世同胞...</view>
           <view class="post-body">
-            <view class="post-body-description">
-              为表达全国各族人民对抗击新冠肺炎疫情斗争牺牲烈士和逝世同胞的深切哀悼，国务院发布公...
-            </view>
+            <view class="post-body-description">为表达全国各族人民对抗击新冠肺炎疫情斗争牺牲烈士和逝世同胞的深切哀悼，国务院发布公...</view>
             <image class="post-body-image" src="http://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1586945353&t=3e5e91de9ba76f62acde1bf931435083"></image>
           </view>
           <view class="post-footer">
@@ -62,4 +50,22 @@
       </swiper-item>
     </block>
   </swiper>
+</view>
+<!-- 发布内容入口 -->
+<view class="publish-entrance" bindtap="displayPublishPopup" data-mode="show">
+  <text class="publish-entrance-icon qcicon qcicon-editor"></text>
+</view>
+<view class="publish-type-select" hidden="{{ publish.hidden }}">
+  <view class="publish-type-select-mask" bindtap="displayPublishPopup" data-mode="hidden"></view>
+  <view class="publish-type-select-wrap">
+    <view class="publish-type-select-title">请选择要发布得帖子类型</view>
+    <view class="publish-type-select-list">
+      <block wx:for="{{ publish.postType }}" wx:key="name">
+        <navigator class="publish-type-select-item" open-type="navigate" url="/pages/publish_post/publish_post?type={{ item.name }}">
+          <image class="publish-type-select-item-icon" src="{{ item.icon }}"></image>
+          <view class="publish-type-select-item-text">{{ item.title }}</view>
+        </navigator>
+      </block>
+    </view>
+  </view>
 </view>
