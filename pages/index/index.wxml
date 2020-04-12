@@ -61,7 +61,7 @@
     <view class="publish-type-select-title">请选择要发布得帖子类型</view>
     <view class="publish-type-select-list">
       <block wx:for="{{ publish.postType }}" wx:key="name">
-        <navigator class="publish-type-select-item" open-type="navigate" url="/pages/publish_post/publish_post?type={{ item.name }}">
+        <navigator class="publish-type-select-item" open-type="navigate" url="/pages/post/publish/publish?type={{ item.name }}">
           <image class="publish-type-select-item-icon" src="{{ item.icon }}"></image>
           <view class="publish-type-select-item-text">{{ item.title }}</view>
         </navigator>

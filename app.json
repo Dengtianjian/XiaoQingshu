@@ -1,8 +1,9 @@
 {
   "pages": [
-    "pages/publish_post/publish_post",
-    "pages/index/index",
     "pages/school/school",
+    "pages/post/publish/publish",
+    "pages/post/select_topic/select_topic",
+    "pages/index/index",
     "pages/class/class",
     "pages/mine/mine"
   ],
@@ -41,6 +42,6 @@
       }
     ]
   },
-  "style": "v2",
+  "style":"v2",
   "sitemapLocation": "sitemap.json"
 }

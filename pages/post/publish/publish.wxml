@@ -1,0 +1,40 @@
+<!-- pages/publish_post/publish_post.wxml -->
+<form class="publish-post-form" bindsubmit="publishPost">
+  <input class="publish-post-form-item publish-post-title" type="text" name="title" placeholder="请在这里输入问题" placeholder-style="color:var(--font-color);" />
+  <textarea  class="publish-post-form-item publish-post-content" name="content" placeholder="输入正文"></textarea>
+  <view class="image-upload">
+    <scroll-view scroll-x="{{ true }}" class="image-upload-list" >
+      <block wx:for="{{ imageList }}" wx:key="id">
+        <image class="image-upload-item" src="{{ item.url }}" mode="aspectFill" data-index="{{ index }}" bindtap="previewImage"></image>
+      </block>
+    </scroll-view>
+    <view class="image-upload-button qcicon qcicon-upload" bindtap="uploadImage"></view>
+  </view>
+  <view class="post-option">
+    <view class="post-option-item"  >
+      <view class="post-option-item-title">话题</view>
+      <navigator class="post-option-item-content" hover-class="none" url="/pages/post/select_topic/select_topic">
+        <block wx:if="{{ topic.id=='' }}">
+          选择话题
+        </block>
+        <block wx:else>
+          {{ topic.text }}
+        </block>
+      </navigator>
+    </view>
+    <label class="post-option-item">
+      <view class="post-option-item-title">
+        <checkbox checked="{{true}}" />
+      </view>
+      <view class="post-option-item-content">
+        仅限我所在学校的同学可看到
+      </view>
+    </label>
+  </view>
+  <button class="publish-form-submit" type="primary" form-type="submit">发布</button>
+</form>
+
+<view class="popup" catchtouchmove="return">
+  <view class="popup-content"></view>
+  <cover-view class="popup-mask" catchtouchmove="return"></cover-view>
+</view>

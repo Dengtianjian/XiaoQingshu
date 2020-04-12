@@ -1,4 +1,4 @@
-// pages/publish_post/publish_post.js
+// pages/post/select_topic/select_topic.js
 Page({
 
   /**
@@ -62,5 +62,18 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  selectTopic(e){
+    const pages=getCurrentPages();
+    let prevPage=pages[pages.length-2];
+    if(prevPage){
+      prevPage.setData({
+        topic:{
+          id:"2",
+          text:"sdf456sfd"
+        }
+      });
+      wx.navigateBack();
+    }
   }
 })

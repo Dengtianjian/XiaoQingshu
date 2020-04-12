@@ -5,11 +5,13 @@ page {
   z-index: 9999998;
   background: #fff;
 
-  --main-container-padding:30rpx;
+  --container-padding:30rpx;
   --main-color:#428CED;
-  --main-font-color:#333333;
+  --font-color:#333333;
   --main-font-color2:#666666;
-  --main-font-light-color:#999999;
+  --font-light-color:#999999;
+  --border-radius:10rpx;
+  --light-color:#F0F0F0;
 }
 
 view,text {
@@ -18,4 +20,9 @@ view,text {
 
 form {
   display:block;
+}
+
+/* 按钮样式重写 */
+button[type='primary'] {
+  background-color:var(--main-color)!important;
 }

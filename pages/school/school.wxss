@@ -12,23 +12,23 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0 var(--main-container-padding);
+    padding: 0 var(--container-padding);
     box-sizing: border-box;
     /* background:red; */
   }
  .not-join-school-content{
-    display:flex;                    
+    display:flex;
     justify-content: center;/**水平居中*/
     vertical-align: center; /**垂直居中*/
     align-items:center;
     flex-direction:column;/**子view排列方式row--水平 column--垂直*/
-    margin-top: 200rpx;       
+    margin-top: 200rpx;
  }
 .not-join-school-content .not-join-school-picture{
     width: 500rpx;
     height: 350rpx;
 }
-.not-join-school-content .add-school-button{ 
+.not-join-school-content .add-school-button{
     margin-top: 30rpx;
     width: 250rpx;
     height: 70rpx;
