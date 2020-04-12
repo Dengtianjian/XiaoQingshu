@@ -1,0 +1,13 @@
+<!-- pages/school.wxml -->
+<!-- 顶部导航栏 -->
+<view class="navigation-bar" style="height: {{height*2+20}}px;">
+  <view style="height: {{height}}px;"></view>
+  <!-- have deleted the inexistent class -->
+  <view class="navigator-bar-safe-area" style="height:{{ (height*2+24)-height }}px"></view>
+</view>
+<view class="navigation-bar-placeholder" style="height: {{height*2+20}}px;"></view>
+<!-- 图片&加入学校按钮 -->
+<view class="not-join-school">
+  <image class="not-join-school-image" src="/material/images/school_center_picture.png"></image>
+  <navigator class="not-join-school-selectschool-entry" open-type="navigate" url="/pages/school/select_school/select_school">选择学校</navigator>
+</view>

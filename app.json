@@ -1,6 +1,8 @@
 {
   "pages": [
-    "pages/school/school",
+    "pages/school/feedback_school/feedback_school",
+    "pages/school/select_school/select_school",
+    "pages/school/index/index",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
     "pages/index/index",
@@ -23,7 +25,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/school/school",
+        "pagePath": "pages/school/index/index",
         "iconPath": "/material/tabbar/school.png",
         "selectedIconPath": "/material/tabbar/school.png",
         "text": "学校"
@@ -42,6 +44,6 @@
       }
     ]
   },
-  "style":"v2",
+  "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

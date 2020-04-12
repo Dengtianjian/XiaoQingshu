@@ -33,8 +33,3 @@
   </view>
   <button class="publish-form-submit" type="primary" form-type="submit">发布</button>
 </form>
-
-<view class="popup" catchtouchmove="return">
-  <view class="popup-content"></view>
-  <cover-view class="popup-mask" catchtouchmove="return"></cover-view>
-</view>

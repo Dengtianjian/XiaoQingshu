@@ -1,0 +1,9 @@
+<!-- pages/school/feedback_school/feedback_school.wxml -->
+<view class="feedback-title">
+  <view>非常抱歉没有找到您的学校</view>
+  我们将在收到反馈核实后添加上去
+</view>
+<form class="feedback-form" bindsubmit="addSchool">
+  <input class="feedback-form-input" name="schoolName" placeholder="请在这里输入学校名字" ></input>
+  <button class="feedback-form-submit" type="primary" form-type="submit">提交</button>
+</form>

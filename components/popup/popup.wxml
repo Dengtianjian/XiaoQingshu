@@ -1,0 +1,7 @@
+<!-- components/popup/popup.wxml -->
+<view class="popup" catchtouchmove="return" hidden="{{ hidden }}">
+  <cover-view class="popup-mask" catchtouchmove="return" ></cover-view>
+  <view class="popup-content">
+     <slot></slot>
+  </view>
+</view>

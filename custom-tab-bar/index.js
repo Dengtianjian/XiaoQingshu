@@ -9,7 +9,7 @@ Component({
       selectedIconPath: "/material/tabbar/home.png",
       text: "首页"
     }, {
-        pagePath: "/pages/school/school",
+        pagePath: "/pages/school/index/index",
         iconPath: "/material/tabbar/school.png",
         selectedIconPath: "/material/tabbar/school.png",
         text: "学校"

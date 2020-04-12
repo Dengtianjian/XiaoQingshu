@@ -1,0 +1,24 @@
+/* pages/school/feedback_school/feedback_school.wxss */
+.feedback-title {
+  margin-top:30rpx;
+  font-size:28rpx;
+  text-align:center;
+  color:var(--font-color);
+}
+.feedback-form {
+  margin-top:42rpx;
+  padding:0 var(--container-padding);
+}
+.feedback-form-input {
+  padding:10rpx;
+  height:70rpx;
+  line-height:70rpx;
+  color:var(--font-color);
+  font-size:28rpx;
+  border-radius:var(--border-radius);
+  background-color:var(--light-color);
+  box-sizing: border-box;
+}
+.feedback-form-submit {
+  margin-top:100rpx;
+}
