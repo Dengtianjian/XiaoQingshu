@@ -10,7 +10,9 @@ Component({
       this.setData({
         "current": tabs[this.data.current]
       });
-      this.computedSwiperHeight();
+      setTimeout(()=>{
+        this.computedSwiperHeight()
+      },1000);
     }
   },
   /**
@@ -63,6 +65,7 @@ Component({
       let query = wx.createSelectorQuery().in(this);
       query.select(`.swiper-item-${this.data.current}`).boundingClientRect();
       query.exec((res) => {
+        console.log(res);
         this.setData({
           "swiperHeight": res[0].height
         });

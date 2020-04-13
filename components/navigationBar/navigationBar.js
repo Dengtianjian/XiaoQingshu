@@ -19,7 +19,11 @@ Component({
     },
     backgroundColor:{
       type:String,
-      value:"0,0,0"
+      value:"white"
+    },
+    opacity:{
+      type:Number,
+      value:1
     }
   },
   observers:{
@@ -31,7 +35,7 @@ Component({
         })
       }else{
         this.setData({
-          barOpacity:1
+          barOpacity:this.data.opacity
         });
       }
     }

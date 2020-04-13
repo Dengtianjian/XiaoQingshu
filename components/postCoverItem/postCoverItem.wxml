@@ -8,7 +8,7 @@
   </view>
   <view class="post-title">4 月 4 日举行全国性哀悼活动，哀悼抗疫牺牲烈士和逝世同胞...</view>
   <view class="post-body {{ postBodyClass }}">
-    <template is="{{ templateName }}"></template>
+    <template is="{{ templateName }}" data="{{ ...templateData }}"></template>
   </view>
   <view class="post-footer">
     <view class="post-attribute">

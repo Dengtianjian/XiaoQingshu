@@ -1,7 +1,7 @@
 <!-- pages/school.wxml -->
 <!-- 顶部导航栏 -->
 <block wx:if="{{ true }}">
-  <NavigationBar pageScrollTop="{{ pageScrollTop }}" backgroundColor="blue">
+  <NavigationBar pageScrollTop="{{ pageScrollTop }}" backgroundColor="blue" opacity="0.8">
     <view class="switch-school">
       <text class="qcicon qcicon-qiehuan switch-school-icon"></text>
       华南师范大学
@@ -36,7 +36,9 @@
 
     <Tabs class="post-list" current="0" tabs="{{ {all:'全部',qa:'问答',note:'笔记'} }}">
       <view slot="all">
-        <view class="max-height">1</view>
+        <block wx:for="{{ 5 }}" wx:key="index">
+          <PostCoverItem/>
+        </block>
       </view>
       <view slot="qa">问答</view>
       <view slot="note">笔记</view>

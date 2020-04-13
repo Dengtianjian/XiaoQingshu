@@ -89,6 +89,7 @@
   height: inherit;
   border-radius: var(--border-radius);
 }
-.max-height {
+.post-list {
+  display: block;
   height: 2000rpx;
 }
