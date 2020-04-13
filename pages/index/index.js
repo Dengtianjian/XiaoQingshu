@@ -5,7 +5,7 @@ const app = getApp();
 Page({
   onLoad() {
     this.setData({
-      height: app.globalData.height
+      statusBarHeight: app.globalData.statusBarHeight
     });
   },
   onReady() {
@@ -18,7 +18,7 @@ Page({
     });
   },
   data: {
-    height: 0,
+    statusBarHeight: 0,
     postSwiper: {
       current: 0,
       height: 0,

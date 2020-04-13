@@ -1,0 +1,44 @@
+/* components/tabs/tabs.wxss */
+.bar {
+  display: flex;
+  align-items: center;
+  margin-left:-26rpx;
+  height: 70rpx;
+  width: 100%;
+}
+.bar-item {
+  position: relative;
+  padding: 0 26rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  color: var(--font-light-color);
+  transition: all 0.2s linear;
+}
+.bar-item::after {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 0;
+  height: 4rpx;
+  background: var(--main-color);
+  transition: all 0.2s linear;
+  border-radius: 4rpx;
+  content: "";
+}
+.bar-item-active {
+  color: var(--main-color);
+}
+.bar-item-active::after {
+  width: 28%;
+}
+.swiper {
+  margin-top: 20rpx;
+}
+.swiper-item {
+  width:100%;
+  height:auto!important;
+  box-sizing:border-box;
+}

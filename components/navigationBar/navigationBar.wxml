@@ -1,0 +1,9 @@
+<!-- components/navigationBar/navigationBar.wxml -->
+<view class="navigation-bar" style="height: {{statusBarHeight*2+20}}px;background:rgba(0,0,0,{{ barOpacity }})">
+  <view style="height: {{statusBarHeight}}px;"></view>
+  <view class="navigator-bar-safe-area" style="height:{{ (statusBarHeight*2+24)-statusBarHeight }}px">
+    {{ pageScrollTop }}
+    <slot></slot>
+  </view>
+</view>
+<view class="navigation-bar-placeholder" style="height: {{statusBarHeight*2+20}}px;"></view>

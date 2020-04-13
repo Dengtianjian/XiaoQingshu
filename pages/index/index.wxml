@@ -1,12 +1,12 @@
 <!-- index.wxml -->
 <!-- 顶部导航栏 -->
-<view class="navigation-bar" style="height: {{height*2+20}}px;">
-  <view class="navigation-bar-status-bar" style="height: {{height}}px;"></view>
-  <view class="navigator-bar-safe-area" style="height:{{ (height*2+24)-height }}px">
+<view class="navigation-bar" style="height: {{statusBarHeight*2+20}}px;">
+  <view class="navigation-bar-status-bar" style="height: {{statusBarHeight}}px;"></view>
+  <view class="navigator-bar-safe-area" style="height:{{ (statusBarHeight*2+24)-statusBarHeight }}px">
     <view class="search-entry"></view>
   </view>
 </view>
-<view class="navigation-bar-placeholder" style="height: {{height*2+20}}px;"></view>
+<view class="navigation-bar-placeholder" style="height: {{statusBarHeight*2+20}}px;"></view>
 <!-- 语录&签到 -->
 <view class="quote-signin">
   <view class="quote">没有人能改变你，别人只能影响你，能改变你的只有你自己。</view>

@@ -1,0 +1,15 @@
+<!-- components/tabs/tabs.wxml -->
+<view class="bar">
+  <block wx:for="{{ tabs }}" wx:key="index">
+    <view class="bar-item {{ current==index?'bar-item-active':'' }}" bindtap="switchPostSwiper" data-index="{{ index }}">
+      {{ item }}
+    </view>
+  </block>
+</view>
+<swiper class="swiper" current="{{ active }}" bindchange="postSwiperSwitch" style="height:{{ swiperHeight }}px">
+  <block wx:for="{{ tabs }}" wx:key="index">
+    <swiper-item class="swiper-item swiper-item-{{ index }}">
+      <slot name="{{ index }}"></slot>
+    </swiper-item>
+  </block>
+</swiper>

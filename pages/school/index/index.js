@@ -1,11 +1,12 @@
 // pages/school.js
+const app=getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    pageScrollTop:0
   },
 
   /**
@@ -62,5 +63,10 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  onPageScroll(e){
+    this.setData({
+      pageScrollTop:e.scrollTop
+    });
   }
 })

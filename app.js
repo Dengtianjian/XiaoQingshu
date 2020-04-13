@@ -17,14 +17,14 @@ App({
     //虽然最后解决了，但是花费了不少时间
     wx.getSystemInfo({
       success: (res) => {
-        this.globalData.height = res.statusBarHeight
+        this.globalData.statusBarHeight = res.statusBarHeight
       }
     })
   },
 
   globalData: {
     share: false,  // 分享默认为false
-    height: 0,
+    statusBarHeight: 0,
   }
 
 })

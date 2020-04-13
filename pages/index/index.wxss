@@ -55,21 +55,7 @@
   background: var(--main-color);
   border-radius: 10rpx;
 }
-.banner-swiper {
-  height: 260rpx;
-  width: 100%;
-  margin-top: 20rpx;
-  padding: 0 var(--container-padding);
-  overflow: hidden;
-  box-sizing: border-box;
-}
-.banner-swiper .banner-swiper-item {
-  width: 100%;
-  border-radius: 10rpx;
-}
-.banner-swiper .banner-swiper-item-image {
-  width: 100%;
-}
+
 .post {
   margin-top: 26rpx;
 }
