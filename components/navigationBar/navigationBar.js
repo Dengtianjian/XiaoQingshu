@@ -21,11 +21,13 @@ Component({
   observers:{
     pageScrollTop(scrollTop){
       // 50 2 25 3
-      let oldValue=this.data.barOpacity;
-      let newValue=oldValue+parseFloat(`0.${scrollTop}`);
-      if(scrollTop<50){
+      //let oldValue=this.data.barOpacity;
+      //let newValue=oldValue+ 0.00002*parseFloat(`${scrollTop}`);
+      let colorValue=0.004*parseFloat(`${scrollTop}`);
+      if(scrollTop<300){
         this.setData({
-          barOpacity:newValue
+          //barOpacity:newValue
+          barOpacity:colorValue
         })
       }else{
         this.setData({
