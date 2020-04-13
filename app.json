@@ -1,11 +1,11 @@
 {
   "pages": [
     "pages/school/index/index",
+    "pages/index/index",
     "pages/school/feedback_school/feedback_school",
     "pages/school/select_school/select_school",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
-    "pages/index/index",
     "pages/class/class",
     "pages/mine/mine"
   ],

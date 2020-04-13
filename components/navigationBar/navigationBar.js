@@ -16,17 +16,17 @@ Component({
   properties: {
     pageScrollTop:{
       type:Number
+    },
+    backgroundColor:{
+      type:String,
+      value:"0,0,0"
     }
   },
   observers:{
     pageScrollTop(scrollTop){
-      // 50 2 25 3
-      //let oldValue=this.data.barOpacity;
-      //let newValue=oldValue+ 0.00002*parseFloat(`${scrollTop}`);
       let colorValue=0.004*parseFloat(`${scrollTop}`);
       if(scrollTop<300){
         this.setData({
-          //barOpacity:newValue
           barOpacity:colorValue
         })
       }else{

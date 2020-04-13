@@ -45,7 +45,20 @@ Page({
           title:"笔记"
         }
       ]
-    }
+    },
+    posts:[
+      {
+        type:"qa"
+      },{
+        type:"common"
+      },{
+        type:"common"
+      },{
+        type:"common"
+      },{
+        type:"qa"
+      }
+    ]
 
   },
   postSwiperSwitch(e) {

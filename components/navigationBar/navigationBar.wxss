@@ -1,6 +1,7 @@
 /* components/navigationBar/navigationBar.wxss */
 .navigation-bar {
   position: fixed;
+  z-index:30;
   top: 0;
   left: 0;
   display: block;
@@ -8,9 +9,16 @@
   background:transparent;
 }
 .navigation-bar-background{
+  position:fixed;
+  z-index:1;
+  top:0;
+  left:0;
+  width:100%;
   background:black;
 }
 .navigator-bar-safe-area {
+  position:relative;
+  z-index:30;
   display: flex;
   align-items: center;
   justify-content: space-between;

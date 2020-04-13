@@ -1,7 +1,7 @@
 <!-- pages/school.wxml -->
 <!-- 顶部导航栏 -->
 <block wx:if="{{ true }}">
-  <NavigationBar pageScrollTop="{{ pageScrollTop }}">
+  <NavigationBar pageScrollTop="{{ pageScrollTop }}" backgroundColor="blue">
     <view class="switch-school">
       <text class="qcicon qcicon-qiehuan switch-school-icon"></text>
       华南师范大学

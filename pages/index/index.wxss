@@ -55,7 +55,6 @@
   background: var(--main-color);
   border-radius: 10rpx;
 }
-
 .post {
   margin-top: 26rpx;
 }
@@ -105,6 +104,10 @@
   border-bottom: 1px solid #eee;
   box-sizing: border-box;
 }
+.post .post-swiper .post-swiper-post-item {
+  display: block;
+  margin-bottom: 30rpx;
+}
 .post-item .post-author {
   display: flex;
   align-items: center;
@@ -152,10 +155,8 @@
 }
 .post-item .post-attribute .post-attribute-item {
   display: inline-block;
-  margin-right: 10rpx;
-  height: 40rpx;
-  line-height: 40rpx;
-  padding: 6rpx 18rpx;
+  margin-right: 20rpx;
+  padding: 0 18rpx 6rpx;
   color: var(--font-color);
   border-radius: 30rpx;
   background: #F0F0F0;
@@ -167,10 +168,11 @@
 .post-item .post-attribute .post-attribute-item-icon {
   width: 20rpx;
   height: 20rpx;
+  font-size: 26rpx;
 }
 .post-item .post-attribute .post-attribute-item-name {
   margin-left: 8rpx;
-  font-size: 26rpx;
+  font-size: 24rpx;
 }
 /* 发布入口 */
 .publish-entrance {
