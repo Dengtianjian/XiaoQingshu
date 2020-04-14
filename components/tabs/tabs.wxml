@@ -6,9 +6,9 @@
     </view>
   </block>
 </view>
-<swiper class="swiper" current="{{ active }}" bindchange="postSwiperSwitch" style="height:{{ swiperHeight }}px">
+<swiper class="swiper" current="{{ active }}" bindchange="postSwiperSwitch" style="height:{{ swiperHeight }}px" bindanimationfinish="computedSwiperHeight">
   <block wx:for="{{ tabs }}" wx:key="index">
-    <swiper-item class="swiper-item swiper-item-{{ index }}">
+    <swiper-item class="swiper-item swiper-item-{{ index }}" skip-hidden-item-layout="{{ true }}">
       <slot name="{{ index }}"></slot>
     </swiper-item>
   </block>

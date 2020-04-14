@@ -58,7 +58,6 @@ Component({
         "active": index,
         "current": tabs[index]
       });
-      this.computedSwiperHeight();
     },
     switchPostSwiper(e) {
       let tabs = this.data.tabs;
@@ -68,15 +67,16 @@ Component({
         "active": tabs.indexOf(key),
         "current": key
       });
-      this.computedSwiperHeight();
     },
     computedSwiperHeight() {
       let query = wx.createSelectorQuery().in(this);
       query.select(`.swiper-item-${this.data.current}`).boundingClientRect();
       query.exec((res) => {
-        this.setData({
-          "swiperHeight": res[0].height
-        });
+        if(parseInt(res[0].height)>parseInt(this.data.swiperHeight)){
+          this.setData({
+            "swiperHeight": res[0].height
+          });
+        }
       });
     }
   }

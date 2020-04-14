@@ -2,6 +2,7 @@
 .bar {
   display: flex;
   align-items: center;
+  padding:0 var(--container-padding);
   margin-left:-26rpx;
   height: 70rpx;
   width: 100%;
@@ -38,6 +39,7 @@
   margin-top: 20rpx;
 }
 .swiper-item {
+  padding:0 var(--container-padding);
   width:100%;
   height:auto!important;
   box-sizing:border-box;

@@ -1,5 +1,19 @@
-<!--pages/class/album/album.wxml-->
-<Tabs tabs="{{ tabs }}" current="video" >
-  <view slot="photo">Photo</view>
-  <view slot="video">Videos</view>
+<!-- pages/class/album/album.wxml -->
+<Tabs tabs="{{ tabs }}" current="photo">
+  <view class="album-list" slot="photo">
+    <block wx:for="{{ photos }}">
+      <image class="album-item" src="{{ item.url }}" mode="aspectFill" bindtap="previewImage"></image>
+    </block>
+  </view>
+  <view class="album-list" slot="video" style="height:500px;width:690rpx;">
+    <block wx:for="{{ videos }}">
+      <cover-image class="album-item" src="{{ item.cover }}" mode="aspectFill" bindtap="previewVideo" data-index="{{ index }}"></cover-image>
+    </block>
+  </view>
 </Tabs>
+<button bindtap="chooseVideo">Upload</button>
+<view class="preview-video" catch:touchmove hidden="{{ hiddenPreviewVideoPopup }}">
+  <!-- <video class="preview-video-source" src="{{ currentPreviewVideo }}"></video> -->
+  <mp-video-swiper class="video-swiper preview-video-source" video-list="{{videoList}}" bindplay="onPlay" bindpause="onPause" bindtimeupdate="onTimeUpdate" bindended="onEnded" binderror="onError" bindwaiting="onWaiting" bindprogress="onProgress" bindloadedmetadata="onLoadedMetaData"></mp-video-swiper>
+  <view class="preview-video-mask" catch:touchmove bindtap="cancelPreviewVideo"></view>
+</view>
