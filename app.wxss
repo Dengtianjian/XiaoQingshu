@@ -6,6 +6,7 @@ page {
   background: #fff;
 
   --container-padding:30rpx;
+  --container-width:calc( 100% - (var(--container-padding) * 2) );
   --main-color:#428CED;
   --font-color:#333333;
   --main-font-color2:#666666;
