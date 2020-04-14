@@ -1,0 +1,18 @@
+.form-common {
+  padding: 0 var(--container-padding);
+}
+.form-common-item {
+  display:block;
+  margin-bottom: 20rpx;
+}
+.form-common-item-title {
+  font-size: 28rpx;
+  color: var(--font-light-color);
+}
+.form-common-item-el {
+  margin-top: 10rpx;
+  padding: 10rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #eee;
+  border-radius: var(--border-radius);
+}
