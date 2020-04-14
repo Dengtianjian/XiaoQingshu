@@ -1,0 +1,23 @@
+<form class="form-common my-info-for-class-form" bindsubmit="saveMyInfo">
+  <view class="form-tips">
+    如果不填写，就不会展示在信息卡片上
+  </view>
+  <label class="form-common-item">
+    <view class="form-common-item-title">年龄</view>
+    <input class="form-common-item-el" type="number" name="age" placeholder="请输入您的年龄" />
+  </label>
+  <label class="form-common-item">
+    <view class="form-common-item-title">生日</view>
+    <picker class="form-common-item-el" name="foundedDate" mode="date" value="{{birthday}}" bindchange="bindDateChange">
+      <view>{{birthday}}</view>
+    </picker>
+  </label>
+  <view class="form-common-item">
+    <label class="form-common-item-title">手机号码</label>
+    <input class="form-common-item-el" type="number" name="phoneNumber" placeholder="请输入您的手机号码" />
+  </view>
+  <view class="my-info-for-class-form-submit-placeholder"></view>
+  <button class="form-common-submit my-info-for-class-form-submit" type="primary" form-type="submit" style="width:var(--container-width);">
+    提交
+  </button>
+</form>

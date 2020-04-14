@@ -1,0 +1,5 @@
+<!--pages/class/album/album.wxml-->
+<Tabs tabs="{{ tabs }}" current="video" >
+  <view slot="photo">Photo</view>
+  <view slot="video">Videos</view>
+</Tabs>

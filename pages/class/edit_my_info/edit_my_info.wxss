@@ -1,0 +1,21 @@
+/* pages/class/edit_my_info/edit_my_info.wxss */
+@import "/source/wxss/form_common.wxss";
+page {
+  min-height:100%;
+}
+.form-tips {
+  margin-bottom:20rpx;
+  height:40rpx;
+  line-height:40rpx;
+  color:var(--font-light-color);
+  font-size:24rpx;
+}
+.my-info-for-class-form-submit {
+  position:absolute;
+  bottom:30rpx;
+  box-sizing: border-box;
+}
+.my-info-for-class-form-submit-placeholder {
+  padding:16rpx 48rpx;
+  background:transparent;
+}

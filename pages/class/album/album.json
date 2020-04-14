@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText":"班级相册",
+  "usingComponents": {
+    "Tabs":"/components/tabs/tabs"
+  }
+}

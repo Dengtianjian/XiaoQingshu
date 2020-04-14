@@ -1,0 +1,14 @@
+/* pages/class/edit_info/edit_info.wxss */
+@import "/source/wxss/form_common.wxss";
+page {
+  min-height:100%;
+}
+.class-info-edit-form-submit {
+  position:absolute;
+  bottom:30rpx;
+  box-sizing: border-box;
+}
+.class-info-edit-form-submit-placeholder {
+  padding:16rpx 48rpx;
+  background:transparent;
+}

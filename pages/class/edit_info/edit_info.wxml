@@ -1,0 +1,23 @@
+<!-- pages/class/edit_info/edit_info.wxml -->
+<form class="form-common class-info-edit-form" bindsubmit="saveClassInfo">
+  <label class="form-common-item">
+    <view class="form-common-item-title">专业</view>
+    <input class="form-common-item-el" type="text" name="profession" placeholder="请输入班级所在专业" />
+  </label>
+  <label class="form-common-item">
+    <view class="form-common-item-title">创立时间</view>
+    <picker class="form-common-item-el" name="foundedDate" mode="date" value="{{createdData}}" bindchange="bindDateChange">
+      <view>{{createdData}}</view>
+    </picker>
+  </label>
+  <view class="form-common-item">
+    <label class="form-common-item-title">毕业时间</label>
+    <picker class="form-common-item-el" name="graduationDate" mode="date" value="{{createdData}}" bindchange="bindDateChange">
+      <view>{{createdData}}</view>
+    </picker>
+  </view>
+  <view class="class-info-edit-form-submit-placeholder"></view>
+  <button class="form-common-submit class-info-edit-form-submit" type="primary" form-type="submit" style="width:var(--container-width);">
+    提交
+  </button>
+</form>
