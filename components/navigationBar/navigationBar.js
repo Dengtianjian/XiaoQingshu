@@ -7,6 +7,19 @@ Component({
       this.setData({
         statusBarHeight:app.globalData.statusBarHeight
       });
+    },
+    ready(){
+      let crititcal=String(this.data.crititcal);
+      crititcal=crititcal.split("");
+      crititcal=crititcal.reverse();
+      if(crititcal.length<3){
+        crititcal.splice(0,0,0);
+      }
+      crititcal=crititcal.join("");
+      crititcal=parseFloat(`0.${crititcal}`);
+      this.setData({
+        count:crititcal
+      });
     }
   },
 
@@ -24,12 +37,24 @@ Component({
     opacity:{
       type:Number,
       value:1
+    },
+    crititcal:{
+      type:Number,
+      value:200
+    },
+    defaultColor:{
+      type:String,
+      value:"white"
+    },
+    downColor:{
+      type:String,
+      value:"black"
     }
   },
   observers:{
     pageScrollTop(scrollTop){
-      let colorValue=0.004*parseFloat(`${scrollTop}`);
-      if(scrollTop<300){
+      let colorValue=this.data.count*parseFloat(`${scrollTop}`);
+      if(colorValue<1){
         this.setData({
           barOpacity:colorValue
         })
@@ -46,7 +71,8 @@ Component({
    */
   data: {
     statusBarHeight:0,
-    barOpacity:0
+    barOpacity:0,
+    count:0
   },
 
   /**

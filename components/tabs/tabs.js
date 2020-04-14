@@ -4,15 +4,24 @@ Component({
     multipleSlots: true
   },
   lifetimes: {
-    ready() {
+    attached() {
       let tabs = this.data.tabs;
       tabs = Object.keys(tabs);
+      let current = "";
+      if (this.data.current) {
+        current = this.data.current;
+      } else {
+        current = tabs[0];
+      }
       this.setData({
-        "current": tabs[this.data.current]
+        current,
+        active: tabs.indexOf(current)
       });
-      setTimeout(()=>{
+    },
+    ready() {
+      setTimeout(() => {
         this.computedSwiperHeight()
-      },1000);
+      }, 1000);
     }
   },
   /**
@@ -65,7 +74,6 @@ Component({
       let query = wx.createSelectorQuery().in(this);
       query.select(`.swiper-item-${this.data.current}`).boundingClientRect();
       query.exec((res) => {
-        console.log(res);
         this.setData({
           "swiperHeight": res[0].height
         });

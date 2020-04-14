@@ -14,7 +14,6 @@
   top:0;
   left:0;
   width:100%;
-  background:black;
 }
 .navigator-bar-safe-area {
   position:relative;
@@ -25,5 +24,6 @@
   width: 100%;
   padding: 0 var(--container-padding);
   box-sizing: border-box;
+  transition:color 1s lienar;
   /* background:red; */
 }

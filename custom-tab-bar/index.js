@@ -14,7 +14,7 @@ Component({
         selectedIconPath: "/material/tabbar/school.png",
         text: "学校"
       }, {
-        pagePath: "/pages/class/class",
+        pagePath: "/pages/class/index/index",
         iconPath: "/material/tabbar/class.png",
         selectedIconPath: "/material/tabbar/class.png",
         text: "班级"
