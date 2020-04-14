@@ -1,0 +1,5 @@
+/* components/statisticsGrid/statisticsGrid.wxss */
+.statictics {
+  display:flex;
+  margin-top:24rpx;
+}
