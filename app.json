@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/post/view/view",
     "pages/index/index",
     "pages/class/index/index",
     "pages/class/album/album",

@@ -1,0 +1,41 @@
+<!-- pages/post/view/view.wxml -->
+<view class="author">
+  <image class="author-avatar" src="https://template.canva.cn/EADcc0Btzak/1/0/400w-4d-QTEYrdNI.jpg"></image>
+  <view class="author-info">
+    <view class="author-nickname">May</view>
+    <view class="author-school">
+      <text class="author-school-name">西南大学</text>
+      <text class="author-school-prefession">金融</text>
+    </view>
+  </view>
+  <view class="author-attention">关注</view>
+</view>
+<view class="post">
+  <view class="post-title">广东确定开学时间，“乐疯的”家长还需
+站好最后一岗</view>
+  <view class="post-content">
+    “神兽回归！👨老师们辛苦了”，这恐怕是很多家长在
+4月9日下午得知广东省开学时间后 😄
+特别是中小学开学时间后的心情。广东省新冠肺
+炎疫情防控指挥部经研究决定，全省各级各类学校学生
+📅4月27日起，分期、分批、错峰返校。
+大家用“重磅”“终于”“广东退出群聊”表达着
+内心的激动🤩
+  </view>
+  <view class="post-images">
+    <image class="post-image-item" src="https://template.canva.cn/EADcCF_XVWk/1/0/400w-j88eWZY7WPo.jpg" mode="aspectFill"></image>
+    <image class="post-image-item" src="https://template.canva.cn/EADcCqn6Y9M/1/0/400w-i6daPhDo2K4.jpg" mode="aspectFill"></image>
+    <image class="post-image-item" src="https://template.canva.cn/EADhZkiUSdg/1/0/400w-P_Ai1uZE8Lo.jpg" mode="aspectFill"></image>
+    <image class="post-image-item" src="https://template.canva.cn/EADcCNWSPPg/1/0/400w-Ox2UTg-Ww-Y.jpg" mode="aspectFill"></image>
+  </view>
+  <view class="post-attribute">
+    <view class="post-attribute-item post-attribute-type-qa">
+      <view class="post-attribute-item-icon"></view>
+      <view class="post-attribute-item-text">问答</view>
+    </view>
+    <view class="post-attribute-item post-attribute-type-qa">
+      <view class="post-attribute-item-icon">#</view>
+      <view class="post-attribute-item-text">问答</view>
+    </view>
+  </view>
+</view>
