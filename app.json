@@ -1,11 +1,11 @@
 {
   "pages": [
-    "pages/class/album/album",
+    "pages/index/index",
     "pages/class/index/index",
+    "pages/class/album/album",
     "pages/class/edit_my_info/edit_my_info",
     "pages/class/edit_info/edit_info",
     "pages/school/index/index",
-    "pages/index/index",
     "pages/school/feedback_school/feedback_school",
     "pages/school/select_school/select_school",
     "pages/post/publish/publish",

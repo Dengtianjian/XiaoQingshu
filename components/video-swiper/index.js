@@ -118,6 +118,10 @@ Component({
 
                 this._videoListChanged(newVal);
             }
+        },
+        current:{
+            type:[String,Number],
+            value:0
         }
     },
     data: {

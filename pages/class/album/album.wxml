@@ -1,19 +1,19 @@
 <!-- pages/class/album/album.wxml -->
 <Tabs tabs="{{ tabs }}" current="photo">
   <view class="album-list" slot="photo">
+  <view class="album-item album-upload qcicon qcicon-upload" bindtap="uploadPhoto"></view>
     <block wx:for="{{ photos }}">
-      <image class="album-item" src="{{ item.url }}" mode="aspectFill" bindtap="previewImage"></image>
+      <image class="album-item" src="{{ item.url }}" mode="aspectFill" bindtap="previewPhoto" data-index="{{ index }}" bindlongpress="deletePhoto" wx:if="{{ item!='deleted' }}"></image>
     </block>
   </view>
-  <view class="album-list" slot="video" style="height:500px;width:690rpx;">
+  <view class="album-list" slot="video">
+    <view class="album-item album-upload qcicon qcicon-upload" bindtap="uploadVideo"></view>
     <block wx:for="{{ videos }}">
-      <cover-image class="album-item" src="{{ item.cover }}" mode="aspectFill" bindtap="previewVideo" data-index="{{ index }}"></cover-image>
+      <image class="album-item" src="{{ item.cover }}" mode="aspectFill" bindtap="previewVideo" data-index="{{ index }}" wx:if="{{ item!='deleted' }}"></image>
     </block>
   </view>
 </Tabs>
-<button bindtap="chooseVideo">Upload</button>
 <view class="preview-video" catch:touchmove hidden="{{ hiddenPreviewVideoPopup }}">
-  <!-- <video class="preview-video-source" src="{{ currentPreviewVideo }}"></video> -->
-  <mp-video-swiper class="video-swiper preview-video-source" video-list="{{videoList}}" bindplay="onPlay" bindpause="onPause" bindtimeupdate="onTimeUpdate" bindended="onEnded" binderror="onError" bindwaiting="onWaiting" bindprogress="onProgress" bindloadedmetadata="onLoadedMetaData"></mp-video-swiper>
+  <video class="preview-video-source" src="{{ currentPreviewVideo }}"></video>
   <view class="preview-video-mask" catch:touchmove bindtap="cancelPreviewVideo"></view>
 </view>
