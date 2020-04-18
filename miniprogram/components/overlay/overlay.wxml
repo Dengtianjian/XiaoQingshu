@@ -1,0 +1,2 @@
+<!--components/overlay/overlay.wxml-->
+<view class="overlay" hidden="{{ hidden }}" style="z-index:{{ z-index }};{{ customStyle }}"></view>

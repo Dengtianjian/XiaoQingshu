@@ -1,0 +1,23 @@
+<!-- components/commentItem/commentItem.wxml -->
+<template name="comment">
+  <view class="comment-author">
+    <image class="comment-author-avatar" src="https://imgavater.ui.cn/avatar/6/2/6/3/113626.png?imageMogr2/auto-orient/crop/!960x960a94a79/thumbnail/148x148"></image>
+    <view class="comment-author-info">
+      <view class="comment-author-nickname">你的猫猫哇🐱</view>
+      <view class="comment-author-school">成都东软学院</view>
+    </view>
+    <text class="comment-operate qcicon ">···</text>
+  </view>
+  <view class="comment-content">今天 河北 上海 广东商量好
+给学生们惊喜啊 😂</view>
+  <view class="comment-bottom">
+    <view class="comment-publish-date">10小时前</view>
+    <view class="comment-like">
+      <text class="comment-like-icon qcicon qcicon-good"></text>
+      <text class="comment-like-text">48</text>
+    </view>
+  </view>
+</template>
+<view class="comment-item">
+  <template is="comment"></template>
+</view>

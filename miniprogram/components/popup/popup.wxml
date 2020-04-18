@@ -1,0 +1,7 @@
+<!--components/popup/popup.wxml-->
+<view class="popup" catch:touchmove hidden="{{ hidden }}">
+  <view class="popup-content" style="{{ positionStyle }}{{ customStyle }}">
+    <slot></slot>
+  </view>
+  <view class="popup-overlay" catch:touchmove bind:tap="hiddenPopup"></view>
+</view>

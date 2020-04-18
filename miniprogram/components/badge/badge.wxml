@@ -1,0 +1,9 @@
+<!-- components/badge/badge.wxml -->
+<view class="badge {{ isImageIcon?'badge-image':'' }}" style="background:{{ background }};color:{{ color }};">
+  <text class="badge-icon qcicon {{ icon }}" wx:if="{{ isIconFont&&icon!=null }}"></text>
+  <text class="badge-icon" wx:if="{{ isIconFont==false&&icon!=null&&isImageIcon==false }}">{{ icon }}</text>
+  <image class="badge-image-icon" wx:if="{{ isImageIcon }}" src="{{ icon }}" mode="aspectFill"></image>
+  <slot name="icon"></slot>
+  <text class="badge-text">{{ text }}</text>
+  <slot name="text"></slot>
+</view>

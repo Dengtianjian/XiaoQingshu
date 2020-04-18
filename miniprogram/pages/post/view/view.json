@@ -1,0 +1,10 @@
+{
+  "navigationStyle":"custom",
+  "usingComponents": {
+    "Badge":"/components/badge/badge",
+    "CommentItem":"/components/commentItem/commentItem",
+    "Overlay":"/components/overlay/overlay",
+    "Popup":"/components/popup/popup",
+    "navigationBar":"/components/navigationBar/navigationBar"
+  }
+}

@@ -1,0 +1,17 @@
+<!-- pages/answer_question/answer_question.wxml -->
+<view class="container">
+  <view class="post-title">如何看待山东理工大学学生虐猫并拍视频贩卖，
+两个月致 80 只流浪猫死亡？ {{ editorHeight }}</view>
+  <view class="answer-question-editor-container" style="height:{{ editorHeight }}px;">
+    <editor id="editor" class="answer-question-editor-container-editor" placeholder="请在这里输入..." bind:ready="onEditorReady" bindstatuschange="editorStatusChange" />
+  </view>
+  <button bind:tap="saveSubmit">保存</button>
+  <scroll-view scroll-x class="editor-toolbar" catchtouchend="format" style="bottom:{{ isIOS?keyboardHeight:0 }}px;">
+    <view class="editor-boolbar-item {{ formats.header===1?'editor-boolbar-item-active':'' }}" data-name="header" data-value="{{ 1 }}">
+      H1
+    </view>
+    <view class="editor-boolbar-item {{ formats.header===2?'editor-boolbar-item-active':'' }}" data-name="header" data-value="{{ 2 }}">H2</view>
+    <view class="editor-boolbar-item">B</view>
+    <view class="editor-boolbar-item">H2</view>
+  </scroll-view>
+</view>

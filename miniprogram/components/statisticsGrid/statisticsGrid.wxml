@@ -1,0 +1,13 @@
+<!-- components/statisticsGrid/statisticsGrid.wxml -->
+<view class="statictics" style="text-align:{{ textAlign }};">
+  <block wx:for="{{ statistics }}" wx:key="index">
+    <view class="statictics-item" style="width:{{ itemWidth }};color:{{ color }}">
+      <view class="statictics-item-count" style="font-size:{{ countFontSize }}">
+        {{ item.count }}
+      </view>
+      <view class="statictics-item-title" style="font-size:{{ titleFontSize }}">
+        {{ item.title }}
+      </view>
+    </view>
+  </block>
+</view>

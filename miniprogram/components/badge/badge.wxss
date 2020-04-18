@@ -1,0 +1,26 @@
+/* components/badge/badge.wxss */
+@import "../../material/icon/iconfont.wxss";
+.badge {
+  display: inline-block;
+  align-items: center;
+  padding: 2rpx 18rpx 6rpx;
+  border-radius: 30rpx;
+}
+.badge-image {
+  padding: 4rpx 18rpx;
+}
+.badge-icon {
+  width: 26rpx;
+  height: 26rpx;
+  font-size: 26rpx;
+}
+.badge-image-icon {
+  display:inline-block;
+  width:26rpx;
+  height:26rpx;
+}
+.badge-text {
+  display:inline-block;
+  margin-left: 8rpx;
+  font-size: 24rpx;
+}

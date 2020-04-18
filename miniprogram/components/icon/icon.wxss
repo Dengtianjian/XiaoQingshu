@@ -1,0 +1,11 @@
+/* components/icon/icon.wxss */
+@import "/material/icon/iconfont.wxss";
+.icon-font {
+  width: 26rpx;
+  height: 26rpx;
+}
+.image-icon {
+  display:inline-block;
+  width:26rpx;
+  height:26rpx;
+}

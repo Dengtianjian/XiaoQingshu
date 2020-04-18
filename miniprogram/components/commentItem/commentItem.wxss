@@ -1,0 +1,41 @@
+/* components/commentItem/commentItem.wxss */
+@import "/material/icon/iconfont.wxss";
+.comment-author {
+  display:grid;
+  grid-template-columns: 70rpx auto 40rpx;
+  align-items:space-between;
+  height:70rpx;
+}
+.comment-author-avatar {
+  width:70rpx;
+  height:70rpx;
+  border-radius:50%;
+}
+.comment-author-info {
+  margin-left:10rpx;
+}
+.comment-author-nickname {
+  font-size:24rpx;
+  color:var(--font-color);
+}
+.comment-author-school {
+  font-size:20rpx;
+  color:var(--font-light-color);
+}
+.comment-operate {
+  width:30rpx;
+  font-size:24rpx;
+  text-align:right;
+  color:var(--font-color2);
+}
+.comment-content {
+  margin:10rpx 0 0 80rpx;
+  font-size:28rpx;
+}
+.comment-bottom {
+  display:flex;
+  justify-content: space-between;
+  margin:6rpx 0 0 80rpx;
+  color:var(--font-light-color);
+  font-size:24rpx;
+}

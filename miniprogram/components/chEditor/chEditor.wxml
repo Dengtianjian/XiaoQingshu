@@ -1,0 +1,8 @@
+<!--components/chEditor/chEditor.wxml-->
+<editor class="editor" placeholder="请在这里输入" bindready="onEditorReady"></editor>
+
+<view class="toolbar">
+  <view class="toolbar-item" bind:tap="insert">
+  1
+  </view>
+</view>
