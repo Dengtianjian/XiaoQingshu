@@ -9,6 +9,7 @@ Component({
       });
     },
     ready(){
+      let pages=getCurrentPages();
       let crititcal=String(this.data.crititcal);
       crititcal=crititcal.split("");
       crititcal=crititcal.reverse();
@@ -18,7 +19,8 @@ Component({
       crititcal=crititcal.join("");
       crititcal=parseFloat(`0.${crititcal}`);
       this.setData({
-        count:crititcal
+        count:crititcal,
+        isHasBack:pages.length>1
       });
     }
   },
@@ -28,11 +30,12 @@ Component({
    */
   properties: {
     pageScrollTop:{
-      type:Number
+      type:Number,
+      value:null
     },
     backgroundColor:{
       type:String,
-      value:"white"
+      value:"#FFFFFF"
     },
     opacity:{
       type:Number,
@@ -40,19 +43,23 @@ Component({
     },
     crititcal:{
       type:Number,
-      value:200
+      value:50
     },
     defaultColor:{
       type:String,
-      value:"white"
+      value:"#000000"
     },
     downColor:{
       type:String,
-      value:"black"
+      value:"#000000"
     },
     pageTitle:{
       type:String,
       value:""
+    },
+    hiddenReturnPage:{
+      type:Boolean,
+      value:false
     }
   },
   observers:{
@@ -76,13 +83,18 @@ Component({
   data: {
     statusBarHeight:0,
     barOpacity:0,
-    count:0
+    count:0,
+    isHasBack:false
   },
 
   /**
    * 组件的方法列表
    */
   methods: {
-
+    returnToPreviousPage(){
+      wx.navigateBack({
+        delta:1
+      });
+    }
   }
 })

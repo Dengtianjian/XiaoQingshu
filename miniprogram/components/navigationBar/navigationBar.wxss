@@ -1,4 +1,5 @@
 /* components/navigationBar/navigationBar.wxss */
+@import "/material/icon/iconfont.wxss";
 .navigation-bar {
   position: fixed;
   z-index:30;
@@ -18,12 +19,26 @@
 .navigator-bar-safe-area {
   position:relative;
   z-index:30;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display:flex;
+  align-items:center;
   width: 100%;
   padding: 0 var(--container-padding);
+  font-size:28rpx;
   box-sizing: border-box;
-  transition:color 1s lienar;
-  /* background:red; */
+}
+.navigator-bar-return-page {
+  margin-left:-6rpx;
+  width:70rpx;
+  text-align:left;
+}
+.navigator-bar-safe-content {
+  position:absolute;
+  left:0;
+  right:0;
+  margin:0 auto;
+  width:380rpx;
+  text-align:center;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+  overflow:hidden;
 }
