@@ -1,5 +1,5 @@
 <!-- pages/my/index/index.wxml -->
-<NavigationBar opacity="1" />
+<NavigationBar opacity="0.9" crititcal="50" pageScrollTop="{{ pageScrollTop }}"  pageTitle="自己"/>
 <image class="page-background" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587723912&t=e9de60b29a4a40a6dbd0e372b9cefa85" mode="aspectFill"></image>
 <image class="avatar" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587723912&t=b1d98aadbcdfb3da199f1668611c0cca" mode="aspectFill"></image>
 <view class="nickname">黄同学</view>
@@ -43,7 +43,7 @@
       },{
         icon:"/material/temp/4.png",
         title:"消息",
-        url:""
+        url:"/pages/my/notification/notification"
       },{
         icon:"/material/temp/5.png",
         title:"最近浏览",
