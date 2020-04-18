@@ -49,6 +49,10 @@ Component({
     downColor:{
       type:String,
       value:"black"
+    },
+    pageTitle:{
+      type:String,
+      value:""
     }
   },
   observers:{

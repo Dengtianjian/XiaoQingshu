@@ -5,10 +5,7 @@ Component({
    */
   properties: {
     hidden: {
-      type: Boolean,
-      observer(e) {
-
-      },
+      type: Boolean
     },
     position: {
       type: String,

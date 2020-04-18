@@ -1,7 +1,8 @@
 <!-- components/navigationBar/navigationBar.wxml -->
 <view class="navigation-bar" style="height: {{statusBarHeight*2+20}}px;">
   <view style="height: {{statusBarHeight}}px;"></view>
-  <view class="navigator-bar-safe-area" style="height:{{ (statusBarHeight*2+24)-statusBarHeight }}px;color:{{ barOpacity<1?defaultColor:downColor }};">
+  <view class="navigator-bar-safe-area" style="height:{{ (statusBarHeight*2+24)-statusBarHeight }}px;color:{{ barOpacity<opacity?defaultColor:downColor }};">
+    {{ pageTitle }}
     <slot></slot>
   </view>
   <view class="navigation-bar-background" style="height: {{statusBarHeight*2+20}}px;background:{{ backgroundColor }};opacity:{{ barOpacity }};"></view>
