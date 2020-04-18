@@ -1,0 +1,9 @@
+{
+  "navigationStyle":"custom",
+  "navigationBarTitleText":"消息列表",
+  "usingComponents": {
+    "NavigationBar":"/components/navigationBar/navigationBar",
+    "Icon":"/components/icon/icon",
+    "Popup":"/components/popup/popup"
+  }
+}

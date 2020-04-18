@@ -1,0 +1,59 @@
+<!-- miniprogram/pages/my/notification/notification.wxml -->
+<NavigationBar pageTitle="消息列表" />
+<view class="notification-box" bind:tap="showNotificationPopup">
+  <Icon class="notification-box-icon" icon="/material/icon/system_notification_round.png" size="110rpx"></Icon>
+  <view class="notification-box-main">
+    <view class="notification-box-head">
+      <text class="notification-box-title">系统消息</text>
+      <text class="notification-box-time">8个小时前</text>
+    </view>
+    <view class="notification-box-summary">您的 问答帖子 已经审核通过了，感谢您为设区做出的贡献，社区奖励宁 2 颗糖</view>
+  </view>
+</view>
+<view class="notification-box">
+  <Icon class="notification-box-icon" icon="/material/icon/like_round.png" size="110rpx"></Icon>
+  <view class="notification-box-main">
+    <view class="notification-box-head">
+      <text class="notification-box-title">点赞 & 认同</text>
+      <text class="notification-box-time"></text>
+    </view>
+    <view class="notification-box-summary">暂时没人给宁点赞或认同，多点评论💬</view>
+  </view>
+</view>
+<view class="notification-box">
+  <Icon class="notification-box-icon" icon="/material/icon/comment_reply_round.png" size="110rpx"></Icon>
+  <view class="notification-box-main">
+    <view class="notification-box-head">
+      <text class="notification-box-title">评论 & 回复</text>
+      <text class="notification-box-time">5天前</text>
+    </view>
+    <view class="notification-box-summary">巴啦啦小魔仙 回复了 您的帖子 我的英语不是盖的</view>
+  </view>
+</view>
+<view class="notification-box">
+  <Icon class="notification-box-icon" icon="/material/icon/attention_round.png" size="110rpx"></Icon>
+  <view class="notification-box-main">
+    <view class="notification-box-head">
+      <text class="notification-box-title">关注</text>
+      <text class="notification-box-time"></text>
+    </view>
+    <view class="notification-box-summary">暂时没别的人关注宁，多点🚶逛社区</view>
+  </view>
+</view>
+<Popup hidden="{{ isHiddenNotificationListPopup }}" position="bottom" customStyle="height:90%;">
+  <scroll-view scroll-y class="notification-list">
+    <block wx:for="{{ 10 }}">
+      <view class="notification-item">
+        <Icon class="notification-item-icon" icon="/material/icon/system_notification_round.png" size="60rpx"></Icon>
+        <view class="notification-item-wrap">
+          <view class="notification-item-content">您的 问答帖子 已经通过了审核，非常感谢您遵守社区规范👍</view>
+          <view class="notification-item-date">8小时前</view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+  <view class="notification-operate">
+      <button class="notification-operate-item" type="default"  bindtap="cleanNotification">清除</button>
+      <button class="notification-operate-item" type="primary" bindtap="hiddenNotificationListPopup">关闭</button>
+    </view>
+</Popup>
