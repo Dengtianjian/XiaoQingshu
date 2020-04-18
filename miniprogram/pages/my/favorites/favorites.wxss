@@ -1,0 +1,58 @@
+/* miniprogram/pages/my/favorites/favorites.wxss */
+.favorite-list {
+  margin-top:20rpx;
+  padding:0 var(--container-padding);
+}
+.favorite-item {
+  display:grid;
+  grid-template-columns:80rpx auto 30rpx;
+  align-items:center;
+  position:relative;
+  height:80rpx;
+  margin-bottom:40rpx;
+}
+.favorite-item::after {
+  position:absolute;
+  bottom:-20rpx;
+  left:0;
+  width:100%;
+  height:2rpx;
+  background:#F0F0F0;
+  content:"";
+}
+.favorite-item-icon {
+  border-radius:var(--border-radius);
+  overflow:hidden;
+}
+.favorite-item-main {
+  margin-left:16rpx;
+}
+.favorite-item-name {
+  font-size:28rpx;
+  color:var(--font-color);
+}
+.favorite-item-bottom {
+  margin-top:6rpx;
+  font-size:24rpx;
+  color:var(--font-light-color);
+}
+.favorite-item-created-date {
+  margin-left:36rpx;
+}
+.favorite-item-view-icon {
+  justify-self: flex-end;
+  color:var(--font-light-color);
+}
+.create-favorite {
+  position:fixed;
+  bottom:120rpx;
+  right:var(--container-padding);
+  width:100rpx;
+  height:100rpx;
+  line-height:100rpx;
+  text-align:center;
+  color:white;
+  font-size:44rpx;
+  border-radius:50%;
+  background:var(--main-color);
+}

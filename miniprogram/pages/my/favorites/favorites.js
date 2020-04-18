@@ -1,17 +1,18 @@
-// pages/my/index/index.js
+// miniprogram/pages/my/favorites/favorites.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    pageScrollTop:0,
+
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
   },
 
   /**
@@ -61,10 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
 
-  },
-  onPageScroll(e){
-    this.setData({
-      pageScrollTop:e.scrollTop
-    })
   }
 })

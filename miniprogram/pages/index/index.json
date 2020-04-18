@@ -1,6 +1,7 @@
 {
   "navigationStyle":"custom",
   "usingComponents": {
-    "PostCoverItem":"/components/postCoverItem/postCoverItem"
+    "PostCoverItem":"/components/postCoverItem/postCoverItem",
+    "NavigationBar":"/components/navigationBar/navigationBar"
   }
 }

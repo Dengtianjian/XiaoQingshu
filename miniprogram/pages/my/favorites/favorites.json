@@ -1,0 +1,8 @@
+{
+  "navigationStyle":"custom",
+  "usingComponents": {
+    "NavigationBar":"/components/navigationBar/navigationBar",
+    "Icon":"/components/icon/icon",
+    "Popup":"/components/popup/popup"
+  }
+}

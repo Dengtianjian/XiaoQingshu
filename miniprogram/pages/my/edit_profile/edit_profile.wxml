@@ -1,4 +1,5 @@
 <!-- miniprogram/pages/my/edit_profile/edit_profile.wxml -->
+<NavigationBar pageTitle="编辑资料" />
 <view class="chenge-avatar">
   <image class="change-avatar-preview" src="{{ avatar }}" mode="aspectFill"></image>
   <view class="change-avatar-overlay">

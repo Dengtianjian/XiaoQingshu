@@ -1,31 +1,11 @@
 /**index.wxss**/
-.navigation-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.8);
-}
-.navigation-bar .navigator-bar-safe-area {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0 var(--container-padding);
-  box-sizing: border-box;
-  /* background:red; */
-}
-.navigation-bar .navigator-bar-safe-area .search-entry {
+.search-entry {
   width: 460rpx;
   height: 48rpx;
   background: #F0F0F0;
   border-radius: 10rpx;
 }
-.navigation-bar-placeholder {
-  width: 100%;
-  background: transparent;
-}
+
 .quote-signin {
   display: flex;
   align-items: center;

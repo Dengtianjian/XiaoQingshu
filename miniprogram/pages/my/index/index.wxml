@@ -55,7 +55,7 @@
       },{
         icon:"/material/temp/7.png",
         title:"收藏",
-        url:""
+        url:"/pages/my/favorites/favorites"
       },{
         icon:"/material/temp/8.png",
         title:"小黑屋",

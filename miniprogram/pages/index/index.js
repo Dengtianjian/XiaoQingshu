@@ -17,8 +17,14 @@ Page({
       });
     });
   },
+  onPageScroll(e){
+    this.setData({
+      pageScrollTop:e.scrollTop
+    });
+  },
   data: {
     statusBarHeight: 0,
+    pageScrollTop:0,
     postSwiper: {
       current: 0,
       height: 0,

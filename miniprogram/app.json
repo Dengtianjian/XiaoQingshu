@@ -1,12 +1,13 @@
 {
   "pages": [
+    "pages/my/favorites/favorites",
+    "pages/index/index",
     "pages/my/index/index",
     "pages/my/notification/notification",
     "pages/my/edit_profile/edit_profile",
     "pages/post/answer_question/answer_question",
     "pages/post/view/view",
     "pages/test/test",
-    "pages/index/index",
     "pages/class/index/index",
     "pages/class/album/album",
     "pages/class/edit_my_info/edit_my_info",

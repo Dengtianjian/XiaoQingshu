@@ -1,0 +1,23 @@
+<!-- miniprogram/pages/my/favorites/favorites.wxml -->
+<NavigationBar pageTitle="收藏" />
+<view class="favorite-list">
+  <block wx:for="{{ 10 }}">
+    <view class="favorite-item">
+      <Icon class="favorite-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
+      <view class="favorite-item-main">
+        <view class="favorite-item-name">小猪佩奇一家</view>
+        <view class="favorite-item-bottom">
+          <text class="favorite-item-count">4个</text>
+          <text class="favorite-item-created-date">2018-12-01</text>
+        </view>
+      </view>
+      <Icon class="favorite-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
+    </view>
+  </block>
+</view>
+<view class="create-favorite qcicon qcicon-upload"></view>
+<Popup hidden="{{ false }}" >
+  <form class="favorite-create-form">
+    A
+  </form>
+</Popup>

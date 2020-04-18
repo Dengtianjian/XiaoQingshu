@@ -1,12 +1,8 @@
 <!-- index.wxml -->
 <!-- 顶部导航栏 -->
-<view class="navigation-bar" style="height: {{statusBarHeight*2+20}}px;">
-  <view class="navigation-bar-status-bar" style="height: {{statusBarHeight}}px;"></view>
-  <view class="navigator-bar-safe-area" style="height:{{ (statusBarHeight*2+24)-statusBarHeight }}px">
-    <view class="search-entry"></view>
-  </view>
-</view>
-<view class="navigation-bar-placeholder" style="height: {{statusBarHeight*2+20}}px;"></view>
+<NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.8">
+  <view class="search-entry"></view>
+</NavigationBar>
 <!-- 语录&签到 -->
 <view class="quote-signin">
   <view class="quote">没有人能改变你，别人只能影响你，能改变你的只有你自己。</view>
@@ -21,7 +17,6 @@
       </view>
     </block>
   </view>
-
   <swiper class="post-swiper" bindchange="postSwiperSwitch" current="{{ postSwiper.current }}" style="height:{{ postSwiper.height }}px">
     <block wx:for="{{postSwiper.tabbar}}" wx:key="index">
       <swiper-item class="post-swiper-item post-swiper-item-{{ index }}">
