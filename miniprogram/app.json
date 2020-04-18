@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/my/index/index",
+    "pages/my/edit_profile/edit_profile",
     "pages/post/answer_question/answer_question",
     "pages/post/view/view",
     "pages/test/test",

@@ -1,5 +1,5 @@
 <!-- pages/my/index/index.wxml -->
-<NavigationBar />
+<NavigationBar opacity="1" />
 <image class="page-background" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587723912&t=e9de60b29a4a40a6dbd0e372b9cefa85" mode="aspectFill"></image>
 <image class="avatar" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587723912&t=b1d98aadbcdfb3da199f1668611c0cca" mode="aspectFill"></image>
 <view class="nickname">黄同学</view>
@@ -30,44 +30,54 @@
     navigations:[
       {
         icon:"/material/temp/1.png",
-        title:"主页"
+        title:"主页",
+        url:""
       },{
         icon:"/material/temp/2.png",
-        title:"帖子"
+        title:"帖子",
+        url:""
       },{
         icon:"/material/temp/3.png",
-        title:"资料"
+        title:"资料",
+        url:"/pages/my/edit_profile/edit_profile"
       },{
         icon:"/material/temp/4.png",
-        title:"消息"
+        title:"消息",
+        url:""
       },{
         icon:"/material/temp/5.png",
-        title:"最近浏览"
+        title:"最近浏览",
+        url:""
       },{
         icon:"/material/temp/6.png",
-        title:"勋章"
+        title:"勋章",
+        url:""
       },{
         icon:"/material/temp/7.png",
-        title:"收藏"
+        title:"收藏",
+        url:""
       },{
         icon:"/material/temp/8.png",
-        title:"小黑屋"
+        title:"小黑屋",
+        url:""
       },{
         icon:"/material/temp/9.png",
-        title:"社区规范"
+        title:"社区规范",
+        url:""
       },{
         icon:"/material/temp/10.png",
-        title:"设置"
+        title:"设置",
+        url:""
       }
     ]
   };
 </wxs>
 <view class="quick-navigation">
   <block wx:for="{{ quickConfig.navigations }}">
-    <navigation class="quick-navigation-item">
+    <navigator class="quick-navigation-item" hover-class="none" open-type="navigate" url="{{ item.url }}">
       <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ quickConfig.size }}"></Icon>
       <text class="quick-navigation-item-title">{{ item.title }}</text>
       <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
-    </navigation>
+    </navigator>
   </block>
 </view>
