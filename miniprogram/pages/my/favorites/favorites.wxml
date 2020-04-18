@@ -2,22 +2,28 @@
 <NavigationBar pageTitle="收藏" />
 <view class="favorite-list">
   <block wx:for="{{ 10 }}">
-    <view class="favorite-item">
-      <Icon class="favorite-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
-      <view class="favorite-item-main">
-        <view class="favorite-item-name">小猪佩奇一家</view>
-        <view class="favorite-item-bottom">
-          <text class="favorite-item-count">4个</text>
-          <text class="favorite-item-created-date">2018-12-01</text>
+    <view class="nfavorite-box-item">
+      <Icon class="nfavorite-box-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
+      <view class="nfavorite-box-item-main">
+        <view class="nfavorite-box-item-name">小猪佩奇一家</view>
+        <view class="nfavorite-box-item-bottom">
+          <text class="nfavorite-box-item-count">4个</text>
+          <text class="nfavorite-box-item-created-date">2018-12-01</text>
         </view>
       </view>
-      <Icon class="favorite-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
+      <Icon class="nfavorite-box-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
     </view>
   </block>
 </view>
 <view class="create-favorite qcicon qcicon-upload"></view>
-<Popup hidden="{{ false }}" >
-  <form class="favorite-create-form">
-    A
-  </form>
+<template name="create_favorite">
+  <form class="favorite-create-form">A</form>
+</template>
+<template name="favorite_list">
+  <view class="nfavorite-item">
+    Item
+  </view>
+</template>
+<Popup hidden="{{ false }}" position="bottom" customStyle="height:90%;">
+  <template is="favorite_list"></template>
 </Popup>
