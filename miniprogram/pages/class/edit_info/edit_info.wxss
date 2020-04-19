@@ -3,9 +3,6 @@
 page {
   min-height:100%;
 }
-.class-info-edit-form {
-  margin:0 var(--container-padding);
-}
 .class-info-edit-form-submit {
   position:absolute;
   bottom:30rpx;

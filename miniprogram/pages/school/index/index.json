@@ -1,5 +1,6 @@
 {
   "navigationStyle":"custom",
+  "navigationBarTextStyle":"white",
   "usingComponents": {
     "NavigationBar":"/components/navigationBar/navigationBar",
     "Tabs":"/components/tabs/tabs",

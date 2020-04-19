@@ -41,7 +41,7 @@
 
 /* 资料表单 */
 .profile-form {
-  margin:90rpx var(--container-padding) 0;
+  margin-top:90rpx;
 }
 .profile-form-submit {
   margin-top:54rpx;

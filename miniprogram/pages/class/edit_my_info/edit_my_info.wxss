@@ -3,19 +3,12 @@
 page {
   min-height:100%;
 }
-.profile-form {
-  display:block;
-  margin:0 var(--container-padding);
-}
 .form-tips {
   margin-bottom:20rpx;
   height:40rpx;
   line-height:40rpx;
   color:var(--font-light-color);
   font-size:24rpx;
-}
-.my-info-for-class-form {
-  margin:0 var(--container-padding);
 }
 .my-info-for-class-form-submit {
   position:absolute;

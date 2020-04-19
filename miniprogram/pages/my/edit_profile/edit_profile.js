@@ -7,15 +7,12 @@ Page({
     avatar: "",
   },
 
-  onLoad(){
-
-  },
-
   changeAvatar() {
     wx.chooseImage({
       count: 1,
     }).then((res) => {
       let tempFile = res["tempFilePaths"][0];
+      console.log(this.data.avatar);
       if(this.data.avatar==""){
         this.animate(
           ".change-avatar-overlay-preview",
