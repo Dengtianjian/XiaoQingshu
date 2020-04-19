@@ -1,9 +1,13 @@
 /* miniprogram/pages/my/favorites/favorites.wxss */
+@import "../../../source/wxss/form_common.wxss";
+page {
+  min-height:100%;
+}
 .favorite-list {
   margin-top:20rpx;
   padding:0 var(--container-padding);
 }
-.favorite-item {
+.favorite-box-item {
   display:grid;
   grid-template-columns:80rpx auto 30rpx;
   align-items:center;
@@ -11,7 +15,7 @@
   height:80rpx;
   margin-bottom:40rpx;
 }
-.favorite-item::after {
+.favorite-box-item::after {
   position:absolute;
   bottom:-20rpx;
   left:0;
@@ -20,26 +24,26 @@
   background:#F0F0F0;
   content:"";
 }
-.favorite-item-icon {
+.favorite-box-item-icon {
   border-radius:var(--border-radius);
   overflow:hidden;
 }
-.favorite-item-main {
+.favorite-box-item-main {
   margin-left:16rpx;
 }
-.favorite-item-name {
+.favorite-box-item-name {
   font-size:28rpx;
   color:var(--font-color);
 }
-.favorite-item-bottom {
+.favorite-box-item-bottom {
   margin-top:6rpx;
   font-size:24rpx;
   color:var(--font-light-color);
 }
-.favorite-item-created-date {
+.favorite-box-item-created-date {
   margin-left:36rpx;
 }
-.favorite-item-view-icon {
+.favorite-box-item-view-icon {
   justify-self: flex-end;
   color:var(--font-light-color);
 }
@@ -56,6 +60,7 @@
   border-radius:50%;
   background:var(--main-color);
 }
+<<<<<<< HEAD
 /* 收藏夹浏览 */
 .nfavorite-item{
   margin: 60rpx 0 30rpx 0; /* 上右下左 */
@@ -105,3 +110,41 @@
   height: 60rpx;
   align-items: center;
 }
+=======
+
+.create-favorite-form {
+  position:relative;
+  min-height:100%;
+}
+.favorite-box-icon-upload {
+  display:inline-block;
+  width:100rpx;
+  height:100rpx;
+  font-size:88rpx;
+  color:var(--font-light-color);
+  background:var(--light-color);
+  border-radius:var(--border-radius);
+}
+.favorite-box-icon-preview {
+  display:inline-block;
+  margin-left:20rpx;
+  width:100rpx;
+  height:100rpx;
+  border-radius:var(--border-radius);
+}
+.favorite-box-form-operate {
+  display:flex;
+  align-items:center;
+  position:absolute;
+  bottom:0;
+  left:0;
+  height:80rpx;
+  width:100%;
+}
+.favorite-box-form-operate-item {
+  padding:0;
+  height:60rpx;
+  line-height:60rpx;
+  font-weight:400;
+}
+>>>>>>> Chuntian

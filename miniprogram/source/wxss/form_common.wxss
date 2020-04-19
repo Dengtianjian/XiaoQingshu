@@ -1,5 +1,5 @@
 .form-common {
-  padding: 0 var(--container-padding);
+  /* padding: 0 var(--container-padding); */
 }
 .form-common-item {
   display:block;
