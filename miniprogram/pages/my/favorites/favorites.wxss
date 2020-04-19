@@ -65,17 +65,20 @@ page {
   position:relative;
   min-height:100%;
 }
+.favorite-box-item-icon-upload {
+  display:flex;
+}
 .favorite-box-icon-upload {
-  display:inline-block;
   width:100rpx;
   height:100rpx;
-  font-size:88rpx;
+  line-height:100rpx;
+  font-size:46rpx;
+  text-align:center;
   color:var(--font-light-color);
   background:var(--light-color);
   border-radius:var(--border-radius);
 }
 .favorite-box-icon-preview {
-  display:inline-block;
   margin-left:20rpx;
   width:100rpx;
   height:100rpx;

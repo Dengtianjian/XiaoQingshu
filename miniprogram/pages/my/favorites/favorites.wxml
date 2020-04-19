@@ -2,7 +2,7 @@
 <NavigationBar pageTitle="收藏" />
 <view class="favorite-list">
   <block wx:for="{{ 10 }}">
-    <view class="favorite-box-item">
+    <view class="favorite-box-item" bind:tap="showFavoriteListPopup">
       <Icon class="favorite-box-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
       <view class="favorite-box-item-main">
         <view class="favorite-box-item-name">小猪佩奇一家</view>
@@ -15,13 +15,13 @@
     </view>
   </block>
 </view>
-<view class="create-favorite qcicon qcicon-upload" bind:tap="showCreateFavoritePopup"></view>
+<view class="create-favorite qcicon qcicon-add-select" bind:tap="showCreateFavoritePopup"></view>
 <template name="create_favorite">
   <form class="create-favorite-form form-common">
     <view class="form-common-item" >
       <view class="form-common-item-title">配图</view>
-      <view class="form-common-item-el" style="padding:0;border:none;">
-        <view class="favorite-box-icon-upload qcicon "></view>
+      <view class="form-common-item-el favorite-box-item-icon-upload" style="padding:0;border:none;">
+        <view class="favorite-box-icon-upload qcicon qcicon-upload"></view>
         <image class="favorite-box-icon-preview" src="https://template.canva.cn/EADcCZHzjf4/1/0/400w-n1oCpYmVM2c.jpg"></image>
       </view>
     </view>
@@ -38,7 +38,7 @@
       </view>
     </view>
     <view class="favorite-box-form-operate">
-      <button class="favorite-box-form-operate-item" type="default" style="width:45%;" bindtap="hiddenCreateFavoritePopup">取消</button>
+      <button class="favorite-box-form-operate-item" type="default" style="width:45%;" bindtap="hiddenPopup">取消</button>
       <button class="favorite-box-form-operate-item" type="primary" style="width:45%;">保存</button>
     </view>
   </form>
@@ -48,6 +48,6 @@
     Item
   </view>
 </template>
-<Popup hidden="{{ isHiddenCreateFavoritePopup }}" position="bottom" customStyle="height:90%;">
-  <template is="create_favorite"></template>
+<Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="height:90%;">
+  <template is="{{ popupTemplateName }}"></template>
 </Popup>

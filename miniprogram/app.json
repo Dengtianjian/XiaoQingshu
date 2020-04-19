@@ -31,25 +31,25 @@
       {
         "pagePath": "pages/index/index",
         "iconPath": "/material/tabbar/home.png",
-        "selectedIconPath": "/material/temp/20.png",
+        "selectedIconPath": "/material/tabbar/home_selected.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/school/index/index",
         "iconPath": "/material/tabbar/school.png",
-        "selectedIconPath": "/material/temp/19.png",
+        "selectedIconPath": "/material/tabbar/school_selected.png",
         "text": "学校"
       },
       {
         "pagePath": "pages/class/index/index",
         "iconPath": "/material/tabbar/class.png",
-        "selectedIconPath": "/material/temp/18.png",
+        "selectedIconPath": "/material/tabbar/class_selected.png",
         "text": "班级"
       },
       {
         "pagePath": "pages/my/index/index",
         "iconPath": "/material/tabbar/my.png",
-        "selectedIconPath": "/material/temp/17.png",
+        "selectedIconPath": "/material/tabbar/my_selected.png",
         "text": "自己"
       }
     ]
