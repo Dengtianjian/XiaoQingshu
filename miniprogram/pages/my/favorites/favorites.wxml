@@ -52,7 +52,6 @@
   </form>
 </template>
 
-
 <!-- 收藏夹里面的内容 弹窗 -->
 <wxs module="favoritesBrowse">
   module.exports={

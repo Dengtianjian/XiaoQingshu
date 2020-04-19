@@ -72,8 +72,8 @@
     ]
   };
 </wxs>
-<navigator class="quick-navigation">
-  <block wx:for="{{ quickConfig.navigations }}">
+<navigator class="quick-navigation" hover-class="none">
+  <block wx:for="{{ quickConfig.navigations }}"  >
     <navigator class="quick-navigation-item" open-type="navigate" url="{{ item.url }}"> 
       <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ quickConfig.size }}"></Icon>
       <text class="quick-navigation-item-title">{{ item.title }}</text>
