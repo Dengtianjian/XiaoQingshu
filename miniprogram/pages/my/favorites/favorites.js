@@ -21,7 +21,7 @@ Page({
       popupTemplateName:""
     });
   },
-  showFavoriteListPopup(){
+  showFavorites(){
     this.setData({
       isHiddenPopup:false,
       popupTemplateName:"favorite_list"

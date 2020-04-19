@@ -1,6 +1,6 @@
 /* pages/school.wxss */
 .switch-school {
-  color: white;
+  color: #ffffff;
   font-size: 36rpx;
 }
 .navigator-bar-background {
@@ -22,7 +22,7 @@
 .school-info .school-info-left {
   margin-top: 26rpx;
   width: 90%;
-  color: white;
+  color: #ffffff;
 }
 .school-info .school-info-name {
   font-size: 36rpx;
@@ -33,7 +33,7 @@
 }
 .school-info .school-info-statictics .school-info-statictics-item {
   width: 33%;
-  color: white;
+  color: #ffffff;
 }
 .school-info .school-info-statictics .school-info-statictics-item-title {
   font-size: 24rpx;
@@ -70,7 +70,7 @@
   height: 70rpx;
   line-height: 70rpx;
   text-align: center;
-  color: white;
+  color: #ffffff;
   font-size: 36rpx;
   background: var(--main-color);
   border-radius: 10rpx;

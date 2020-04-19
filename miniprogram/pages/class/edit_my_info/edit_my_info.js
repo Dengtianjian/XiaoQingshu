@@ -8,7 +8,11 @@ Page({
     birthday:"--------"
   },
 
-  saveMyInfo(){
+  onReady(){
+
+  },
+
+  saveMyInfo(e){
 
   }
 })

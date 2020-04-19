@@ -1,20 +1,17 @@
 <!-- pages/class/class.wxml -->
-<NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}">
+<NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" defaultColor="#ffffff">
   <view class="grade">2018级</view>
 </NavigationBar>
 <navigator class="class-info" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info">
   <view class="class-name">软件工程4班</view>
-  <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" />
+  <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
 </navigator>
-<view class="head-background">
-  <image class="head-background-image" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587449171&t=9200d6deae3608fddca06686ca13f4fa"></image>
-  <view class="head-background-mask"></view>
-</view>
+<view class="head-background"></view>
 <view class="radius-container">
   <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album">
-    <view class="album-entry" hover-class="none" open-type="navigate" url="">
+    <!-- <view class="album-entry" hover-class="none" open-type="navigate" url="">
       <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
-    </view>
+    </view> -->
     <view class="album-list">
       <image class="album-item" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
       <image class="album-item" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=feec1fd80cdd3f1310aac704deae344a" mode="aspectFill"></image>
@@ -23,40 +20,40 @@
       <image class="album-item" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
     </view>
   </navigator>
-</view>
-<view class="classmate">
-  <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
-    编辑我的信息
-  </navigator>
-  <view class="classmate-item" wx:for="{{ 50 }}" bindtap="showClassmateInfo" data-index="{{ index }}">
-    <view class="classmater-item-left">
-      <image class="classmater-item-avatar" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
-      <view class="classmate-item-nickname">黄同学</view>
+  <view class="classmate">
+    <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
+      编辑我的信息
+    </navigator>
+    <view class="classmate-item" wx:for="{{ 50 }}" bindtap="showClassmateInfo" data-index="{{ index }}">
+      <view class="classmater-item-left">
+        <image class="classmater-item-avatar" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
+        <view class="classmate-item-nickname">黄同学</view>
+      </view>
+      <text class="classmate-item-rightarrow qcicon qcicon-arrow-right"></text>
     </view>
-    <text class="classmate-item-rightarrow qcicon qcicon-arrow-right"></text>
-  </view>
-  <view hidden="{{ hiddenClassmateInfoPopup }}">
-    <view class="classmate-info-popup" catch:touchmove>
-      <image class="classmate-info-avatar" src="{{ classmateInfoPopupData['avatar'] }}" mode="top"></image>
-      <view class="classmate-info-gender">👩</view>
-      <view class="classmate-info-name">{{ classmateInfoPopupData['relaname'] }}</view>
-      <view class="classmate-info-list">
-        <view class="classmate-info-item">
-          <view class="classmate-info-item-title">手机号码</view>
-          <view class="classmate-info-item-content">
-            {{ classmateInfoPopupData['phoneNumber'] }}
+    <view hidden="{{ hiddenClassmateInfoPopup }}">
+      <view class="classmate-info-popup" catch:touchmove>
+        <image class="classmate-info-avatar" src="{{ classmateInfoPopupData['avatar'] }}" mode="top"></image>
+        <view class="classmate-info-gender">👩</view>
+        <view class="classmate-info-name">{{ classmateInfoPopupData['relaname'] }}</view>
+        <view class="classmate-info-list">
+          <view class="classmate-info-item">
+            <view class="classmate-info-item-title">手机号码</view>
+            <view class="classmate-info-item-content">
+              {{ classmateInfoPopupData['phoneNumber'] }}
+            </view>
           </view>
-        </view>
-        <view class="classmate-info-item">
-          <view class="classmate-info-item-title">年龄</view>
-          <view class="classmate-info-item-content">{{ classmateInfoPopupData['age'] }}</view>
-        </view>
-        <view class="classmate-info-item">
-          <view class="classmate-info-item-title">职位</view>
-          <view class="classmate-info-item-content">{{ classmateInfoPopupData['office'] }}</view>
+          <view class="classmate-info-item">
+            <view class="classmate-info-item-title">年龄</view>
+            <view class="classmate-info-item-content">{{ classmateInfoPopupData['age'] }}</view>
+          </view>
+          <view class="classmate-info-item">
+            <view class="classmate-info-item-title">职位</view>
+            <view class="classmate-info-item-content">{{ classmateInfoPopupData['office'] }}</view>
+          </view>
         </view>
       </view>
     </view>
+    <view class="classmate-info-popup-mask" catch:touchmove hidden="{{ hiddenClassmateInfoPopup }}" bindtap="hiddenClassmateInfoPopup"></view>
   </view>
-  <view class="classmate-info-popup-mask" catch:touchmove hidden="{{ hiddenClassmateInfoPopup }}" bindtap="hiddenClassmateInfoPopup"></view>
 </view>
