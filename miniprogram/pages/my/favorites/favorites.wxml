@@ -19,11 +19,33 @@
 <template name="create_favorite">
   <form class="favorite-create-form">A</form>
 </template>
-<template name="favorite_list">
+<wxs module="favoritesBrowse">
+  module.exports={
+    favoritesNavigations:[
+      {
+        favoritesTitle:"Vue的计算属性真的会缓存吗？(保姆级学，原理深入揭秘)",
+        favoritesAuthor:"晨曦时梦见兮",
+        favoritesTime:"一个月前",
+        favoritesContentsUrl:""
+      }
+    ]
+  };
+</wxs>
+<template name="favorite_list"> 
   <view class="nfavorite-item">
-    Item
+    <block wx:for="{{ 10 }}">
+    <block wx:for="{{ favoritesBrowse.favoritesNavigations }}">
+    <navigator class="favorites-browse-item" open-type="navigate" url="{{ item.favoritesContentsUrl }}"> 
+      <text class="favorites-browse-item-title">{{ item.favoritesTitle }}</text>
+      <view class="author-and-time-display">
+      <text class="favorites-browse-item-author">{{ item.favoritesAuthor }}</text>
+      <text class="favorites-browse-item-time">{{ item.favoritesTime }}</text>
+      </view>
+    </navigator>
+    </block>
+    </block>
   </view>
-</template>
+</template> 
 <Popup hidden="{{ false }}" position="bottom" customStyle="height:90%;">
   <template is="favorite_list"></template>
 </Popup>

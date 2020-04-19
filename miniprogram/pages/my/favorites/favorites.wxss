@@ -56,3 +56,52 @@
   border-radius:50%;
   background:var(--main-color);
 }
+/* 收藏夹浏览 */
+.nfavorite-item{
+  margin: 60rpx 0 30rpx 0; /* 上右下左 */
+  padding: 0 var(--container-padding);
+  overflow-y:scroll;
+}
+.favorites-browse-item{
+  display: grid;
+  grid-template-rows:100rpx 60rpx;  
+  height: 160rpx;
+  width: 100%;
+  align-items: center;
+  border-bottom: 1px solid var(--light-color);
+}
+.favorites-browse-item .favorites-browse-item-title{
+  margin-top: 20rpx;
+  font-size: 32rpx;
+  color: var(--font-color);
+  white-space: pre-wrap; 
+  text-overflow: ellipsis;
+  overflow: hidden; 
+} 
+.favorites-browse-item .favorites-browse-item-author{
+  /* margin-top: 20rpx;  */
+  font-size: 24rpx;
+  color: var(--font-color);
+  white-space: nowrap; /* 规定段落中的文本不进行换行 */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  align-items: center;
+  color: grey;
+}
+.favorites-browse-item .favorites-browse-item-time{
+  margin-left: 30rpx;
+  /* margin-top: 20rpx;  */
+  font-size: 24rpx;
+  color: var(--font-color);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  align-items: center;
+  color: grey;
+}
+.favorites-browse-item .author-and-time-display{
+  display: grid;
+  grid-template-columns: 180rpx auto;  /* 长度随着文字内容长度咋整 ? */
+  height: 60rpx;
+  align-items: center;
+}
