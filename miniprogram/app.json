@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/my/index/index",
     "pages/my/space/space",
+    "pages/index/index",
     "pages/my/favorites/favorites",
     "pages/my/notification/notification",
     "pages/my/edit_profile/edit_profile",

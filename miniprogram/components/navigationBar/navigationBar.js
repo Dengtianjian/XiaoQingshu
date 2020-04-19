@@ -69,13 +69,13 @@ Component({
           this.setData({
             barOpacity: colorValue,
           });
-          if (
-            this.data.currentColor != this.data.defaultColor
-          ) {
-            wx.setNavigationBarColor({
-              frontColor: this.data.defaultColor,
-              backgroundColor: this.data.backgroundColor,
-            });
+          if (this.data.currentColor != this.data.defaultColor) {
+            if (this.data.defaultColor != "transparent") {
+              wx.setNavigationBarColor({
+                frontColor: this.data.defaultColor,
+                backgroundColor: this.data.backgroundColor,
+              });
+            }
             this.setData({
               currentColor: this.data.defaultColor,
             });
@@ -85,10 +85,12 @@ Component({
             barOpacity: this.data.opacity,
           });
           if (this.data.currentColor != this.data.downColor) {
-            wx.setNavigationBarColor({
-              frontColor: this.data.downColor,
-              backgroundColor: this.data.backgroundColor,
-            });
+            if (this.data.defaultColor != "transparent") {
+              wx.setNavigationBarColor({
+                frontColor: this.data.downColor,
+                backgroundColor: this.data.backgroundColor,
+              });
+            }
             this.setData({
               currentColor: this.data.downColor,
             });

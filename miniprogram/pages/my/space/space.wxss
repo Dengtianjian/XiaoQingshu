@@ -77,3 +77,7 @@
   background:#ffffff;
   border-radius:var(--border-radius) var(--border-radius) 0 0;
 }
+.post-wrap .post-item {
+  display:block;
+  margin-bottom:20rpx;
+}
