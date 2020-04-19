@@ -1,14 +1,15 @@
 {
   "pages": [
-    "pages/my/favorites/favorites",
     "pages/index/index",
-    "pages/my/index/index",
-    "pages/my/notification/notification",
+    "pages/class/index/index",
     "pages/my/edit_profile/edit_profile",
+    "pages/my/index/index",
+    "pages/my/space/space",
+    "pages/my/favorites/favorites",
+    "pages/my/notification/notification",
     "pages/post/answer_question/answer_question",
     "pages/post/view/view",
     "pages/test/test",
-    "pages/class/index/index",
     "pages/class/album/album",
     "pages/class/edit_my_info/edit_my_info",
     "pages/class/edit_info/edit_info",
@@ -26,23 +27,26 @@
   },
   "tabBar": {
     "custom": false,
+    "color":"#333333",
+    "selectedColor":"#428CED",
+    "borderStyle":"white",
     "list": [
       {
         "pagePath": "pages/index/index",
         "iconPath": "/material/tabbar/home.png",
-        "selectedIconPath": "/material/temp/20.png",
+        "selectedIconPath": "/material/tabbar/home_selected.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/school/index/index",
         "iconPath": "/material/tabbar/school.png",
-        "selectedIconPath": "/material/temp/19.png",
+        "selectedIconPath": "/material/tabbar/school_selected.png",
         "text": "学校"
       },
       {
         "pagePath": "pages/class/index/index",
         "iconPath": "/material/tabbar/class.png",
-        "selectedIconPath": "/material/temp/18.png",
+        "selectedIconPath": "/material/tabbar/class_selected.png",
         "text": "班级"
       },
       {

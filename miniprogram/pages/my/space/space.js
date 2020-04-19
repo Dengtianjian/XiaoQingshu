@@ -1,11 +1,11 @@
-// pages/my/index/index.js
+// miniprogram/pages/my/space/space.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    pageScrollTop:0,
+    pageScrollTop:0
   },
 
   /**
@@ -66,6 +66,6 @@ Page({
   onPageScroll(e){
     this.setData({
       pageScrollTop:e.scrollTop
-    })
+    });
   }
 })

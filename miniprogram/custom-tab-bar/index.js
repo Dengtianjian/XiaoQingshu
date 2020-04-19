@@ -6,7 +6,7 @@ Component({
     list: [{
       pagePath: "/pages/index/index",
       iconPath: "/material/tabbar/home.png",
-      selectedIconPath: "/material/temp/20.png",
+      selectedIconPath: "/material/tabbar/home_selected.png",
       text: "首页"
     }, {
         pagePath: "/pages/school/index/index",

@@ -2,7 +2,6 @@
   "navigationStyle":"custom",
   "usingComponents": {
     "NavigationBar":"/components/navigationBar/navigationBar",
-    "Tabs":"/components/tabs/tabs",
     "PostCoverItem":"/components/postCoverItem/postCoverItem"
   }
 }

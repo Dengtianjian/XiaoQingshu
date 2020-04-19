@@ -3,11 +3,12 @@
   padding: var(--container-padding);
 }
 .class-info .class-name {
-  color: white;
+  color: #ffffff;
   font-size: 36rpx;
 }
 .class-info .class-statistics {
   display: block;
+  margin-top: 20rpx;
   width: 60%;
 }
 .head-background {
@@ -18,6 +19,7 @@
   width: 100%;
   height: 570rpx;
   overflow: hidden;
+  background: #3192FF;
 }
 .head-background .head-background-image {
   margin: -10% 0 0 -10%;
@@ -31,13 +33,13 @@
   left: 0;
   width: 100%;
   height: 40%;
-  background: linear-gradient(to top, white, transparent);
+  background: linear-gradient(to top, #ffffff, transparent);
 }
 .radius-container {
-  margin: 20rpx 10rpx 0;
-  padding: 20rpx;
+  margin: 20rpx 0 0;
+  padding: var(--container-padding);
   min-height: 300rpx;
-  background: white;
+  background: #ffffff;
   border-radius: 30rpx 30rpx 0 0;
 }
 .album-entry {
@@ -46,6 +48,7 @@
 }
 .album-entry .album-entry-images {
   height: 100rpx;
+  width: 100%;
 }
 .album-list {
   display: grid;
@@ -60,7 +63,8 @@
   border: 1px solid var(--light-color);
 }
 .classmate {
-  padding: 0 var(--container-padding) 100rpx;
+  margin-top: 40rpx;
+  padding: 0 0 100rpx;
   /* 信息弹窗 */
 }
 .classmate .classmate-item {
@@ -110,7 +114,7 @@
   width: 694rpx;
   height: 830rpx;
   border-radius: var(--border-radius);
-  background: white;
+  background: #ffffff;
 }
 .classmate .classmate-info-popup .classmate-info-avatar {
   margin-top: 25rpx;
