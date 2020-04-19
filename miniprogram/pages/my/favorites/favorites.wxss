@@ -55,7 +55,7 @@ page {
   height:100rpx;
   line-height:100rpx;
   text-align:center;
-  color:white;
+  color:#ffffff;
   font-size:44rpx;
   border-radius:50%;
   background:var(--main-color);
