@@ -3,6 +3,7 @@
 <view class="favorite-list">
   <block wx:for="{{ 16 }}">
     <view class="favorite-box-item" bindtap="showFavorites">
+    <view class="favorite-box-item">
       <Icon class="favorite-box-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
       <view class="favorite-box-item-main">
         <view class="favorite-box-item-name">小猪佩奇一家</view>
@@ -13,11 +14,14 @@
       </view>
       <Icon class="favorite-box-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
     </view>
+    </view>
   </block>
 </view>
 <!-- 添加收藏的按钮 -->
 <view class="create-favorite qcicon qcicon-upload" bind:tap="showCreateFavoritePopup"></view>
-<!-- 创建新的收藏夹弹窗模板 -->
+
+<!-- 创建新的收藏夹弹窗 -->
+<view class="create-favorite qcicon qcicon-upload" bind:tap="showCreateFavoritePopup"></view>
 <template name="create_favorite">
   <form class="create-favorite-form form-common">
     <view class="form-common-item">
@@ -47,7 +51,9 @@
     </view>
   </form>
 </template>
-<!-- 收藏夹 详情 模板 -->
+
+
+<!-- 收藏夹里面的内容 弹窗 -->
 <wxs module="favoritesBrowse">
   module.exports={
     favoritesNavigations:[
@@ -75,7 +81,12 @@
     </block>
   </scroll-view>
 </template>
+
 <!-- 展示某一个收藏夹里面的收藏列表 -->
+
 <Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="height:90%;">
   <template is="{{ popupTemplateName }}"></template>
+</Popup>
+<Popup hidden="{{ false }}" position="bottom" customStyle="height:90%;"> 
+  <template is="favorite_list"></template>
 </Popup>
