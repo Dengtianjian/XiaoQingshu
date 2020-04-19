@@ -44,6 +44,7 @@
   </form>
 </template>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <wxs module="favoritesBrowse">
   module.exports={
     favoritesNavigations:[
@@ -73,6 +74,15 @@
 </template> 
 <Popup hidden="{{ false }}" position="bottom" customStyle="height:90%;">
   <template is="favorite_list"></template>
+=======
+<template name="favorite_list">
+  <view class="favorite-item">
+    Item
+  </view>
+</template>
+<Popup hidden="{{ isHiddenCreateFavoritePopup }}" position="bottom" customStyle="height:90%;">
+  <template is="create_favorite"></template>
+>>>>>>> Chuntian
 =======
 <template name="favorite_list">
   <view class="favorite-item">
