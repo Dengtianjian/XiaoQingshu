@@ -60,23 +60,30 @@ page {
   border-radius:50%;
   background:var(--main-color);
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
 /* 收藏夹浏览 */
 .nfavorite-item{
-  margin: 60rpx 0 30rpx 0; /* 上右下左 */
-  padding: 0 var(--container-padding);
-  overflow-y:scroll;
+  margin-top:20rpx;
+  padding:0 var(--container-padding);
 }
 .favorites-browse-item{
   display: grid;
   grid-template-rows:100rpx 60rpx;  
+  position:relative;
   height: 160rpx;
   width: 100%;
   align-items: center;
   border-bottom: 1px solid var(--light-color);
 }
-.favorites-browse-item .favorites-browse-item-title{
+/* .favorite-browse-item::after {
+  position:absolute;
+  bottom:-20rpx;
+  left:0;
+  width:100%;
+  height:2rpx;
+  background:#F0F0F0;
+  content:"";
+} */
+.favorites-browse-item-title{
   margin-top: 20rpx;
   font-size: 32rpx;
   color: var(--font-color);
@@ -84,7 +91,7 @@ page {
   text-overflow: ellipsis;
   overflow: hidden; 
 } 
-.favorites-browse-item .favorites-browse-item-author{
+.favorites-browse-item-author{
   /* margin-top: 20rpx;  */
   font-size: 24rpx;
   color: var(--font-color);
@@ -94,7 +101,7 @@ page {
   align-items: center;
   color: grey;
 }
-.favorites-browse-item .favorites-browse-item-time{
+.favorites-browse-item-time{
   margin-left: 30rpx;
   /* margin-top: 20rpx;  */
   font-size: 24rpx;
@@ -105,16 +112,14 @@ page {
   align-items: center;
   color: grey;
 }
-.favorites-browse-item .author-and-time-display{
+.author-and-time-display{
   display: grid;
   grid-template-columns: 180rpx auto;  /* 长度随着文字内容长度咋整 ? */
   height: 60rpx;
   align-items: center;
 }
-=======
-=======
->>>>>>> Chuntian
 
+/* 创建新的收藏夹弹窗 */
 .create-favorite-form {
   position:relative;
   min-height:100%;
@@ -149,9 +154,4 @@ page {
   height:60rpx;
   line-height:60rpx;
   font-weight:400;
-<<<<<<< HEAD
 }
->>>>>>> Chuntian
-=======
-}
->>>>>>> Chuntian
