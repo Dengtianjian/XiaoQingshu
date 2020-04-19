@@ -1,0 +1,7 @@
+{
+  "navigationStyle":"custom",
+  "usingComponents": {
+    "NavigationBar":"/components/navigationBar/navigationBar",
+    "PostCoverItem":"/components/postCoverItem/postCoverItem"
+  }
+}

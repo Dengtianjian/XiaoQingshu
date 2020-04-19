@@ -31,7 +31,7 @@
       {
         icon:"/material/temp/1.png",
         title:"主页",
-        url:""
+        url:"/pages/my/space/space"
       },{
         icon:"/material/temp/2.png",
         title:"帖子",

@@ -1,0 +1,21 @@
+<!-- miniprogram/pages/my/space/space.wxml -->
+<NavigationBar pageScrollTop="{{ pageScrollTop }}" defaultColor="transparent" downColor="black" pageTitle="Ta的空间" />
+<image class="head-background" src="https://template.canva.cn/EADccbDM8Jc/1/0/400w-U8_rAHf6alo.jpg" mode="aspectFill"></image>
+<view class="user-wrap">
+  <image class="user-avatar" src="https://template.canva.cn/EADhZqHbHN0/1/0/400w-v8oONrNb-pw.jpg" mode="aspectFill"></image>
+  <view class="user-info">
+    <view class="user-nickname">巴啦啦小魔仙</view>
+    <view class="user-age">芳龄 20岁</view>
+  </view>
+  <view class="user-attention-button">关注</view>
+</view>
+<view class="school-info">
+  <view class="school-name">广东省 华南师范大学</view>
+  <view class="school-class">2018级 软件工程</view>
+  <view class="user-statement">北京第三区交通委提醒您: 道路千万条, 安全第一条。行车不规范, 亲人两行泪</view>
+</view>
+<view class="post-wrap">
+  <blovk wx:for="{{ 5 }}">
+    <PostCoverItem />
+  </blovk>
+</view>
