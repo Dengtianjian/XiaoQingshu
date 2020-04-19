@@ -2,7 +2,7 @@
 <NavigationBar pageTitle="收藏" />
 <view class="favorite-list">
   <block wx:for="{{ 16 }}">
-    <view class="favorite-box-item">
+    <view class="favorite-box-item" bindtap="showFavorites">
       <Icon class="favorite-box-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
       <view class="favorite-box-item-main">
         <view class="favorite-box-item-name">小猪佩奇一家</view>
@@ -15,40 +15,39 @@
     </view>
   </block>
 </view>
-
 <!-- 添加收藏的按钮 -->
 <view class="create-favorite qcicon qcicon-upload" bind:tap="showCreateFavoritePopup"></view>
-
-<!-- 创建新的收藏夹弹窗 -->
+<!-- 创建新的收藏夹弹窗模板 -->
 <template name="create_favorite">
   <form class="create-favorite-form form-common">
-    <view class="form-common-item" >
+    <view class="form-common-item">
       <view class="form-common-item-title">配图</view>
       <view class="form-common-item-el" style="padding:0;border:none;">
         <view class="favorite-box-icon-upload qcicon "></view>
         <image class="favorite-box-icon-preview" src="https://template.canva.cn/EADcCZHzjf4/1/0/400w-n1oCpYmVM2c.jpg"></image>
       </view>
     </view>
-    <view class="form-common-item" >
+    <view class="form-common-item">
       <view class="form-common-item-title">名称</view>
-      <view class="form-common-item-el" >
-       <input type="text" name="name" />
+      <view class="form-common-item-el">
+        <input type="text" name="name" />
       </view>
     </view>
-    <view class="form-common-item" >
+    <view class="form-common-item">
       <view class="form-common-item-title">描述</view>
-      <view class="form-common-item-el" >
-       <input type="text" name="description" />
+      <view class="form-common-item-el">
+        <input type="text" name="description" />
       </view>
     </view>
     <view class="favorite-box-form-operate">
-      <button class="favorite-box-form-operate-item" type="default" style="width:45%;" bindtap="hiddenCreateFavoritePopup">取消</button>
+      <button class="favorite-box-form-operate-item" type="default" style="width:45%;" bindtap="hiddenPopup">
+        取消
+      </button>
       <button class="favorite-box-form-operate-item" type="primary" style="width:45%;">保存</button>
     </view>
   </form>
 </template>
-
-<!-- 收藏夹里面的内容 弹窗 -->
+<!-- 收藏夹 详情 模板 -->
 <wxs module="favoritesBrowse">
   module.exports={
     favoritesNavigations:[
@@ -61,27 +60,22 @@
     ]
   };
 </wxs>
-<template name="favorite_list"> 
-  <view class="nfavorite-item" >
+<template name="favorite_list">
+  <scroll-view scroll-y class="favorite-box-list">
     <block wx:for="{{ 10 }}">
-    <block wx:for="{{ favoritesBrowse.favoritesNavigations }}" >
-    <navigator class="favorites-browse-item" open-type="navigate" url="{{ item.favoritesContentsUrl }}"> 
-      <text class="favorites-browse-item-title">{{ item.favoritesTitle }}</text>
-      <view class="author-and-time-display">
-        <text class="favorites-browse-item-author">{{ item.favoritesAuthor }}</text>
-        <text class="favorites-browse-item-time">{{ item.favoritesTime }}</text>
-      </view>
-    </navigator>
+      <block wx:for="{{ favoritesBrowse.favoritesNavigations }}">
+        <navigator class="favorites-browse-item" open-type="navigate" url="{{ item.favoritesContentsUrl }}">
+          <text class="favorites-browse-item-title">{{ item.favoritesTitle }}</text>
+          <view class="author-and-time-display">
+            <text class="favorites-browse-item-author">{{ item.favoritesAuthor }}</text>
+            <text class="favorites-browse-item-time">{{ item.favoritesTime }}</text>
+          </view>
+        </navigator>
+      </block>
     </block>
-    </block>
-  </view>
-</template> 
-
+  </scroll-view>
+</template>
 <!-- 展示某一个收藏夹里面的收藏列表 -->
-<Popup hidden="{{ false }}" position="bottom" customStyle="height:90%;"> 
-  <template is="favorite_list"></template>
-</Popup>
-
-<Popup hidden="{{ isHiddenCreateFavoritePopup }}" position="bottom" customStyle="height:90%;">
-<template is="create_favorite"></template>
+<Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="height:90%;">
+  <template is="{{ popupTemplateName }}"></template>
 </Popup>

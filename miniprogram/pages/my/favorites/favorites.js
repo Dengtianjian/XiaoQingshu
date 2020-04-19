@@ -5,17 +5,26 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isHiddenCreateFavoritePopup:true
+    isHiddenPopup:true,
+    popupTemplateName:""
   },
 
   showCreateFavoritePopup(){
     this.setData({
-      isHiddenCreateFavoritePopup:false
+      isHiddenPopup:false,
+      popupTemplateName:"create_favorite"
     });
   },
-  hiddenCreateFavoritePopup(){
+  hiddenPopup(){
     this.setData({
-      isHiddenCreateFavoritePopup:true
+      isHiddenPopup:true,
+      popupTemplateName:""
+    });
+  },
+  showFavorites(){
+    this.setData({
+      isHiddenPopup:false,
+      popupTemplateName:"favorite_list"
     });
   }
 })
