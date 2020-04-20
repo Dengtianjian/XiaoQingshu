@@ -1,25 +1,25 @@
 <!-- pages/my/index/index.wxml -->
 <NavigationBar opacity="0.9" crititcal="50" pageScrollTop="{{ pageScrollTop }}"  defaultColor="#ffffff"/>
 <image class="page-background" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587723912&t=e9de60b29a4a40a6dbd0e372b9cefa85" mode="aspectFill"></image>
-<image class="avatar" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587723912&t=b1d98aadbcdfb3da199f1668611c0cca" mode="aspectFill"></image>
-<view class="nickname">黄同学</view>
+<image class="avatar" src="{{ userInfo['avatarUrl'] }}" mode="aspectFill"></image>
+<view class="nickname">{{ userInfo['nickName'] }}</view>
 <view class="statistics">
   <view class="statistics-head">
-    <statisticsGrid statistics="{{ [{title:'关注',count:8880},{title:'粉丝',count:12},{title:'收藏',count:26}] }}" color="#333" titleFontSize="24rpx" countFontSize="24rpx" />
+    <statisticsGrid statistics="{{ [{title:'关注',count: userInfo['fans']},{title:'粉丝',count: userInfo['fans']},{title:'收藏',count: userInfo['fans']}] }}" color="#333" titleFontSize="24rpx" countFontSize="24rpx" />
   </view>
   <view class="statistics-bottom">
     <view class="statistics-item statistics-credits">
       <text class="statistics-item-icon qcicon qcicon-tangguo1"></text>
       <view class="statistics-item-right">
         <view class="statistics-item-title">糖量</view>
-        <view class="statistics-item-count">423</view>
+        <view class="statistics-item-count">{{  userInfo['credits'] }}</view>
       </view>
     </view>
     <view class="statistics-item">
       <Icon class="statistics-item-icon" icon="qcicon-turanghuanjing" size="60rpx"></Icon>
       <view class="statistics-item-right">
         <view class="statistics-item-title">泥值</view>
-        <view class="statistics-item-count">648</view>
+        <view class="statistics-item-count">{{  userInfo['expreience'] }}</view>
       </view>
     </view>
   </view>

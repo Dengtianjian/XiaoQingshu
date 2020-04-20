@@ -1,0 +1,15 @@
+<!-- components/confirm/confirm.wxml -->
+<Popup hidden="{{ hidden }}" position="center" customStyle="height:{{ height }};" overlay="{{ overlay }}" >
+  <view class="dialog-main">
+    <view class="dialog-title" style="text-align:{{ textAlign }};" wx:if="{{ title }}">{{ title }}</view>
+    <view class="dialog-content" style="text-align:{{ textAlign }};">
+      {{ content }}
+      <slot name="content"></slot>
+    </view>
+    <view class="dialog-operate">
+      <button class="button-common" type="default" bind:tap="cancel" wx:if="{{ cancelButton }}">{{ cancelButton }}</button>
+      <button class="button-common" type="primary" bind:tap="confirm" wx:if="{{ confirmButton }}">{{ confirmButton }}</button>
+      <slot name="operate"></slot>
+    </view>
+  </view>
+</Popup>

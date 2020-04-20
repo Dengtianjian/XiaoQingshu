@@ -1,4 +1,5 @@
 // pages/my/index/index.js
+const App=getApp();
 Page({
 
   /**
@@ -6,13 +7,18 @@ Page({
    */
   data: {
     pageScrollTop:0,
+    userInfo:null,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-
+  async onLoad(options) {
+    let userInfo=await App.getUserInfo();
+    console.log(userInfo);
+    this.setData({
+      userInfo
+    });
   },
 
   /**

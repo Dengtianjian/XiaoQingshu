@@ -1,15 +1,15 @@
 {
   "pages": [
+    "pages/class/index/index",
     "pages/my/index/index",
-    "pages/my/space/space",
     "pages/index/index",
+    "pages/my/space/space",
     "pages/my/favorites/favorites",
     "pages/my/notification/notification",
     "pages/my/edit_profile/edit_profile",
     "pages/post/answer_question/answer_question",
     "pages/post/view/view",
     "pages/test/test",
-    "pages/class/index/index",
     "pages/class/album/album",
     "pages/class/edit_my_info/edit_my_info",
     "pages/class/edit_info/edit_info",

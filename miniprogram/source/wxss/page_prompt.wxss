@@ -1,0 +1,23 @@
+.page-prompt {
+  position:relative;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  margin:auto;
+  width:70%;
+}
+.page-prompt-icon {
+  display:block;
+  margin:auto;
+  width:400rpx;
+}
+.page-prompt-title {
+  margin-top:20rpx;
+  font-size:28rpx;
+  color:var(--font-color2);
+  text-align:center;
+}
+.page-prompt-operate {
+  margin-top:40rpx;
+}

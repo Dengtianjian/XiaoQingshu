@@ -69,7 +69,10 @@ Component({
           this.setData({
             barOpacity: colorValue,
           });
-          if (this.data.currentColor != this.data.defaultColor) {
+          if (
+            this.data.currentColor != this.data.defaultColor &&
+            this.data.defaultColor != undefined
+          ) {
             if (this.data.defaultColor != "transparent") {
               wx.setNavigationBarColor({
                 frontColor: this.data.defaultColor,
@@ -84,8 +87,11 @@ Component({
           this.setData({
             barOpacity: this.data.opacity,
           });
-          if (this.data.currentColor != this.data.downColor) {
-            if (this.data.defaultColor != "transparent") {
+          if (
+            this.data.currentColor != this.data.downColor &&
+            this.data.downColor != undefined
+          ) {
+            if (this.data.downColor != "transparent") {
               wx.setNavigationBarColor({
                 frontColor: this.data.downColor,
                 backgroundColor: this.data.backgroundColor,
