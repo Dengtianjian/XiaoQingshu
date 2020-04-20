@@ -2,6 +2,8 @@
   "navigationStyle":"custom",
   "usingComponents": {
     "NavigationBar":"/components/navigationBar/navigationBar",
-    "StatisticsGrid":"/components/statisticsGrid/statisticsGrid"
+    "StatisticsGrid":"/components/statisticsGrid/statisticsGrid",
+    "Popup":"/components/popup/popup",
+    "Dialog":"/components/dialog/dialog"
   }
 }

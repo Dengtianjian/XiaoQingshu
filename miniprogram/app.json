@@ -1,12 +1,12 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/class/index/index",
-    "pages/my/edit_profile/edit_profile",
     "pages/my/index/index",
+    "pages/index/index",
     "pages/my/space/space",
     "pages/my/favorites/favorites",
     "pages/my/notification/notification",
+    "pages/my/edit_profile/edit_profile",
     "pages/post/answer_question/answer_question",
     "pages/post/view/view",
     "pages/test/test",
@@ -27,9 +27,6 @@
   },
   "tabBar": {
     "custom": false,
-    "color":"#333333",
-    "selectedColor":"#428CED",
-    "borderStyle":"white",
     "list": [
       {
         "pagePath": "pages/index/index",
@@ -52,7 +49,7 @@
       {
         "pagePath": "pages/my/index/index",
         "iconPath": "/material/tabbar/my.png",
-        "selectedIconPath": "/material/temp/17.png",
+        "selectedIconPath": "/material/tabbar/my_selected.png",
         "text": "自己"
       }
     ]

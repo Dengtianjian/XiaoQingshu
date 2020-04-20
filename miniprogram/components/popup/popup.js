@@ -45,6 +45,10 @@ Component({
     customStyle: {
       type: String,
     },
+    overlay:{
+      type:Boolean,
+      value:true
+    }
   },
 
   /**

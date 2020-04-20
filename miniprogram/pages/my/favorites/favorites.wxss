@@ -109,11 +109,15 @@ page {
   position: relative;
   min-height: 100%;
 }
+.create-favorite-form-icon-upload {
+  display:flex;
+}
 .favorite-box-icon-upload {
-  display: inline-block;
   width: 100rpx;
   height: 100rpx;
-  font-size: 88rpx;
+  line-height:100rpx;
+  text-align:center;
+  font-size: 46rpx;
   color: var(--font-light-color);
   background: var(--light-color);
   border-radius: var(--border-radius);

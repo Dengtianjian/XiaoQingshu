@@ -38,6 +38,7 @@ module.exports = {
     let _this=this;
     let config = {
       title,
+      icon:conf['icon']?conf['icon']:'none',
       success() {
         if (config.succeeded) {
           config.succeeded();
@@ -75,5 +76,14 @@ module.exports = {
     }
     config = Object.assign(config, conf);
     wx.showToast(config);
+  },
+  codeToast(error,code,message){
+    wx.hideToast();
+    let current=message[error][code];
+    if(typeof current == "object"){
+      this.toast(current['title'],current);
+    }else{
+      this.toast(current);
+    }
   }
 }

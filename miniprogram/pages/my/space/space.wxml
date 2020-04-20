@@ -1,5 +1,5 @@
 <!-- miniprogram/pages/my/space/space.wxml -->
-<NavigationBar pageScrollTop="{{ pageScrollTop }}" defaultColor="transparent" downColor="black" pageTitle="Ta的空间" />
+<NavigationBar pageScrollTop="{{ pageScrollTop }}" defaultColor="transparent" downColor="#000000" pageTitle="Ta的空间" />
 <image class="head-background" src="https://template.canva.cn/EADccbDM8Jc/1/0/400w-U8_rAHf6alo.jpg" mode="aspectFill"></image>
 <view class="user-wrap">
   <image class="user-avatar" src="https://template.canva.cn/EADhZqHbHN0/1/0/400w-v8oONrNb-pw.jpg" mode="aspectFill"></image>
@@ -16,6 +16,6 @@
 </view>
 <view class="post-wrap">
   <blovk wx:for="{{ 5 }}">
-    <PostCoverItem />
+    <PostCoverItem class="post-item" />
   </blovk>
 </view>

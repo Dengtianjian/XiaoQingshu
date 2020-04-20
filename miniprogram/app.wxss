@@ -24,6 +24,10 @@ form {
 }
 
 /* 按钮样式重写 */
-button[type='primary'] {
-  background-color:var(--main-color)!important;
+button,.button-common {
+  padding:10rpx 16rpx;
+  width:auto!important;
+  font-weight:400!important;
+  font-size:28rpx;
+  background-color:var(--main-color);
 }

@@ -3,5 +3,5 @@
   <view class="popup-content" style="{{ positionStyle }}{{ customStyle }}">
     <slot></slot>
   </view>
-  <view class="popup-overlay" catch:touchmove bind:tap="hiddenPopup"></view>
+  <view class="popup-overlay" catch:touchmove bind:tap="hiddenPopup" style="backround:{{ overlay?'rgba(0,0,0,0.2)':'transparent' }}"></view>
 </view>

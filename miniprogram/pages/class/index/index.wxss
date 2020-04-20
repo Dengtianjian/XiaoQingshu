@@ -1,6 +1,20 @@
+@import "/source/wxss/page_prompt.wxss";
+page {
+  min-height: 100%;
+}
 /* 学校信息 */
 .class-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: var(--container-padding);
+}
+.class-info-left {
+  flex-grow: 6;
+}
+.class-info-right {
+  flex-grow: 4;
+  text-align: right;
 }
 .class-info .class-name {
   color: #ffffff;
@@ -9,7 +23,7 @@
 .class-info .class-statistics {
   display: block;
   margin-top: 20rpx;
-  width: 60%;
+  width: 70%;
 }
 .head-background {
   position: absolute;
@@ -19,22 +33,82 @@
   width: 100%;
   height: 570rpx;
   overflow: hidden;
-  background: #3192FF;
+  background: #3192ff;
 }
-.head-background .head-background-image {
-  margin: -10% 0 0 -10%;
-  width: 120%;
-  height: 120%;
-  filter: blur(20rpx);
+.class-new-classmate {
+  font-size: 60rpx;
+  color: white;
+  animation: Beat linear 2s infinite;
 }
-.head-background .head-background-mask {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40%;
-  background: linear-gradient(to top, #ffffff, transparent);
+@keyframes Beat {
+  0% {
+    transform:rotate(0);
+  }
+  5% {
+    transform:rotate(-30deg);
+  }
+  10% {
+    transform:rotate(0deg);
+  }
+  15% {
+    transform:rotate(-30deg);
+  }
+  20% {
+    transform:rotate(-30deg);
+  }
+  20% {
+    transform:rotate(0deg);
+  }
+  30% {
+    transform:rotate(10deg);
+  }
+  50% {
+    transform:rotate(0deg);
+  }
+  100% {
+    transform:rotate(0deg);
+  }
 }
+.new-classmate-item {
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  margin-bottom:20rpx;
+  height:70rpx;
+}
+.new-classmate-item-info {
+  flex-grow:9;
+  display:flex;
+  justify-content: flex-start;
+  align-items:center;
+  height:inherit;
+}
+.new-classmate-item-avatar {
+  flex-grow:1;
+  flex-shrink:0;
+  width:70rpx;
+  height:70rpx;
+  border-radius:50%;
+}
+.new-classmate-item-nickname {
+  margin-left:10rpx;
+  width:100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align:left;
+  overflow:hidden;
+}
+.new-classmate-item-operate {
+  flex-grow:1;
+  display:flex;
+  justify-content: flex-end;
+}
+.new-classmate-item-operate-item {
+  margin:0 0 0 16rpx;
+  font-size:24rpx!important;
+}
+
+
 .radius-container {
   margin: 20rpx 0 0;
   padding: var(--container-padding);
@@ -140,7 +214,10 @@
   height: 50rpx;
   line-height: 50rpx;
 }
-.classmate .classmate-info-popup .classmate-info-list .classmate-info-item-title {
+.classmate
+  .classmate-info-popup
+  .classmate-info-list
+  .classmate-info-item-title {
   display: inline-block;
   min-width: 148rpx;
   text-align: justify;
@@ -148,7 +225,10 @@
   font-size: 32rpx;
   color: var(--font-light-color);
 }
-.classmate .classmate-info-popup .classmate-info-list .classmate-info-item-content {
+.classmate
+  .classmate-info-popup
+  .classmate-info-list
+  .classmate-info-item-content {
   display: inline-block;
   margin-left: 20rpx;
   font-size: 40rpx;
@@ -162,4 +242,14 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.2);
+}
+/* 未加入任何一个班级提示 表单 */
+.not-class-form .not-class-form-el {
+  padding: 10rpx;
+  font-size: 28rpx;
+  border-radius: 10rpx;
+  border: 2rpx solid #ddd;
+}
+.not-class-form-submit {
+  margin-top: 20rpx;
 }

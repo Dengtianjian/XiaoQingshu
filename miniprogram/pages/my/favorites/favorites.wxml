@@ -3,7 +3,6 @@
 <view class="favorite-list">
   <block wx:for="{{ 10 }}">
     <view class="favorite-box-item" bindtap="showFavorites">
-    <view class="favorite-box-item">
       <Icon class="favorite-box-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
       <view class="favorite-box-item-main">
         <view class="favorite-box-item-name">小猪佩奇一家</view>
@@ -26,8 +25,8 @@
   <form class="create-favorite-form form-common">
     <view class="form-common-item">
       <view class="form-common-item-title">配图</view>
-      <view class="form-common-item-el" style="padding:0;border:none;">
-        <view class="favorite-box-icon-upload qcicon "></view>
+      <view class="form-common-item-el create-favorite-form-icon-upload" style="padding:0;border:none;">
+        <view class="favorite-box-icon-upload qcicon qcicon-upload"></view>
         <image class="favorite-box-icon-preview" src="https://template.canva.cn/EADcCZHzjf4/1/0/400w-n1oCpYmVM2c.jpg"></image>
       </view>
     </view>
@@ -51,8 +50,7 @@
     </view>
   </form>
 </template>
-
-<!-- 收藏夹里面的内容 弹窗 -->
+<!-- 收藏夹 详情 模板 -->
 <wxs module="favoritesBrowse">
   module.exports={
     favoritesNavigations:[
