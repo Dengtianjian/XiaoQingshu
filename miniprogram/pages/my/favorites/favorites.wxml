@@ -1,7 +1,7 @@
 <!-- miniprogram/pages/my/favorites/favorites.wxml -->
 <NavigationBar pageTitle="收藏" />
 <view class="favorite-list">
-  <block wx:for="{{ 16 }}">
+  <block wx:for="{{ 10 }}">
     <view class="favorite-box-item" bindtap="showFavorites">
     <view class="favorite-box-item">
       <Icon class="favorite-box-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
@@ -71,21 +71,23 @@
       <block wx:for="{{ favoritesBrowse.favoritesNavigations }}">
         <navigator class="favorites-browse-item" open-type="navigate" url="{{ item.favoritesContentsUrl }}">
           <text class="favorites-browse-item-title">{{ item.favoritesTitle }}</text>
-          <view class="author-and-time-display">
+          <view class="author-and-time-bottom">
             <text class="favorites-browse-item-author">{{ item.favoritesAuthor }}</text>
             <text class="favorites-browse-item-time">{{ item.favoritesTime }}</text>
           </view>
         </navigator>
       </block>
     </block>
+     <!-- 透明的view  -->
+    <view class="placeholder-view"></view>
   </scroll-view>
+  
+  <!-- 关闭按钮 -->
+  <button class="close-favorite-list-button" type="primary" style="width:92%;" bindtap="hiddenPopup"> 关闭 </button>
 </template>
 
 <!-- 展示某一个收藏夹里面的收藏列表 -->
 
-<Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="height:90%;">
+<Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="height:88%;">
   <template is="{{ popupTemplateName }}"></template>
-</Popup>
-<Popup hidden="{{ false }}" position="bottom" customStyle="height:90%;"> 
-  <template is="favorite_list"></template>
 </Popup>
