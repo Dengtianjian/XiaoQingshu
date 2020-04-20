@@ -13,7 +13,6 @@
       </view>
       <Icon class="favorite-box-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
     </view>
-    </view>
   </block>
 </view>
 <!-- 添加收藏的按钮 -->
@@ -79,7 +78,6 @@
      <!-- 透明的view  -->
     <view class="placeholder-view"></view>
   </scroll-view>
-  
   <!-- 关闭按钮 -->
   <button class="close-favorite-list-button" type="primary" style="width:92%;" bindtap="hiddenPopup"> 关闭 </button>
 </template>
