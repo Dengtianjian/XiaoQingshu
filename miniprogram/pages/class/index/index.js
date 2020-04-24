@@ -1,261 +1,333 @@
 // pages/class/class.js
 import Cloud from "../../../source/js/cloud";
 import Prompt from "../../../source/js/prompt";
+import Utils from "../../../source/js/utils";
 const App = getApp();
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    hiddenClassmateInfoPopup: true,
-    classmateInfoPopupData: null,
+    pageLoading: true,
     scrollTop: 0,
-    statistics: [
-      {
-        title: "人数",
-        count: 23,
-      },
-      {
-        title: "人数",
-        count: 23,
-      },
-      {
-        title: "人数",
-        count: 23,
-      },
-    ],
+    classInfo: null,
     userInfo: null,
-    searchClassInfo:null,
-    hiddenJoinClassDialog:true,
-    newClassmate:{
-      hiddenPopup:true
+    statistics: [],
+    joinClass: {
+      searchResult: null,
+      hiddenPopup: true,
     },
-    classInfo:null
+    newClassmate: {
+      has: false,
+      hiddenPopup: true,
+      list: null,
+    },
+    classmates: [],
+    classmateInfo: {
+      hiddenPopup: true,
+      info: null,
+    },
   },
   onPageScroll(e) {
     this.setData({
       scrollTop: e.scrollTop,
     });
   },
+  onPullDownRefresh: function () {
+    this.getClassInfo();
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    let userInfo = await App.getUserInfo().then((res) => {
-      return res;
+    wx.showLoading({
+      title: "加载中",
     });
-    let classInfo=null;
-    // userInfo['class']={
-
-    // };
-    await Cloud.collection("school_class").where({
-      _id:"1d1104975e9d59790095e69d041aec4f"
-    }).get().then(res=>{
-      if(res['data'].length==0){
-        wx.showToast({
-          title:"班级不存在或者正在审核中",
-          icon:"none"
+    await App.getUserInfo()
+      .then(async (userInfo) => {
+        this.setData({
+          userInfo,
         });
-        return;
-      }
-      classInfo=res.data[0];
-    });
+        let schoolid = userInfo["_default_school"];
+        if (userInfo["_default_school"]) {
+          wx.hideLoading();
+          await Cloud.cfunction("Class", "getClassBySchoolId", {
+            _schoolid: schoolid,
+          })
+            .then((res) => {
+              this.setData({
+                classInfo: res,
+              });
+              this.updateStatistics();
+              this.updateNewClassmateList();
+              this.getClassStudent();
+            })
+            .catch((res) => {
+              wx.hideLoading();
+              Prompt.codeToast(res.error, res.code, {
+                404: {
+                  404001: "抱歉，班级不存在或者正在审核中",
+                },
+              });
+            });
+        }
+
+        wx.hideLoading();
+      })
+      .catch((res) => {
+        if (this.data.isLogin) {
+          return;
+        }
+        this.setData({
+          userInfo: res,
+        });
+        wx.hideLoading();
+      });
+  },
+  updateStatistics() {
+    //计算 已过去时间
+    let userInfo = this.data.userInfo;
+    let nowDate = new Date();
+    let nowYear = nowDate.getFullYear();
+    let nowMonth = nowDate.getMonth();
+    let nowDay = nowDate.getDate();
+    let buildDate = new Date(userInfo.build_date);
+    let buildYear = buildDate.getFullYear();
+    let buildMonth = buildDate.getMonth();
+    let buildDay = buildDate.getDate();
+    let lessString = ``;
+    if (nowYear - buildYear > 0) {
+      lessString += `${nowYear - buildYear}年`;
+    }
+    if (nowMonth - buildMonth) {
+      lessString += `${nowMonth - buildMonth}个月`;
+    }
+    lessString += `${buildDay - nowDay || 0}天`;
+    let statistics = [
+      {
+        title: "人数",
+        count: this.data.classInfo.students,
+      },
+      {
+        title: "相册",
+        count: this.data.classInfo.album_count,
+      },
+      {
+        title: "已过去",
+        count: lessString,
+      },
+    ];
     this.setData({
-      userInfo,
-      classInfo,
-      statistics: [
-        {
-          title: "人数",
-          count: classInfo['members'],
-        },
-        {
-          title: "人数",
-          count: 23,
-        },
-        {
-          title: "过去时间",
-          count: 23,
-        },
-      ]
+      statistics,
     });
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {},
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {},
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {},
-  showClassmateInfo(e) {
+  updateNewClassmateList() {
+    if (this.data.classInfo["_adminid"] == this.data.userInfo["_openid"]) {
+      Cloud.collection("school_class_apply")
+        .where({
+          _classid: this.data.classInfo["_id"],
+        })
+        .count()
+        .then((res) => {
+          this.setData({
+            "newClassmate.has": res.total,
+          });
+        });
+    }
+  },
+  getClassInfo() {
+    Cloud.collection("school_class")
+      .where({
+        _id: this.data.classInfo._id,
+      })
+      .get()
+      .then((res) => {
+        if (res.data.length > 0) {
+          this.updateStatistics();
+          this.updateNewClassmateList();
+          wx.setNavigationBarColor({
+            frontColor: "#ffffff",
+            backgroundColor: "#000000",
+          });
+          this.setData({
+            classInfo: res.data[0],
+          });
+        } else {
+          this.setData({
+            classInfo: null,
+          });
+        }
+      });
+  },
+  displayClassmateInfo(e) {
     let dataset = e.currentTarget.dataset;
-    let index = dataset.index;
-    this.setData({
-      hiddenClassmateInfoPopup: false,
-      classmateInfoPopupData: {
-        avatar:
-          "http://t9.baidu.com/it/u=1589763659,2716552399&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587449931&t=5a4adaac66cdeb2f07ff7a0247f58d15",
-        relaname: "蔡同学",
-        age: 18,
-        phoneNumber: 1888999966,
-        office: "扫地专员",
-      },
-    });
+    let flag = dataset.flag;
+    if (flag) {
+      this.setData({
+        classmateInfo: {
+          hiddenPopup: flag
+        },
+      });
+    } else {
+      let index = dataset.index;
+      let selectUser=this.data.classmates[index];
+      if(selectUser['brithday']!=''){
+        selectUser['age']=Utils.computedAge(selectUser['brithday']);
+        selectUser['brithday']=Utils.formatDate(selectUser['brithday'],"y-m-d");
+      }
+      this.setData({
+        classmateInfo: {
+          hiddenPopup: flag,
+          info: selectUser,
+        },
+      });
+    }
   },
   hiddenClassmateInfoPopup() {
     this.setData({
       hiddenClassmateInfoPopup: true,
     });
   },
-  userLogin(e) {
-    if (e.detail.cloudID) {
-      let userInfo = {
-        isLogin: true,
-        cloudId: e.detail.cloudID,
-        ...e.detail.userInfo,
-      };
-
-      App.userInfo = userInfo;
-      this.setData({
-        userInfo,
-      });
+  /* 获取用户信息 */
+  async getUserInfo(e) {
+    if (e.detail.userInfo) {
+      let userInfo = e.detail.userInfo;
+      await App.getUserInfo(userInfo)
+        .then((res) => {
+          userInfo["isLogin"] = true;
+          App.userInfo = userInfo;
+          this.setData({
+            userInfo: res,
+          });
+          wx.hideLoading();
+        })
+        .catch((res) => {
+          this.setData({
+            userInfo: res,
+          });
+          wx.hideLoading();
+        });
     }
   },
+  /* 搜索班级 */
   async searchClass(e) {
-    let classId = e.detail.value.class_id;
-    if (!classId) {
-      wx.showToast({
-        title: "请输入班级ID，数字的呢",
-        icon: "none",
+    let classNumberId = e.detail.value.class_id;
+    if (!classNumberId) {
+      Prompt.toast("请输入班级的数字ID");
+      return;
+    }
+
+    if (
+      this.data.joinClass.searchResult &&
+      classNumberId == this.data.joinClass.searchResult["_numberid"]
+    ) {
+      this.setData({
+        "joinClass.hiddenPopup": false,
       });
       return;
     }
     wx.showLoading({
-      title:"查询中，请稍等"
+      title: "正在🔍查找",
     });
-    let classInfo = null;
-    let schoolInfo = null;
-    await wx.cloud
-      .database()
-      .collection("school_class")
-      .where({
-        _numberid: parseInt(classId),
-      })
-      .get()
-      .then((res) => {
-        if (res.data.length < 1) {
-          wx.showToast({
-            title: "抱歉，没搜索到相应的班级，请再次确认ID是否正确",
-            icon: "none",
-          });
-          return;
-        }
-        classInfo = res.data[0];
-      });
-
-    let schoolId = classInfo["_schoolid"];
-    await wx.cloud
-      .database()
-      .collection("school")
-      .where({
-        _id: schoolId,
-      })
-      .get()
-      .then((res) => {
-        if (res.data.length < 1) {
-          wx.showToast({
-            title: "抱歉，班级信息错误，请联系班级管理员",
-            icon: "none",
-          });
-          return;
-        }
-        schoolInfo = res["data"][0];
-      });
-      this.setData({
-        searchClassInfo:{
-          school:schoolInfo,
-          class:classInfo
-        },
-        hiddenJoinClassDialog:false
-      });
-      wx.hideLoading();
-  },
-  hiddenJoinClassDialog(){
-    this.setData({
-      hiddenJoinClassDialog:true
-    });
-  },
-  confirmJoinClass(e){
-    let that=this;
-    Cloud.cfunction("class","applyJoinClass",{
-      classId:this.data.searchClassInfo['class']['_id'],
-      schoolId:this.data.searchClassInfo['school']['_id'],
-    }).then(res=>{
-      Prompt.toast("申请成功",{
-        icon:"success"
-      });
-      this.setData({
-        hiddenJoinClassDialog:true
-      });
-    }).catch(err=>{
-      Prompt.codeToast(err.error,err.code,{
-        404:{
-          404001:"班级信息错误，请联系班级管理员"
-        },
-        409:{
-          409001:{
-            title:"您已申请过了，请勿重复申请",
-            switchTab:"/pages/index/index",
-            success(){
-              that.setData({
-                hiddenJoinClassDialog:true
-              });
-            }
-          }
-        }
-      });
-    });
-  },
-  displayNewClassmatePopup(e){
-    let flag=e.currentTarget.dataset.flag;
-    this.setData({
-      "newClassmate.hiddenPopup":flag
-    });
-  },
-  rejectNewClassmateJoin(){
-
-  },
-  agreeNewClassmateJoin(){
-    Cloud.cfunction("class","agreeNewClassmateJoin",{
-
+    await Cloud.cfunction("Class", "getClassByNumberId", {
+      _numberid: classNumberId,
     })
-  }
+      .then((res) => {
+        wx.hideLoading();
+        this.setData({
+          joinClass: {
+            searchResult: res,
+            hiddenPopup: false,
+          },
+        });
+      })
+      .catch((res) => {
+        wx.hideLoading();
+        Prompt.codeToast(res.error, res.code, {
+          404: {
+            404001: "抱歉，没找到ID所对应的班级，请检查是否输入正确",
+          },
+        });
+      });
+  },
+  /* 隐藏加入班级弹窗 */
+  hiddenJoinClassDialog() {
+    this.setData({
+      "joinClass.hiddenPopup": true,
+    });
+  },
+  /* 确定加入班级 */
+  confirmJoinClass() {
+    Cloud.cfunction("Class", "applyJoinClass", {
+      _classid: this.data.joinClass.searchResult["_id"],
+    })
+      .then((res) => {
+        Prompt.toast("提交申请成功，我们已经通知班级管理员审核，请耐心等候👌");
+      })
+      .catch((res) => {
+        Prompt.codeToast(res.error, res.code, {
+          409: {
+            409001: "宁已经提交过申请，请勿重复提交",
+            409002: "宁已是该班级的同学了，请勿重复加入",
+          },
+          500: {
+            500001: "申请加入失败，请稍后重试",
+          },
+        });
+      });
+  },
+  /* 显示 新同学申请 列表弹窗 */
+  async displayNewClassmatePopup(e) {
+    await Cloud.cfunction("Class", "getNewClassmate", {
+      _classid: this.data.classInfo["_id"],
+    }).then((res) => {
+      this.setData({
+        newClassmate: {
+          has: true,
+          hiddenPopup: false,
+          list: res,
+        },
+      });
+    });
+  },
+  /* 拒绝新同学加入 */
+  rejectNewClassmateJoin(e) {
+    let index = e.currentTarget.dataset.index;
+    let selectUser = this.data.newClassmate.list[index];
+    Cloud.cfunction("Class", "rejectNewClassmateJoin", {
+      _classid: this.data.classInfo["_id"],
+      _userid: selectUser["_openid"],
+    }).then((res) => {
+      this.setData({
+        [`newClassmate.list[${index}]`]: "deleted",
+      });
+      Prompt.toast("🙅拒绝成功");
+    });
+  },
+  /* 同意新同学加入 */
+  async agreeNewClassmateJoin(e) {
+    let index = e.currentTarget.dataset.index;
+    let selectUser = this.data.newClassmate.list[index];
+    Cloud.cfunction("Class", "agreeNewClassmateJoin", {
+      _classid: this.data.classInfo["_id"],
+      _userid: selectUser["_openid"],
+    }).then((res) => {
+      this.setData({
+        [`newClassmate.list[${index}]`]: "deleted",
+        "newClassmate.has": this.newClassmate.list.length != 0,
+        "newClassmate.hiddenPopup": this.newClassmate.list.length == 0,
+      });
+      Prompt.toast("🙆同意成功，我们已经发送了通知给新同学了！");
+    });
+  },
+  getClassStudent() {
+    Cloud.cfunction("Class", "getStudent", {
+      _classid: this.data.classInfo._id,
+    }).then((res) => {
+      this.setData({
+        classmates: res,
+      });
+    });
+  },
 });

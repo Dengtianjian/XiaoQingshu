@@ -1,9 +1,9 @@
 <!-- pages/class/album/album.wxml -->
-<Tabs tabs="{{ tabs }}" current="photo">
-  <view class="album-list" slot="photo">
+<Tabs tabs="{{ tabs }}" current="photo" swiperHeight="{{ swiperHeight }}" >
+  <view class="album-list album-list-photo" slot="photo">
   <view class="album-item album-upload qcicon qcicon-upload" bindtap="uploadPhoto"></view>
-    <block wx:for="{{ photos }}">
-      <image class="album-item" src="{{ item.url }}" mode="aspectFill" bindtap="previewPhoto" data-index="{{ index }}" bindlongpress="deletePhoto" wx:if="{{ item!='deleted' }}"></image>
+    <block wx:for="{{ photo.list }}">
+      <image class="album-item" src="{{ item._fileid }}" mode="aspectFill" bindtap="previewPhoto" data-index="{{ index }}" bindlongpress="deletePhoto" wx:if="{{ item!='deleted' }}" lazy-load></image>
     </block>
   </view>
   <view class="album-list" slot="video">

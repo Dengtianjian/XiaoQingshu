@@ -35,6 +35,10 @@ Component({
     current: {
       type: [String, Number],
       value: ""
+    },
+    swiperHeight:{
+      type:Number,
+      value:"200"
     }
   },
 
@@ -42,7 +46,6 @@ Component({
    * 组件的初始数据
    */
   data: {
-    swiperHeight: 200,
     active: 0
   },
 
@@ -58,6 +61,9 @@ Component({
         "active": index,
         "current": tabs[index]
       });
+      wx.pageScrollTo({
+        scrollTop:0
+      });
     },
     switchPostSwiper(e) {
       let tabs = this.data.tabs;
@@ -66,6 +72,9 @@ Component({
       this.setData({
         "active": tabs.indexOf(key),
         "current": key
+      });
+      wx.pageScrollTo({
+        scrollTop:0
       });
     },
     computedSwiperHeight() {

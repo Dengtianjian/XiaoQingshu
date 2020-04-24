@@ -1,5 +1,6 @@
 {
   "navigationStyle":"custom",
+  "enablePullDownRefresh":true,
   "usingComponents": {
     "NavigationBar":"/components/navigationBar/navigationBar",
     "StatisticsGrid":"/components/statisticsGrid/statisticsGrid",

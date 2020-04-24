@@ -1,34 +1,42 @@
 <!-- pages/class/class.wxml -->
-<block wx:if="{{ userInfo.isLogin&&userInfo.class }}">
+<block wx:if="{{ classInfo!=null }}">
   <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" defaultColor="#ffffff">
     <view class="grade">{{ classInfo['grade'] }}级</view>
   </NavigationBar>
   <view class="class-info">
-    <navigator class="class-info-left" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info">
-      <view class="class-name">{{ classInfo['profession'] }}{{ classInfo['number'] }}班 ></view>
+    <navigator class="class-info-left" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info?classid={{ classInfo['_id'] }}">
+      <view class="class-name">{{ classInfo['profession'] }}{{ classInfo['number']||'' }}班</view>
       <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
     </navigator>
     <view class="class-info-right">
-      <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
-      <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:90%;">
-        <view class="new-classmate-list">
-          <view class="new-classmate-item">
-            <view class="new-classmate-item-info">
-              <image class="new-classmate-item-avatar" src="https://template.canva.cn/EADhZmVSNlI/1/0/400w-FLVNlTFuTn4.jpg"></image>
-              <text class="new-classmate-item-nickname">憨憨</text>
-            </view>
-            <view class="new-classmate-item-operate">
-              <button class="new-classmate-item-operate-item" type="default" size="mini" bind:tap="rejectNewClassmateJoin">拒绝</button>
-              <button class="new-classmate-item-operate-item" type="primary" size="mini" bind:tap="agreeNewClassmateJoin">同意</button>
-            </view>
+      <block wx:if="{{ newClassmate.has }}">
+        <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
+        <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:88%;">
+          <view class="new-classmate-list">
+            <block wx:for="{{ newClassmate.list }}" wx:key="index">
+              <view class="new-classmate-item" wx:if="{{ item!='deleted' }}">
+                <view class="new-classmate-item-info">
+                  <image class="new-classmate-item-avatar" src="{{ item['avatar_url'] }}"></image>
+                  <text class="new-classmate-item-nickname">{{ item['nickname'] }}</text>
+                </view>
+                <view class="new-classmate-item-operate">
+                  <button class="new-classmate-item-operate-item" type="default" size="mini" bind:tap="rejectNewClassmateJoin" data-index="{{ index }}">
+                    拒绝
+                  </button>
+                  <button class="new-classmate-item-operate-item" type="primary" size="mini" bind:tap="agreeNewClassmateJoin" data-index="{{ index }}">
+                    同意
+                  </button>
+                </view>
+              </view>
+            </block>
           </view>
-        </view>
-      </Popup>
+        </Popup>
+      </block>
     </view>
   </view>
   <view class="head-background"></view>
   <view class="radius-container">
-    <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album">
+    <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album?classid={{ classInfo['_id'] }}">
       <!-- <view class="album-entry" hover-class="none" open-type="navigate" url="">
       <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
     </view> -->
@@ -41,42 +49,43 @@
       </view>
     </navigator>
     <view class="classmate">
-      <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
+      <!-- <button bind:tap="getClassStudent">Get</button> -->
+      <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
         编辑我的信息
-      </navigator>
-      <view class="classmate-item" wx:for="{{ 50 }}" bindtap="showClassmateInfo" data-index="{{ index }}">
+      </navigator> -->
+      <view class="classmate-item" wx:for="{{ classmates }}" bindtap="displayClassmateInfo" data-index="{{ index }}" data-flag="{{ false }}">
         <view class="classmater-item-left">
-          <image class="classmater-item-avatar" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
-          <view class="classmate-item-nickname">黄同学</view>
+          <image class="classmater-item-avatar" src="{{ item['avatar_url'] }}" mode="aspectFill"></image>
+          <view class="classmate-item-nickname">{{ item['realname']||item['nickname'] }}</view>
         </view>
         <text class="classmate-item-rightarrow qcicon qcicon-arrow-right"></text>
       </view>
-      <view hidden="{{ hiddenClassmateInfoPopup }}">
+      <view hidden="{{ classmateInfo.hiddenPopup }}">
         <view class="classmate-info-popup" catch:touchmove>
-          <image class="classmate-info-avatar" src="{{ classmateInfoPopupData['avatar'] }}" mode="top"></image>
-          <view class="classmate-info-gender">👩</view>
-          <view class="classmate-info-name">{{ classmateInfoPopupData['relaname'] }}</view>
+          <image class="classmate-info-avatar" src="{{ classmateInfo['info']['avatar_url'] }}" mode="top"></image>
+          <view class="classmate-info-gender" wx:if="{{ classmateInfo['info']['gender']!='secret' }}">{{ classmateInfo['info']['gender']=='male'?'🧑':'👩' }}</view>
+          <view class="classmate-info-name">
+            {{ classmateInfo['info']['realname']||classmateInfo['info']['nickname'] }}
+          </view>
           <view class="classmate-info-list">
-            <view class="classmate-info-item">
+            <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['phone_number']!='' }}">
               <view class="classmate-info-item-title">手机号码</view>
               <view class="classmate-info-item-content">
-                {{ classmateInfoPopupData['phoneNumber'] }}
+                {{ classmateInfo['info']['phone_number'] }}
               </view>
             </view>
-            <view class="classmate-info-item">
+            <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['brithday']!='' }}">
               <view class="classmate-info-item-title">年龄</view>
-              <view class="classmate-info-item-content">{{ classmateInfoPopupData['age'] }}</view>
+              <view class="classmate-info-item-content">{{ classmateInfo['info']['age'] }}</view>
             </view>
-            <view class="classmate-info-item">
-              <view class="classmate-info-item-title">职位</view>
-              <view class="classmate-info-item-content">
-                {{ classmateInfoPopupData['office'] }}
-              </view>
+            <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['brithday']!='' }}">
+              <view class="classmate-info-item-title">生日</view>
+              <view class="classmate-info-item-content">{{ classmateInfo['info']['brithday'] }}</view>
             </view>
           </view>
         </view>
       </view>
-      <view class="classmate-info-popup-mask" catch:touchmove hidden="{{ hiddenClassmateInfoPopup }}" bindtap="hiddenClassmateInfoPopup"></view>
+      <view class="classmate-info-popup-mask" catch:touchmove hidden="{{ classmateInfo['hiddenPopup'] }}" bindtap="displayClassmateInfo" data-flag="{{ true }}"></view>
     </view>
   </view>
 </block>
@@ -86,13 +95,13 @@
     <image class="page-prompt-icon" src="/material/images/not_logged.png" mode="aspectFill"></image>
     <view class="page-prompt-title">宁还未登录哦，登录后才可以查看自己所在的班级呢</view>
     <view class="page-prompt-operate">
-      <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="userLogin">
+      <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
         登录
       </button>
     </view>
   </view>
 </block>
-<block wx:if="{{ userInfo.isLogin&&userInfo.class==undefined }}">
+<block wx:if="{{ userInfo.isLogin==true&&classInfo==null }}">
   <NavigationBar pageTitle="班级" />
   <view class="not-class-prompt page-prompt">
     <image class="page-prompt-icon" src="/material/images/not_class.png" mode="aspectFill"></image>
@@ -102,13 +111,16 @@
       <button class="not-class-form-submit button-common" type="primary" form-type="submit">
         搜索
       </button>
+      <navigator class="create-class-entry" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info">
+        创建班级
+      </navigator>
     </form>
   </view>
-  <Dialog hidden="{{ hiddenJoinClassDialog }}" title="根据ID查询到了" height="440rpx" cancelButton="不是这个" confirmButton="是的，申请加入" textAlign="center" bind:cancel="hiddenJoinClassDialog" bind:confirm="confirmJoinClass">
+  <Dialog hidden="{{ joinClass['hiddenPopup'] }}" title="根据ID查询到了" height="440rpx" cancelButton="不是这个" confirmButton="是的，申请加入" textAlign="center" bind:cancel="hiddenJoinClassDialog" bind:confirm="confirmJoinClass">
     <view slot="content">
-      {{ searchClassInfo['school']['name'] }}
+      {{ joinClass['searchResult']['school']['name'] }}
       <view>
-        {{ searchClassInfo['class']['grade'] }}级 {{ searchClassInfo['class']['profession'] }}{{ searchClassInfo['class']['number'] }}班
+        {{ joinClass['searchResult']['grade'] }}级 {{ joinClass['searchResult']['profession'] }}{{ joinClass['searchResult']['number'] }}班
       </view>
     </view>
   </Dialog>

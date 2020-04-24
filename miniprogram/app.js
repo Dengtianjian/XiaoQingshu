@@ -1,4 +1,5 @@
 //app.js
+import Cloud from "./source/js/cloud";
 wx.cloud.init({
   env: "develogment-env",
 });
@@ -22,7 +23,6 @@ App({
       },
     });
     this.getUserInfo();
-    this.isLogining = true;
   },
 
   globalData: {
@@ -33,41 +33,74 @@ App({
   userInfo: {
     isLogin: false,
   },
-  getUserInfo() {
-    let that = this;
-    if (this.userInfo.isLogin == true) {
-      return Promise.resolve(this.userInfo);
-    } else {
-      return new Promise((resolve) => {
-        wx.getSetting({
-          async success(res) {
-            if (res.authSetting["scope.userInfo"]) {
-              await wx.getUserInfo({
-                async success(res) {
-                  let userInfo = {
-                    isLogin: true,
-                    cloudID: res.cloudID,
-                    ...res.userInfo,
-                  };
-                  await wx.cloud
-                    .callFunction({
-                      name: "getUserInfo",
-                    })
-                    .then((res) => {
-
-                      userInfo = Object.assign(userInfo, res.result);
-                    });
-                  that.userInfo = userInfo;
-
-                  resolve(userInfo);
-                },
-              });
-            }else{
-              resolve(that.userInfo);
-            }
-          },
+  async cloudGetUserInfo(userInfo) {
+    let _that = this;
+    return await Cloud.cfunction("User", "getUserInfo", {
+      info: userInfo,
+    })
+      .then((res) => {
+        if (_that.isLogin) {
+          return;
+        }
+        let userInfo = res;
+        userInfo["isLogin"] = true;
+        _that.userInfo = userInfo;
+        wx.setStorage({
+          key:"userInfo",
+          data:userInfo
         });
+        return userInfo;
+      })
+      .catch((res) => {
+        console.log(res);
+        if (_that.isLogin) {
+          return;
+        }
+        return _that.userInfo;
       });
-    }
+  },
+  async getUserInfo(userInfo = null) {
+    let _that = this;
+    return new Promise(async (resolve, reject) => {
+      if (userInfo) {
+        await this.cloudGetUserInfo(userInfo).then(res=>{
+          resolve(res);
+        }).catch(res=>{
+          reject(res);
+        });
+      } else {
+        await wx.getSetting().then(async (res) => {
+          if (res.authSetting["scope.userInfo"]) {
+            if (_that.isLogin) {
+              return;
+            }
+            await wx.getUserInfo()
+              .then(async (res) => {
+                if (_that.isLogin) {
+                  return;
+                }
+                userInfo = res.userInfo;
+                await this.cloudGetUserInfo(userInfo).then(res=>{
+                  resolve(res);
+                }).catch(res=>{
+                  reject(res);
+                })
+              })
+              .catch((res) => {
+                console.log(res);
+                if (_that.isLogin) {
+                  return;
+                }
+                reject(_that.userInfo);
+              });
+          } else {
+            if (_that.isLogin) {
+              return;
+            }
+            reject(_that.userInfo);
+          }
+        });
+      }
+    });
   },
 });

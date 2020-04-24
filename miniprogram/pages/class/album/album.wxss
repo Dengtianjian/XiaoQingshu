@@ -1,7 +1,7 @@
 /* pages/class/album/album.wxss */
 page{
   background-color: #FFFFFF;
-  height: 100%;
+  min-height: 100%;
 }
 
 mp-video-swiper {
