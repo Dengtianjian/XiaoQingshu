@@ -64,6 +64,9 @@ Component({
       wx.pageScrollTo({
         scrollTop:0
       });
+      this.triggerEvent("change",{
+        current:this.data.current
+      });
     },
     switchPostSwiper(e) {
       let tabs = this.data.tabs;
