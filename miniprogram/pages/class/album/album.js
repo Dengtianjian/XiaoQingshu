@@ -4,11 +4,10 @@ import Prompt from "../../../source/js/prompt";
 Page({
   async onLoad(options) {
     let classId = options.classid;
-    classId = "3f8c212f5ea1af880012fed41a850048";
     this.setData({
       classId,
     });
-    // this.getClassPhoto();
+    this.getClassPhoto();
   },
 
   /**
@@ -21,7 +20,7 @@ Page({
       video: "视频",
     },
     swiperHeight: 200,
-    currentShowType: "video",
+    currentShowType: "photo",
     photo: {
       page: 0,
       list: [],

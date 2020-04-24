@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/class/album/album",
     "pages/class/index/index",
+    "pages/class/album/album",
     "pages/class/edit_info/edit_info",
     "pages/my/index/index",
     "pages/index/index",
