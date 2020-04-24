@@ -1,5 +1,6 @@
 // pages/class/album/album.js
 import Cloud from "../../../source/js/cloud";
+import Prompt from "../../../source/js/prompt";
 Page({
   async onLoad(options) {
     let classId = options.classid;
@@ -7,7 +8,7 @@ Page({
     this.setData({
       classId,
     });
-    this.getClassPhoto();
+    // this.getClassPhoto();
   },
 
   /**
@@ -20,57 +21,68 @@ Page({
       video: "视频",
     },
     swiperHeight: 200,
+    currentShowType: "video",
     photo: {
       page: 0,
       list: [],
       loadCount: 0,
       finished: false,
     },
-    hiddenPreviewVideoPopup: true,
-    currentPreviewVideo: "",
-    videos: [
-      {
-        cover: "/material/images/index.png",
-        url:
-          "http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/2fcc59275285890794073114126/ySa5LZ3k4EcA.mp4",
-      },
-      {
-        cover: "/material/images/index.png",
-        url:
-          "http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/320ee16a5285890794073203247/okwtzftAVuwA.mp4",
-      },
-      {
-        cover: "/material/images/index.png",
-        url:
-          "http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/320ed9255285890794073203062/JyqT3zzDH4MA.mp4",
-      },
-      {
-        cover: "/material/images/index.png",
-        url:
-          "http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/30287db75285890794073167278/WVQpwkgnb9EA.mp4",
-      },
-      {
-        cover: "/material/images/index.png",
-        url:
-          "http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/30287db75285890794073167278/WVQpwkgnb9EA.mp4",
-      },
-    ],
+    video: {
+      hiddenPopup: true,
+      currentPreviewVideo: null,
+      page: 0,
+      list: [],
+      loadCount: 0,
+      finished: false,
+    },
   },
 
   onReachBottom() {
-    this.getClassPhoto();
+    if (this.data.currentShowType == "photo") {
+      this.getClassPhoto();
+    } else {
+      this.getClassVideo();
+    }
   },
 
   onPullDownRefresh() {
+    if (this.data.currentShowType == "photo") {
+      this.setData({
+        photo: {
+          page: 0,
+          list: [],
+          loadCount: 0,
+          finished: false,
+        },
+      });
+      this.getClassPhoto();
+    } else {
+      this.setData({
+        video: {
+          hiddenPopup: true,
+          currentPreviewVideo: null,
+          page: 0,
+          list: [],
+          loadCount: 0,
+          finished: false,
+        },
+      });
+      this.getClassVideo();
+    }
+  },
+
+  tabChange(e) {
     this.setData({
-      photo: {
-        page: 0,
-        list: [],
-        loadCount: 0,
-        finished: false,
-      },
+      currentShowType: e.detail.current,
     });
-    this.getClassPhoto();
+    if (this.data[this.data.currentShowType]["list"].length == 0) {
+      if (this.data.currentShowType == "photo") {
+        this.getClassPhoto();
+      } else {
+        this.getClassVideo();
+      }
+    }
   },
 
   getClassPhoto() {
@@ -83,6 +95,7 @@ Page({
     if (this.data.photo.finished == true) {
       return;
     }
+
     wx.showLoading({
       title: "从相册取出中",
       mask: true,
@@ -90,6 +103,7 @@ Page({
     Cloud.collection("school_class_album")
       .where({
         _classid: this.data.classId,
+        type: "photo",
       })
       .limit(15)
       .skip(this.data.photo.page * 15)
@@ -107,7 +121,7 @@ Page({
           {
             "photo.loadCount": this.data.photo.loadCount + 1,
             "photo.page": this.data.photo.page + 1,
-            "photo.finished":res.data.length<15
+            "photo.finished": res.data.length < 15,
           },
           () => {
             let photosLength = this.data.photo.list.length;
@@ -123,61 +137,161 @@ Page({
         );
       });
   },
+  getClassVideo() {
+    if (this.data.video.loadCount == 2) {
+      this.setData({
+        "video.loadCount": 0,
+      });
+      return;
+    }
+    if (this.data.video.finished == true) {
+      return;
+    }
+    wx.showLoading({
+      title: "从相册取出中",
+      mask: true,
+    });
+    Cloud.collection("school_class_album")
+      .where({
+        _classid: this.data.classId,
+        type: "video",
+      })
+      .limit(15)
+      .skip(this.data.video.page * 15)
+      .get()
+      .then((DBVideos) => {
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
+        if (DBVideos.data.length == 0) {
+          this.setData({
+            "video.finished": true,
+          });
+          return;
+        }
+        DBVideos = DBVideos.data;
+        this.setData(
+          {
+            "video.loadCount": this.data.video.loadCount + 1,
+            "video.page": this.data.video.page + 1,
+            "video.finished": DBVideos.length < 15,
+          },
+          () => {
+            let videosLength = this.data.video.list.length;
+            DBVideos.forEach((item, index) => {
+              this.setData({
+                [`video.list[${videosLength + index}]`]: item,
+              });
+            });
+            this.updateSwiperHeight();
+            this.getClassVideo();
+          }
+        );
+      });
+  },
   updateSwiperHeight() {
+    let selector = `.album-list-${this.data.currentShowType}`;
     let query = wx.createSelectorQuery();
-    query.select(".album-list-photo").boundingClientRect((rect) => {
+    query.select(selector).boundingClientRect((rect) => {
       this.setData({
         swiperHeight: rect.height,
       });
     });
     query.exec();
   },
-  uploadPhoto() {
-    wx.chooseImage().then((localImages) => {
-      let length = this.data.photos.length;
-      let arrayIndex = 0;
-      localImages.tempFilePaths.forEach(async (item, index) => {
-        let file = {};
-        let fileName = `${Math.round(Math.random() * 100000000)}${Date.now()}`;
-        let fileExtension = item.slice(item.lastIndexOf("."));
-        fileName += fileExtension;
+  async uploadFile(tempFile) {
+    let fileName = `${Math.round(Math.random() * 100000000)}${Date.now()}`;
+    let fileExtension = tempFile.slice(tempFile.lastIndexOf("."));
+    fileName += fileExtension;
+    return await wx.cloud
+      .uploadFile({
+        cloudPath: `class_album/${this.data.classId}/${fileName}`,
+        filePath: tempFile,
+      })
+      .then((res) => {
+        return res.fileID;
+      });
+  },
+  async upload() {
+    let chooseFile = null;
+    let length = null;
+    let arrayIndex = 0;
+    let that = this;
+    if (this.data.currentShowType == "photo") {
+      length = this.data.photo.list.length;
+      chooseFile = await wx.chooseImage().then((localImages) => {
+        return localImages;
+      });
+
+      chooseFile.tempFilePaths.forEach(async (item, index) => {
         wx.showLoading({
           title: "上传中Up up！",
         });
-        await wx.cloud
-          .uploadFile({
-            cloudPath: `class_album/${this.data.classId}/${fileName}`,
-            filePath: item,
-          })
-          .then((res) => {
-            arrayIndex = `photos[${length + index}]`;
-            file = {
-              _fileid: res.fileID,
-            };
-            Cloud.cfunction("Class", "saveAlbum", {
-              _classid: this.data.classId,
-              _fileid: res.fileID,
-              type: "photo",
-            });
-            this.setData(
-              {
-                [arrayIndex]: file,
-              },
-              () => {
-                if (this.data.photos.length % 4 > 0 || localImages.length > 4) {
-                  this.updateSwiperHeight();
-                }
-                wx.hideLoading();
-              }
-            );
-          });
+        let _fileid = await this.uploadFile(item);
+        Cloud.cfunction("Class", "saveAlbum", {
+          _classid: this.data.classId,
+          _fileid,
+          type: "photo",
+        });
+        arrayIndex = `photo.list[${length + index}]`;
+        that.setData(
+          {
+            [arrayIndex]: {
+              _fileid,
+            },
+          },
+          () => {
+            if (
+              that.data.photo.list.length % 4 > 0 ||
+              chooseFile.tempFilePaths.length > 4
+            ) {
+              that.updateSwiperHeight();
+            }
+            wx.hideLoading();
+          }
+        );
       });
-    });
+    } else {
+      length = this.data.video.list.length;
+      chooseFile = await wx
+        .chooseVideo({
+          compressed: true,
+        })
+        .then((res) => {
+          return res;
+        });
+      wx.showLoading({
+        title: "上传中Up up！",
+      });
+      let coverFileid = await this.uploadFile(chooseFile["thumbTempFilePath"]);
+      let videoFileid = await this.uploadFile(chooseFile["tempFilePath"]);
+      Cloud.cfunction("Class", "saveAlbum", {
+        _classid: this.data.classId,
+        _fileid: videoFileid,
+        type: "video",
+        cover: coverFileid,
+        duration: chooseFile["duration"],
+      }).then((res) => {
+        arrayIndex = `video.list[${length}]`;
+        this.setData(
+          {
+            [arrayIndex]: {
+              _fileid: videoFileid,
+              cover: coverFileid,
+            },
+          },
+          () => {
+            this.updateSwiperHeight();
+            wx.hideLoading();
+          }
+        );
+      });
+    }
   },
   previewPhoto(e) {
     let index = e.currentTarget.dataset.index;
     let urls = [];
-    let photos = this.data.photos;
+    let photos = this.data.photo.list;
+    console.log(photos);
     photos.forEach((element) => {
       urls.push(element._fileid);
     });
@@ -194,7 +308,16 @@ Page({
       success(res) {
         if (res.confirm) {
           let index = e.currentTarget.dataset.index;
-          let key = `photos[${index}]`;
+          let selectPhoto=_this.data.photo.list[index];
+          Cloud.cfunction("Class","deleteAlbumContent",{
+            _classid:_this.data.classId,
+            _fileid:selectPhoto._fileid,
+            _id:selectPhoto._id,
+            type:"photo"
+          }).then(res=>{
+            Prompt.toast("删除成功");
+          })
+          let key = `photo.list[${index}]`;
           _this.setData({
             [key]: "deleted",
           });
@@ -202,43 +325,8 @@ Page({
       },
     });
   },
-  uploadVideo() {
-    let _this = this;
-    let videos = this.data.videos;
-    wx.chooseVideo({
-      success(e) {
-        wx.showLoading({
-          title: "上传中",
-        });
-        wx.cloud.uploadFile({
-          cloudPath: `${Math.random()}.jpg`,
-          filePath: e.thumbTempFilePath,
-          success(res) {
-            wx.cloud
-              .getTempFileURL({
-                fileList: [
-                  {
-                    fileID: res["fileID"],
-                  },
-                ],
-              })
-              .then((result) => {
-                videos.push({
-                  url: e.tempFilePath,
-                  cover: result["fileList"][0]["tempFileURL"],
-                });
-                _this.setData({
-                  videos,
-                });
-                wx.hideLoading();
-              });
-          },
-        });
-      },
-    });
-  },
   previewVideo(e) {
-    let videos = this.data.videos;
+    let videos = this.data.video.list;
     let dataset = e.currentTarget.dataset;
     if (videos[dataset["index"]] == "deleted") {
       wx.showToast({
@@ -248,8 +336,8 @@ Page({
       return;
     }
     this.setData({
-      hiddenPreviewVideoPopup: false,
-      currentPreviewVideo: videos[dataset["index"]]["url"],
+      "video.hiddenPopup": false,
+      "video.currentPreviewVideo": videos[dataset["index"]]["_fileid"],
     });
   },
   deleteVideo(e) {
@@ -260,7 +348,17 @@ Page({
       success(res) {
         if (res.confirm) {
           let index = e.currentTarget.dataset.index;
-          let key = `videos[${index}]`;
+          let selectVideo=_this.data.video.list[index];
+          Cloud.cfunction("Class","deleteAlbumContent",{
+            _classid:_this.data.classId,
+            _fileid:selectVideo._fileid,
+            _id:selectVideo._id,
+            cover:selectVideo.cover,
+            type:"video"
+          }).then(res=>{
+            Prompt.toast("删除成功");
+          });
+          let key = `video.list[${index}]`;
           _this.setData({
             [key]: "deleted",
           });
@@ -270,7 +368,7 @@ Page({
   },
   cancelPreviewVideo() {
     this.setData({
-      hiddenPreviewVideoPopup: true,
+      "video.hiddenPopup": true,
     });
   },
 });

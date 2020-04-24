@@ -4,7 +4,7 @@ const cloud = require("wx-server-sdk");
 cloud.init();
 
 const DB = cloud.database();
-const _ =DB.command;
+const _ = DB.command;
 
 let functions = {
   /**
@@ -178,17 +178,19 @@ let functions = {
         });
       if (addResult["_id"]) {
         DB.collection("user_joined_class").add({
-          data:{
-            _classid:addResult["_id"],
-            _userid:wxContext.OPENID,
-            _schoolid
-          }
+          data: {
+            _classid: addResult["_id"],
+            _userid: wxContext.OPENID,
+            _schoolid,
+          },
         });
-        DB.collection("schoold").doc(_schoolid).update({
-          data:{
-            classes:_.inc(1)
-          }
-        });
+        DB.collection("schoold")
+          .doc(_schoolid)
+          .update({
+            data: {
+              classes: _.inc(1),
+            },
+          });
         DB.collection("system_parameters")
           .where({
             identifier: "max_class_numberid",
@@ -199,7 +201,7 @@ let functions = {
             },
           });
         return {
-          _classid:addResult["_id"],
+          _classid: addResult["_id"],
           message: "创建成功",
         };
       }
@@ -272,236 +274,323 @@ let functions = {
   /*
   获取班级的申请加入的新同学
   */
-  async getNewClassmate(event){
-    let newClassmate=await DB.collection("school_class_apply").where({
-      _classid:event._classid
-    }).get().then(res=>{
-      return res['data'];
-    });
-    if(newClassmate.length==0){
+  async getNewClassmate(event) {
+    let newClassmate = await DB.collection("school_class_apply")
+      .where({
+        _classid: event._classid,
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    if (newClassmate.length == 0) {
       return [];
     }
-    let classmateUserId=[];
-    newClassmate.forEach(item=>{
+    let classmateUserId = [];
+    newClassmate.forEach((item) => {
       classmateUserId.push(item._userid);
     });
-    let userInfo=await DB.collection("user").aggregate().lookup({
-      from:"user_profile",
-      localField:"_openid",
-      foreignField:"_userid",
-      as:"profile"
-    }).match({
-      _openid:_.in(classmateUserId)
-    }).end().then(res=>{
-      return res['list'];
-    });
-    userInfo.forEach(userInfoItem=>{
-      userInfoItem=Object.assign(userInfoItem,userInfoItem['profile'][0]);
-      delete userInfoItem['profile'];
-      newClassmate.forEach(classmateItem=>{
-        if(userInfoItem['_openid']==classmateItem['_userid']){
-          userInfoItem['apply_date']=classmateItem['date'];
-        }
+    let userInfo = await DB.collection("user")
+      .aggregate()
+      .lookup({
+        from: "user_profile",
+        localField: "_openid",
+        foreignField: "_userid",
+        as: "profile",
       })
+      .match({
+        _openid: _.in(classmateUserId),
+      })
+      .end()
+      .then((res) => {
+        return res["list"];
+      });
+    userInfo.forEach((userInfoItem) => {
+      userInfoItem = Object.assign(userInfoItem, userInfoItem["profile"][0]);
+      delete userInfoItem["profile"];
+      newClassmate.forEach((classmateItem) => {
+        if (userInfoItem["_openid"] == classmateItem["_userid"]) {
+          userInfoItem["apply_date"] = classmateItem["date"];
+        }
+      });
     });
     return userInfo;
   },
   /* 拒绝新同学加入 */
-  async rejectNewClassmateJoin(event){
-    let _classid=event._classid;
-    let _userid=event._userid;
+  async rejectNewClassmateJoin(event) {
+    let _classid = event._classid;
+    let _userid = event._userid;
 
-    let removeResult=await DB.collection("school_class_apply").where({
-      _classid,
-      _userid
-    }).remove().then(res=>{
-      if(res.errMsg=="collection.remove:ok"){
-        return res.stats.removed;
-      }
-    });
+    let removeResult = await DB.collection("school_class_apply")
+      .where({
+        _classid,
+        _userid,
+      })
+      .remove()
+      .then((res) => {
+        if (res.errMsg == "collection.remove:ok") {
+          return res.stats.removed;
+        }
+      });
     return removeResult;
   },
   /* 同意新同学加入 */
-  async agreeNewClassmateJoin(event){
-    let _classid=event._classid;
-    let _userid=event._userid;
+  async agreeNewClassmateJoin(event) {
+    let _classid = event._classid;
+    let _userid = event._userid;
 
     /* 查询班级信息 */
-    let classInfo=await DB.collection("school_class").where({
-      _id:_classid
-    }).get().then(res=>{
-      return res['data'];
-    });
-    if(classInfo.length==0){
+    let classInfo = await DB.collection("school_class")
+      .where({
+        _id: _classid,
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    if (classInfo.length == 0) {
       return {
-        error:404,
-        code:404001,
-        message:"班级不存在"
+        error: 404,
+        code: 404001,
+        message: "班级不存在",
       };
     }
-    classInfo=classInfo[0];
+    classInfo = classInfo[0];
 
     /* 查询是否已加入班级 */
-    let userJoinClassLog=await DB.collection("user_joined_class").where({
-      _classid,
-      _userid
-    }).get().then(res=>{
-      return res['data'];
-    });
+    let userJoinClassLog = await DB.collection("user_joined_class")
+      .where({
+        _classid,
+        _userid,
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
     //已经加入了
-    if(userJoinClassLog.length>0){
+    if (userJoinClassLog.length > 0) {
       /*更新班级同学数量*/
       //获取班级同学数量
-      await DB.collection("user_joined_class").where({
-        _classid
-      }).count().then(res=>{
-        DB.collection("school_class").where({
-          _classid
-        }).update({
-          data:{
-            students:res.total
-          }
+      await DB.collection("user_joined_class")
+        .where({
+          _classid,
+        })
+        .count()
+        .then((res) => {
+          DB.collection("school_class")
+            .where({
+              _classid,
+            })
+            .update({
+              data: {
+                students: res.total,
+              },
+            });
         });
-      });
       //删除申请记录
-      await DB.collection("school_class_apply").where({
-        _classid,
-        _userid
-      }).remove();
+      await DB.collection("school_class_apply")
+        .where({
+          _classid,
+          _userid,
+        })
+        .remove();
 
       return {
-        message:"同意成功"
+        message: "同意成功",
       };
     }
 
     /* 查询是否已经加入班级所在学校 */
-    let joinClassSchoolLog=await DB.collection("user_joined_school").where({
-      _schoolid:classInfo['_schoolid']
-    }).get().then(res=>{
-      return res['data'];
-    })
-    if(joinClassSchoolLog.length==0){
-      DB.collection("user_joined_school").add({
-        data:{
-          _schoolid:classInfo['_schoolid'],
-          join_time:Date.now(),
-          admission_time:Date.now(),
-          _userid
-        }
-      }).then(res=>{
-        DB.collection("school").where({
-          _id:classInfo['_schoolid']
-        }).update({
-          data:{
-            students:_.inc(1)
-          }
-        });
+    let joinClassSchoolLog = await DB.collection("user_joined_school")
+      .where({
+        _schoolid: classInfo["_schoolid"],
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
       });
+    if (joinClassSchoolLog.length == 0) {
+      DB.collection("user_joined_school")
+        .add({
+          data: {
+            _schoolid: classInfo["_schoolid"],
+            join_time: Date.now(),
+            admission_time: Date.now(),
+            _userid,
+          },
+        })
+        .then((res) => {
+          DB.collection("school")
+            .where({
+              _id: classInfo["_schoolid"],
+            })
+            .update({
+              data: {
+                students: _.inc(1),
+              },
+            });
+        });
     }
 
-    await DB.collection("user_joined_class").add({
-      data:{
+    await DB.collection("user_joined_class")
+      .add({
+        data: {
+          _classid,
+          _userid,
+          _schoolid: classInfo["_schoolid"],
+          join_time: Date.now(),
+        },
+      })
+      .then((res) => {
+        return res;
+      });
+    addResult = DB.collection("school_class")
+      .doc(classInfo["_id"])
+      .update({
+        data: {
+          students: _.inc(1),
+        },
+      })
+      .then((res) => {
+        return res;
+      });
+    DB.collection("user")
+      .where({
+        _openid: _userid,
+      })
+      .update({
+        data: {
+          _default_school: classInfo["_schoolid"],
+        },
+      });
+    //删除申请记录
+    await DB.collection("school_class_apply")
+      .where({
         _classid,
         _userid,
-        _schoolid:classInfo['_schoolid'],
-        join_time:Date.now()
-      }
-    }).then(res=>{
-      return res;
-    });
-    addResult=DB.collection("school_class").doc(classInfo['_id']).update({
-      data:{
-        students:_.inc(1)
-      }
-    }).then(res=>{
-      return res;
-    });
-    DB.collection("user").where({
-      _openid:_userid
-    }).update({
-      data:{
-        _default_school:classInfo['_schoolid'],
-      }
-    });
-    //删除申请记录
-    await DB.collection("school_class_apply").where({
-      _classid,
-      _userid
-    }).remove();
+      })
+      .remove();
     return {
-      message:"同意成功"
+      message: "同意成功",
     };
-
   },
   /* 获取同学列表 */
-  async getStudent(event){
-    let _classid=event._classid;
+  async getStudent(event) {
+    let _classid = event._classid;
 
-    let students=await DB.collection("user_joined_class").where({
-      _classid
-    }).get().then(res=>{
-      return res['data'];
-    });
-    if(students.length==0){
+    let students = await DB.collection("user_joined_class")
+      .where({
+        _classid,
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    if (students.length == 0) {
       return [];
     }
-    let userId=[];
+    let userId = [];
 
-    students.forEach(item=>{
+    students.forEach((item) => {
       userId.push(item._userid);
     });
 
-    let userInfo = await DB.collection('user').aggregate().lookup({
-      from:"user_profile",
-      localField:"_openid",
-      foreignField:"_userid",
-      as:"profile"
-    }).match({
-      _openid:_.in(userId)
-    }).end().then(res=>{
-      return res['list'];
-    });
-    userInfo.forEach((item,index)=>{
-      item=Object.assign(item,item['profile'][0]);
-      delete item['profile'];
-      userInfo[index]=item;
+    let userInfo = await DB.collection("user")
+      .aggregate()
+      .lookup({
+        from: "user_profile",
+        localField: "_openid",
+        foreignField: "_userid",
+        as: "profile",
+      })
+      .match({
+        _openid: _.in(userId),
+      })
+      .end()
+      .then((res) => {
+        return res["list"];
+      });
+    userInfo.forEach((item, index) => {
+      item = Object.assign(item, item["profile"][0]);
+      delete item["profile"];
+      userInfo[index] = item;
     });
 
     return userInfo;
   },
   /* 保存到相册 */
-  async saveAlbum(event){
+  async saveAlbum(event) {
     const wxContext = cloud.getWXContext();
-    let _classid=event._classid;
-    let _fileid=event._fileid;
-    let type=event.type;
+    let _classid = event._classid;
+    let _fileid = event._fileid;
+    let type = event.type;
 
-    let addResult=await DB.collection("school_class_album").add({
-      data:{
-        _classid,
-        _fileid,
-        _author:wxContext.OPENID,
-        dateline:Date.now(),
-        likes:0,
-        type
-      }
-    }).then(res=>{
-      return res;
-    }).catch(res=>{
-      return res;
-    })
-    if(addResult._id){
-      await DB.collection("school_class").doc(_classid).update({
-        data:{
-          album_count:_.inc(1)
-        }
+    let data = {
+      _classid,
+      _fileid,
+      _author: wxContext.OPENID,
+      dateline: Date.now(),
+      likes: 0,
+      type,
+    };
+    if (type == "video") {
+      data["duration"] = event.duration;
+      data["cover"] = event.cover;
+    }
+    let addResult = await DB.collection("school_class_album")
+      .add({
+        data,
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((res) => {
+        return res;
       });
+    if (addResult._id) {
+      await DB.collection("school_class")
+        .doc(_classid)
+        .update({
+          data: {
+            album_count: _.inc(1),
+          },
+        });
     }
     return {
-      message:"保存成功",
-      _id:addResult['_id']
+      message: "保存成功",
+      _id: addResult["_id"],
     };
-  }
+  },
+  async deleteAlbumContent(event) {
+    let _fileid = event._fileid;
+    let _classid = event._classid;
+    let _id = event._id;
+    let type = event.type;
+
+    let fileList=[_fileid];
+    if(type=="video"){
+      fileList.push(event.cover);
+    }
+    await cloud.deleteFile({
+      fileList
+    });
+
+    await DB.collection("school_class_album").where({
+      _id,
+      _classid,
+    }).remove();
+
+    await DB.collection("school_class")
+      .doc(_classid)
+      .update({
+        data: {
+          album_count: _.inc(-1),
+        },
+      });
+    return {
+      message: "删除成功",
+    };
+  },
 };
 
 // 云函数入口函数
@@ -515,7 +604,8 @@ exports.main = async (event, context) => {
     "rejectNewClassmateJoin",
     "agreeNewClassmateJoin",
     "getStudent",
-    "saveAlbum"
+    "saveAlbum",
+    "deleteAlbumContent",
   ];
   let method = event.method;
   if (!methods.includes(method)) {
