@@ -1,0 +1,34 @@
+/* miniprogram/pages/class/invite_join/invite_join.wxss */
+@import "/source/wxss/page_prompt.wxss";
+page {
+  min-height:100%;
+}
+.page-prompt-icon {
+  width:auto;
+}
+.page-prompt-title {
+  color:var(--font-color2);
+}
+.prompt-description {
+  margin-top:20rpx;
+  text-align:center;
+  font-size:40rpx;
+}
+.page-prompt-operate {
+  display:flex;
+  justify-content: space-around;
+  margin-top:80rpx;
+}
+.invite-classmate {
+  position:absolute;
+  bottom:30rpx;
+  width:100%!important;
+  font-size:24rpx;
+  text-align:center;
+  color:var(--font-light-color);
+  background:none;
+}
+
+.not-logged-prompt-button {
+  width:100%!important;
+}

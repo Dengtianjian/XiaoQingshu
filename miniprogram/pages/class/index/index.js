@@ -37,11 +37,24 @@ Page({
   onPullDownRefresh: function () {
     this.getClassInfo();
   },
+  onShareAppMessage	(e){
+    let students=this.data.classInfo.students;
+    let albumCount=this.data.classInfo.album_count;
+    let title=`已经有 ${students} 位同学👬加入同学录啦。还有 ${albumCount} 张同学们的丑照🤭在里面`;
+    let path="/pages/class/invite_join/invite_join?classid="+this.data.classInfo._id;
+    return {
+      title,
+      path
+    }
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    wx.showShareMenu({
+      withShareTicket: true
+    });
     wx.showLoading({
       title: "加载中",
     });

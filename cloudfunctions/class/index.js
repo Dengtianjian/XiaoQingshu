@@ -1,3 +1,4 @@
+const { joinClass } =require("./functions");
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 
@@ -7,6 +8,34 @@ const DB = cloud.database();
 const _ = DB.command;
 
 let functions = {
+  async getClassByClassId(event) {
+    let _classid = event._classid;
+    let result = await DB.collection("school_class")
+      .aggregate()
+      .match({
+        _id: _classid,
+      })
+      .lookup({
+        from: "school",
+        localField: "_schoolid",
+        foreignField: "_id",
+        as: "school",
+      })
+      .end()
+      .then((res) => {
+        return res["list"];
+      });
+    if (result.length == 0) {
+      return {
+        error: 404,
+        code: 404001,
+        message: "班级不存在",
+      };
+    }
+    result = result[0];
+    result["school"] = result["school"][0];
+    return result;
+  },
   /**
    * 根据数字ID 获取班级信息 包含班级所在的学校的信息
    * @param Number _numberid 班级数字ID
@@ -357,18 +386,10 @@ let functions = {
     }
     classInfo = classInfo[0];
 
-    /* 查询是否已加入班级 */
-    let userJoinClassLog = await DB.collection("user_joined_class")
-      .where({
-        _classid,
-        _userid,
-      })
-      .get()
-      .then((res) => {
-        return res["data"];
-      });
+    /* 加入班级 */
+    let joinClassResult = joinClass(_userid, classInfo["_schoolid"], _classid);
     //已经加入了
-    if (userJoinClassLog.length > 0) {
+    if (joinClassResult.error && joinClassResult.code == 409001) {
       /*更新班级同学数量*/
       //获取班级同学数量
       await DB.collection("user_joined_class")
@@ -409,6 +430,7 @@ let functions = {
       .then((res) => {
         return res["data"];
       });
+    //没有加入该班级所在的学校
     if (joinClassSchoolLog.length == 0) {
       DB.collection("user_joined_school")
         .add({
@@ -432,37 +454,6 @@ let functions = {
         });
     }
 
-    await DB.collection("user_joined_class")
-      .add({
-        data: {
-          _classid,
-          _userid,
-          _schoolid: classInfo["_schoolid"],
-          join_time: Date.now(),
-        },
-      })
-      .then((res) => {
-        return res;
-      });
-    addResult = DB.collection("school_class")
-      .doc(classInfo["_id"])
-      .update({
-        data: {
-          students: _.inc(1),
-        },
-      })
-      .then((res) => {
-        return res;
-      });
-    DB.collection("user")
-      .where({
-        _openid: _userid,
-      })
-      .update({
-        data: {
-          _default_school: classInfo["_schoolid"],
-        },
-      });
     //删除申请记录
     await DB.collection("school_class_apply")
       .where({
@@ -561,6 +552,7 @@ let functions = {
       _id: addResult["_id"],
     };
   },
+  /* 删除相册内容 */
   async deleteAlbumContent(event) {
     let _fileid = event._fileid;
     let _classid = event._classid;
@@ -595,6 +587,71 @@ let functions = {
       message: "删除成功",
     };
   },
+  async inviteAgreeJoinClass(event) {
+    let _classid = event._classid;
+    let _schoolid = event._schoolid;
+    const wxContext = cloud.getWXContext();
+
+    let classInfo = await DB.collection("school_class")
+      .where({
+        _id: _classid,
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    if (classInfo.length== 0) {
+      return {
+        error: 404,
+        code: 404001,
+        message: "班级不存在",
+      };
+    }
+    classInfo = classInfo[0];
+
+    let joinClassResult = await joinClass(wxContext.OPENID, _schoolid, _classid);
+
+    if (joinClassResult.error) {
+      return joinClassResult;
+    }
+
+    /* 查询是否已经加入班级所在学校 */
+    let joinClassSchoolLog = await DB.collection("user_joined_school")
+      .where({
+        _schoolid: classInfo["_schoolid"],
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    //没有加入该班级所在的学校
+    if (joinClassSchoolLog.length == 0) {
+      DB.collection("user_joined_school")
+        .add({
+          data: {
+            _schoolid: classInfo["_schoolid"],
+            join_time: Date.now(),
+            admission_time: Date.now(),
+            _userid:wxContext.OPENID,
+          },
+        })
+        .then((res) => {
+          DB.collection("school")
+            .where({
+              _id: classInfo["_schoolid"],
+            })
+            .update({
+              data: {
+                students: _.inc(1),
+              },
+            });
+        });
+    }
+
+    return {
+      message:"加入成功"
+    };
+  },
 };
 
 // 云函数入口函数
@@ -610,6 +667,8 @@ exports.main = async (event, context) => {
     "getStudent",
     "saveAlbum",
     "deleteAlbumContent",
+    "inviteAgreeJoinClass",
+    "getClassByClassId",
   ];
   let method = event.method;
   if (!methods.includes(method)) {

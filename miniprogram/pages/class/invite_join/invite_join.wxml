@@ -1,0 +1,30 @@
+<!-- miniprogram/pages/class/invite_join/invite_join.wxml -->
+<block wx:if="{{ userInfo['isLogin'] }}">
+  <view class="page-prompt">
+    <image class="page-prompt-icon" src="/material/images/invite_join.png" mode="aspectFit"></image>
+    <view class="page-prompt-title">同学们邀请宁加入班级</view>
+    <view class="prompt-description">
+      {{ classInfo['school']['name'] }}的 {{ classInfo['profession'] }} {{ classInfo['number'] }}班
+    </view>
+    <view class="page-prompt-operate">
+      <navigator open-type="switchTab" hover-class="none" url="/pages/class/index/index">
+        <button class="button-common prompt-operate-item" type="default">先不加入</button>
+      </navigator>
+      <button class="button-common prompt-operate-item" type="primary" bind:tap="agreeJoinClass">
+        同意加入
+      </button>
+    </view>
+  </view>
+  <button class="invite-classmate" open-type="share">点击分享😆邀请给其他同学，让TA们也加入进来吧💪</button>
+</block>
+<block wx:else>
+  <view class="page-prompt not-logged-prompt">
+    <image class="page-prompt-icon" src="/material/images/not_logged.png" mode="aspectFit"></image>
+    <view class="page-prompt-title">宁还未登录哦，需要登录后才能加入班级</view>
+    <view class="page-prompt-operate">
+      <button class="button-common prompt-operate-item not-logged-prompt-button" type="primary" open-type="getUserInfo" bindgetuserinfo="userLogin" >
+        登录一个
+      </button>
+    </view>
+  </view>
+</block>
