@@ -128,7 +128,6 @@ page {
   display: grid;
   grid-template-columns: repeat(5, 130rpx);
   justify-content: space-between;
-  margin-top: 12rpx;
 }
 .album-list .album-item {
   height: 130rpx;

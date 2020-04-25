@@ -9,6 +9,7 @@
       <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
     </navigator>
     <view class="class-info-right">
+      <view class="class-new-classmate qcicon qcicon-smile" ></view>
       <block wx:if="{{ newClassmate.has }}">
         <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
         <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:88%;">
@@ -37,15 +38,13 @@
   <view class="head-background"></view>
   <view class="radius-container">
     <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album?classid={{ classInfo['_id'] }}">
-      <!-- <view class="album-entry" hover-class="none" open-type="navigate" url="">
-      <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
-    </view> -->
-      <view class="album-list">
-        <image class="album-item" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
-        <image class="album-item" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=feec1fd80cdd3f1310aac704deae344a" mode="aspectFill"></image>
-        <image class="album-item" src="http://t9.baidu.com/it/u=4169540006,4220376401&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=3939f44137073722d3bd48ba6c5b5a1c" mode="aspectFill"></image>
-        <image class="album-item" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
-        <image class="album-item" src="http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587442780&t=0274854dc061aa1cda9aa70e5ff84c71" mode="aspectFill"></image>
+      <view class="album-entry" wx:if="{{ photos.length==0 }}" >
+        <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
+      </view>
+      <view class="album-list" wx:else>
+        <block wx:for="{{ photos }}" wx:key="index">
+          <image class="album-item" src="{{ item._fileid }}" mode="aspectFill"></image>
+        </block>
       </view>
     </navigator>
     <view class="classmate">
@@ -53,7 +52,7 @@
       <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
         编辑我的信息
       </navigator> -->
-      <view class="classmate-item" wx:for="{{ classmates }}" bindtap="displayClassmateInfo" data-index="{{ index }}" data-flag="{{ false }}">
+      <view class="classmate-item" wx:for="{{ classmates }}" bindtap="displayClassmateInfo" data-index="{{ index }}" data-flag="{{ false }}" wx:key="{{ item._openid }}">
         <view class="classmater-item-left">
           <image class="classmater-item-avatar" src="{{ item['avatar_url'] }}" mode="aspectFill"></image>
           <view class="classmate-item-nickname">{{ item['realname']||item['nickname'] }}</view>
@@ -63,7 +62,9 @@
       <view hidden="{{ classmateInfo.hiddenPopup }}">
         <view class="classmate-info-popup" catch:touchmove>
           <image class="classmate-info-avatar" src="{{ classmateInfo['info']['avatar_url'] }}" mode="top"></image>
-          <view class="classmate-info-gender" wx:if="{{ classmateInfo['info']['gender']!='secret' }}">{{ classmateInfo['info']['gender']=='male'?'🧑':'👩' }}</view>
+          <view class="classmate-info-gender" wx:if="{{ classmateInfo['info']['gender']!='secret' }}">
+            {{ classmateInfo['info']['gender']=='male'?'🧑':'👩' }}
+          </view>
           <view class="classmate-info-name">
             {{ classmateInfo['info']['realname']||classmateInfo['info']['nickname'] }}
           </view>
@@ -80,7 +81,9 @@
             </view>
             <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['brithday']!='' }}">
               <view class="classmate-info-item-title">生日</view>
-              <view class="classmate-info-item-content">{{ classmateInfo['info']['brithday'] }}</view>
+              <view class="classmate-info-item-content">
+                {{ classmateInfo['info']['brithday'] }}
+              </view>
             </view>
           </view>
         </view>

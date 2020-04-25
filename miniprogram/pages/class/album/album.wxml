@@ -9,7 +9,12 @@
   <view class="album-list album-list-video" slot="video">
     <view class="album-item album-upload qcicon qcicon-upload" bindtap="upload"></view>
     <block wx:for="{{ video.list }}">
-      <image class="album-item" src="{{ item.cover }}" mode="aspectFill" bindtap="previewVideo" data-index="{{ index }}" bindlongpress="deleteVideo" wx:if="{{ item!='deleted' }}" lazy-load></image>
+      <block wx:if="{{ item.cover }}">
+        <image class="album-item" src="{{ item.cover }}" mode="aspectFill" bindtap="previewVideo" data-index="{{ index }}" bindlongpress="deleteVideo" wx:if="{{ item!='deleted' }}" lazy-load></image>
+      </block>
+      <block wx:else>
+        <view class="album-item album-item-no-cover qcicon qcicon-play" bindlongpress="deleteVideo" bindtap="previewVideo" data-index="{{ index }}" wx:if="{{ item!='deleted' }}"></view>
+      </block>
     </block>
   </view>
 </Tabs>

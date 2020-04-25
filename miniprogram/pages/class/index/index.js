@@ -27,6 +27,7 @@ Page({
       hiddenPopup: true,
       info: null,
     },
+    photos: [],
   },
   onPageScroll(e) {
     this.setData({
@@ -62,6 +63,15 @@ Page({
               this.updateStatistics();
               this.updateNewClassmateList();
               this.getClassStudent();
+
+              Cloud.collection("school_class_album").where({
+                _classid:res['_id'],
+                type:"photo"
+              }).limit(5).get().then(res=>{
+                this.setData({
+                  photos:res['data']
+                });
+              })
             })
             .catch((res) => {
               wx.hideLoading();
@@ -166,15 +176,18 @@ Page({
     if (flag) {
       this.setData({
         classmateInfo: {
-          hiddenPopup: flag
+          hiddenPopup: flag,
         },
       });
     } else {
       let index = dataset.index;
-      let selectUser=this.data.classmates[index];
-      if(selectUser['brithday']!=''){
-        selectUser['age']=Utils.computedAge(selectUser['brithday']);
-        selectUser['brithday']=Utils.formatDate(selectUser['brithday'],"y-m-d");
+      let selectUser = this.data.classmates[index];
+      if (selectUser["brithday"] != "") {
+        selectUser["age"] = Utils.computedAge(selectUser["brithday"]);
+        selectUser["brithday"] = Utils.formatDate(
+          selectUser["brithday"],
+          "y-m-d"
+        );
       }
       this.setData({
         classmateInfo: {

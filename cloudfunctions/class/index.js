@@ -567,18 +567,22 @@ let functions = {
     let _id = event._id;
     let type = event.type;
 
-    let fileList=[_fileid];
-    if(type=="video"){
-      fileList.push(event.cover);
+    let fileList = [_fileid];
+    if (type == "video") {
+      if (event.cover) {
+        fileList.push(event.cover);
+      }
     }
     await cloud.deleteFile({
-      fileList
+      fileList,
     });
 
-    await DB.collection("school_class_album").where({
-      _id,
-      _classid,
-    }).remove();
+    await DB.collection("school_class_album")
+      .where({
+        _id,
+        _classid,
+      })
+      .remove();
 
     await DB.collection("school_class")
       .doc(_classid)

@@ -207,6 +207,7 @@ Page({
         filePath: tempFile,
       })
       .then((res) => {
+        console.log(res);
         return res.fileID;
       });
   },
@@ -258,10 +259,14 @@ Page({
         .then((res) => {
           return res;
         });
+        console.log(chooseFile);
       wx.showLoading({
         title: "上传中Up up！",
       });
-      let coverFileid = await this.uploadFile(chooseFile["thumbTempFilePath"]);
+      let coverFileid=null;
+      if(chooseFile["thumbTempFilePath"]){
+        coverFileid = await this.uploadFile(chooseFile["thumbTempFilePath"]);
+      }
       let videoFileid = await this.uploadFile(chooseFile["tempFilePath"]);
       Cloud.cfunction("Class", "saveAlbum", {
         _classid: this.data.classId,
@@ -270,6 +275,7 @@ Page({
         cover: coverFileid,
         duration: chooseFile["duration"],
       }).then((res) => {
+        console.log(res);
         arrayIndex = `video.list[${length}]`;
         this.setData(
           {
