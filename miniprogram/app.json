@@ -1,10 +1,10 @@
 {
   "pages": [
+    "pages/my/index/index",
     "pages/class/index/index",
     "pages/class/invite_join/invite_join",
     "pages/class/album/album",
     "pages/class/edit_info/edit_info",
-    "pages/my/index/index",
     "pages/index/index",
     "pages/my/space/space",
     "pages/my/favorites/favorites",
