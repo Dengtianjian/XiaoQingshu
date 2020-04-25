@@ -16,6 +16,7 @@ page {
   flex-grow: 3;
   display:flex;
   justify-content: flex-end;
+  align-items:center;
 }
 .class-info .class-name {
   color: #ffffff;
@@ -41,6 +42,7 @@ page {
   margin:0!important;
   width:84rpx!important;
   height:84rpx!important;
+  text-align:right;
   background:none;
 }
 .invite-classmate {
@@ -60,19 +62,16 @@ page {
     transform:rotate(-30deg);
   }
   10% {
-    transform:rotate(0deg);
+    transform:rotate(30deg);
   }
   15% {
     transform:rotate(-30deg);
   }
   20% {
-    transform:rotate(-30deg);
-  }
-  20% {
-    transform:rotate(0deg);
+    transform:rotate(30deg);
   }
   30% {
-    transform:rotate(10deg);
+    transform:rotate(-10deg);
   }
   50% {
     transform:rotate(0deg);
@@ -262,7 +261,7 @@ page {
   border: 2rpx solid #ddd;
 }
 .not-class-form-submit {
-  margin-top: 20rpx;
+  margin-top: 10rpx!important;
 }
 .create-class-entry {
   margin-top:16rpx;

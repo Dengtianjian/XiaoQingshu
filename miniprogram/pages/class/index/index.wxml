@@ -9,9 +9,6 @@
       <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
     </navigator>
     <view class="class-info-right">
-      <button class="invite-classmate-button" open-type="share">
-        <view class="invite-classmate qcicon qcicon-yaoqing"></view>
-      </button>
       <block wx:if="{{ newClassmate.has }}">
         <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
         <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:88%;">
@@ -35,6 +32,9 @@
           </view>
         </Popup>
       </block>
+      <button class="invite-classmate-button" open-type="share">
+        <view class="invite-classmate qcicon qcicon-share"></view>
+      </button>
     </view>
   </view>
   <view class="head-background"></view>
