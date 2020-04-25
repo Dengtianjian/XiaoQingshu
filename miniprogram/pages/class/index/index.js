@@ -166,6 +166,7 @@ Page({
       })
       .get()
       .then((res) => {
+        wx.stopPullDownRefresh();
         if (res.data.length > 0) {
           this.updateStatistics();
           this.updateNewClassmateList();

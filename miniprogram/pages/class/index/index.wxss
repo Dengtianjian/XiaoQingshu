@@ -115,7 +115,7 @@ page {
   justify-content: flex-end;
 }
 .new-classmate-item-operate-item {
-  margin:0 0 0 16rpx;
+  margin:0 0 0 16rpx!important;
   font-size:24rpx!important;
 }
 
