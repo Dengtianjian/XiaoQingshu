@@ -1,4 +1,5 @@
 const { joinClass } =require("./functions");
+const Response=require("./response");
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 
@@ -206,14 +207,15 @@ let functions = {
           return res;
         });
       if (addResult["_id"]) {
-        DB.collection("user_joined_class").add({
+        await DB.collection("user_joined_class").add({
           data: {
             _classid: addResult["_id"],
             _userid: wxContext.OPENID,
             _schoolid,
+            join_time:Date.now()
           },
         });
-        DB.collection("schoold")
+        await DB.collection("school")
           .doc(_schoolid)
           .update({
             data: {
@@ -278,7 +280,7 @@ let functions = {
       });
 
     if (schoolClass.length == 0) {
-      return null;
+      return Response.result(null);
     }
     schoolClass = schoolClass[0];
     let classInfo = await DB.collection("school_class")

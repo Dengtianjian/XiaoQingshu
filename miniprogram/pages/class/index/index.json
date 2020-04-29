@@ -5,6 +5,7 @@
     "NavigationBar":"/components/navigationBar/navigationBar",
     "StatisticsGrid":"/components/statisticsGrid/statisticsGrid",
     "Popup":"/components/popup/popup",
-    "Dialog":"/components/dialog/dialog"
+    "Dialog":"/components/dialog/dialog",
+    "PagePrompt":"/components/pagePrompt/pagePrompt"
   }
 }

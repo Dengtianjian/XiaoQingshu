@@ -1,132 +1,128 @@
 <!-- pages/class/class.wxml -->
-<block wx:if="{{ classInfo!=null }}">
-  <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" defaultColor="#ffffff">
-    <view class="grade">{{ classInfo['grade'] }}级</view>
-  </NavigationBar>
-  <view class="class-info">
-    <navigator class="class-info-left" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info?classid={{ classInfo['_id'] }}">
-      <view class="class-name">{{ classInfo['profession'] }}{{ classInfo['number']||'' }}班</view>
-      <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
-    </navigator>
-    <view class="class-info-right">
-      <block wx:if="{{ newClassmate.has }}">
-        <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
-        <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:88%;">
-          <view class="new-classmate-list">
-            <block wx:for="{{ newClassmate.list }}" wx:key="index">
-              <view class="new-classmate-item" wx:if="{{ item!='deleted' }}">
-                <view class="new-classmate-item-info">
-                  <image class="new-classmate-item-avatar" src="{{ item['avatar_url'] }}"></image>
-                  <text class="new-classmate-item-nickname">{{ item['nickname'] }}</text>
+<block wx:if="{{ pageLoadingCompleted }}">
+  <block wx:if="{{ classInfo!=null }}">
+    <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" defaultColor="#ffffff">
+      <view class="grade">{{ classInfo['grade'] }}级</view>
+    </NavigationBar>
+    <view class="class-info">
+      <navigator class="class-info-left" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info?classid={{ classInfo['_id'] }}">
+        <view class="class-name">{{ classInfo['profession'] }}{{ classInfo['number']||'' }}班</view>
+        <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
+      </navigator>
+      <view class="class-info-right">
+        <block wx:if="{{ newClassmate.has }}">
+          <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
+          <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:88%;">
+            <view class="new-classmate-list">
+              <block wx:for="{{ newClassmate.list }}" wx:key="index">
+                <view class="new-classmate-item" wx:if="{{ item!='deleted' }}">
+                  <view class="new-classmate-item-info">
+                    <image class="new-classmate-item-avatar" src="{{ item['avatar_url'] }}"></image>
+                    <text class="new-classmate-item-nickname">{{ item['nickname'] }}</text>
+                  </view>
+                  <view class="new-classmate-item-operate">
+                    <button class="new-classmate-item-operate-item" type="default" size="mini" bind:tap="rejectNewClassmateJoin" data-index="{{ index }}">
+                      拒绝
+                    </button>
+                    <button class="new-classmate-item-operate-item" type="primary" size="mini" bind:tap="agreeNewClassmateJoin" data-index="{{ index }}">
+                      同意
+                    </button>
+                  </view>
                 </view>
-                <view class="new-classmate-item-operate">
-                  <button class="new-classmate-item-operate-item" type="default" size="mini" bind:tap="rejectNewClassmateJoin" data-index="{{ index }}">
-                    拒绝
-                  </button>
-                  <button class="new-classmate-item-operate-item" type="primary" size="mini" bind:tap="agreeNewClassmateJoin" data-index="{{ index }}">
-                    同意
-                  </button>
-                </view>
-              </view>
-            </block>
-          </view>
-        </Popup>
-      </block>
-      <button class="invite-classmate-button" open-type="share">
-        <view class="invite-classmate qcicon qcicon-share"></view>
-      </button>
-    </view>
-  </view>
-  <view class="head-background"></view>
-  <view class="radius-container">
-    <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album?classid={{ classInfo['_id'] }}">
-      <view class="album-entry" wx:if="{{ photos.length==0 }}">
-        <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
-      </view>
-      <view class="album-list" wx:else>
-        <block wx:for="{{ photos }}" wx:key="index">
-          <image class="album-item" src="{{ item._fileid }}" mode="aspectFill"></image>
+              </block>
+            </view>
+          </Popup>
         </block>
+        <button class="invite-classmate-button" open-type="share">
+          <view class="invite-classmate qcicon qcicon-share"></view>
+        </button>
       </view>
-    </navigator>
-    <view class="classmate">
-      <!-- <button bind:tap="getClassStudent">Get</button> -->
-      <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
+    </view>
+    <view class="head-background"></view>
+    <view class="radius-container">
+      <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album?classid={{ classInfo['_id'] }}">
+        <view class="album-entry" wx:if="{{ photos.length==0 }}">
+          <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
+        </view>
+        <view class="album-list" wx:else>
+          <block wx:for="{{ photos }}" wx:key="index">
+            <image class="album-item" src="{{ item._fileid }}" mode="aspectFill"></image>
+          </block>
+        </view>
+      </navigator>
+      <view class="classmate">
+        <!-- <button bind:tap="getClassStudent">Get</button> -->
+        <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
         编辑我的信息
       </navigator> -->
-      <view class="classmate-item" wx:for="{{ classmates }}" bindtap="displayClassmateInfo" data-index="{{ index }}" data-flag="{{ false }}" wx:key="index">
-        <view class="classmater-item-left">
-          <image class="classmater-item-avatar" src="{{ item['avatar_url'] }}" mode="aspectFill"></image>
-          <view class="classmate-item-nickname">{{ item['realname']||item['nickname'] }}</view>
+        <view class="classmate-item" wx:for="{{ classmates }}" bindtap="displayClassmateInfo" data-index="{{ index }}" data-flag="{{ false }}" wx:key="index">
+          <view class="classmater-item-left">
+            <image class="classmater-item-avatar" src="{{ item['avatar_url'] }}" mode="aspectFill"></image>
+            <view class="classmate-item-nickname">{{ item['realname']||item['nickname'] }}</view>
+          </view>
+          <text class="classmate-item-rightarrow qcicon qcicon-arrow-right"></text>
         </view>
-        <text class="classmate-item-rightarrow qcicon qcicon-arrow-right"></text>
-      </view>
-      <view hidden="{{ classmateInfo.hiddenPopup }}">
-        <view class="classmate-info-popup" catch:touchmove>
-          <image class="classmate-info-avatar" src="{{ classmateInfo['info']['avatar_url'] }}" mode="top"></image>
-          <view class="classmate-info-gender" wx:if="{{ classmateInfo['info']['gender']!='secret' }}">
-            {{ classmateInfo['info']['gender']=='male'?'🧑':'👩' }}
-          </view>
-          <view class="classmate-info-name">
-            {{ classmateInfo['info']['realname']||classmateInfo['info']['nickname'] }}
-          </view>
-          <view class="classmate-info-list">
-            <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['phone_number']!='' }}">
-              <view class="classmate-info-item-title">手机号码</view>
-              <view class="classmate-info-item-content">
-                {{ classmateInfo['info']['phone_number'] }}
+        <view hidden="{{ classmateInfo.hiddenPopup }}">
+          <view class="classmate-info-popup" catch:touchmove>
+            <image class="classmate-info-avatar" src="{{ classmateInfo['info']['avatar_url'] }}" mode="top"></image>
+            <view class="classmate-info-gender" wx:if="{{ classmateInfo['info']['gender']!='secret' }}">
+              {{ classmateInfo['info']['gender']=='male'?'🧑':'👩' }}
+            </view>
+            <view class="classmate-info-name">
+              {{ classmateInfo['info']['realname']||classmateInfo['info']['nickname'] }}
+            </view>
+            <view class="classmate-info-list">
+              <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['phone_number']!='' }}">
+                <view class="classmate-info-item-title">手机号码</view>
+                <view class="classmate-info-item-content">
+                  {{ classmateInfo['info']['phone_number'] }}
+                </view>
+              </view>
+              <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['birthday']!='' }}">
+                <view class="classmate-info-item-title">年龄</view>
+                <view class="classmate-info-item-content">{{ classmateInfo['info']['age'] }}</view>
+              </view>
+              <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['birthday']!='' }}">
+                <view class="classmate-info-item-title">生日</view>
+                <view class="classmate-info-item-content">
+                  {{ classmateInfo['info']['birthday'] }}
+                </view>
               </view>
             </view>
-            <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['brithday']!='' }}">
-              <view class="classmate-info-item-title">年龄</view>
-              <view class="classmate-info-item-content">{{ classmateInfo['info']['age'] }}</view>
-            </view>
-            <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['brithday']!='' }}">
-              <view class="classmate-info-item-title">生日</view>
-              <view class="classmate-info-item-content">
-                {{ classmateInfo['info']['brithday'] }}
-              </view>
-            </view>
           </view>
         </view>
-      </view>
-      <view class="classmate-info-popup-mask" catch:touchmove hidden="{{ classmateInfo['hiddenPopup'] }}" bindtap="displayClassmateInfo" data-flag="{{ true }}"></view>
-    </view>
-  </view>
-</block>
-<block wx:if="{{ userInfo.isLogin===false }}">
-  <NavigationBar pageTitle="班级" />
-  <view class="not-logged-prompt page-prompt">
-    <image class="page-prompt-icon" src="/material/images/not_logged.png" mode="aspectFill"></image>
-    <view class="page-prompt-title">宁还未登录哦，登录后才可以查看自己所在的班级呢</view>
-    <view class="page-prompt-operate">
-      <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
-        登录
-      </button>
-    </view>
-  </view>
-</block>
-<block wx:if="{{ userInfo.isLogin==true&&classInfo==null }}">
-  <NavigationBar pageTitle="班级" />
-  <view class="not-class-prompt page-prompt">
-    <image class="page-prompt-icon" src="/material/images/not_class.png" mode="aspectFill"></image>
-    <view class="page-prompt-title">宁还未加入任何一个班级哦，请通过好友邀请或者输入班级ID申请加入吧</view>
-    <form class="not-class-form page-prompt-operate" bindsubmit="searchClass">
-      <input class="not-class-form-el" type="number" name="class_id" placeholder="班级ID" />
-      <button class="not-class-form-submit button-common" type="primary" form-type="submit">
-        搜索
-      </button>
-      <navigator class="create-class-entry" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info">
-        创建班级
-      </navigator>
-    </form>
-  </view>
-  <Dialog hidden="{{ joinClass['hiddenPopup'] }}" title="根据ID查询到了" height="440rpx" cancelButton="不是这个" confirmButton="是的，申请加入" textAlign="center" bind:cancel="hiddenJoinClassDialog" bind:confirm="confirmJoinClass">
-    <view slot="content">
-      {{ joinClass['searchResult']['school']['name'] }}
-      <view>
-        {{ joinClass['searchResult']['grade'] }}级 {{ joinClass['searchResult']['profession'] }}{{ joinClass['searchResult']['number'] }}班
+        <view class="classmate-info-popup-mask" catch:touchmove hidden="{{ classmateInfo['hiddenPopup'] }}" bindtap="displayClassmateInfo" data-flag="{{ true }}"></view>
       </view>
     </view>
-  </Dialog>
+  </block>
+  <block wx:if="{{ userIsLogin===false }}">
+    <NavigationBar pageTitle="班级" />
+    <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="宁还未登录哦，登录后才可以查看自己所在的班级呢">
+      <view class="page-prompt-operate">
+        <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+          登录
+        </button>
+      </view>
+    </PagePrompt>
+  </block>
+  <block wx:if="{{ userIsLogin&&classInfo==null }}">
+    <NavigationBar pageTitle="班级" />
+    <PagePrompt class="page-prompt" icon="/material/images/not_class.png" description="宁还未加入任何一个班级哦，请通过好友邀请或者输入班级ID申请加入吧">
+      <form class="not-class-form page-prompt-operate" bindsubmit="searchClass">
+        <input class="not-class-form-el" type="number" name="class_id" placeholder="班级ID" />
+        <button class="not-class-form-submit button-common" type="primary" form-type="submit">
+          搜索
+        </button>
+        <view class="create-class-entry" bind:tap="goToBuildClass">创建班级</view>
+      </form>
+    </PagePrompt>
+    <Dialog hidden="{{ joinClass['hiddenPopup'] }}" title="根据ID查询到了" height="440rpx" cancelButton="不是这个" confirmButton="是的，申请加入" textAlign="center" bind:cancel="hiddenJoinClassDialog" bind:confirm="confirmJoinClass">
+      <view slot="content">
+        {{ joinClass['searchResult']['school']['name'] }}
+        <view>
+          {{ joinClass['searchResult']['grade'] }}级 {{ joinClass['searchResult']['profession'] }}{{ joinClass['searchResult']['number'] }}班
+        </view>
+      </view>
+    </Dialog>
+  </block>
 </block>

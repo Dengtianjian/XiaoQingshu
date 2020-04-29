@@ -40,5 +40,38 @@ export default {
     }else{
       return age-1;
     }
+  },
+  computedOldAge(age,gender){
+    if(age==9){
+      return "始龀";
+    }else if(age==10){
+      return "外傅";
+    }else if(age==13&&gender=="male"){
+      return "舞勺";
+    }else if((age>12&&age<15)&&gender=="female"){
+      return "豆蔻";
+    }else if(age==15&&gender=="female"){
+      return "及笄";
+    }else if(gender=="male"&&(age>14&&age<21)){
+      return "及笄";
+    }else if(gender=="male"&&(age==20)){
+      return "弱冠";
+    }else if(age>29&&age<40){
+      return "而立";
+    }else if(age>39&&age<50){
+      return "不惑";
+    }else if(age>49&&age<60){
+      return "知命";
+    }else if(age>59&&age<70){
+      return "花甲";
+    }else if(age==70){
+      return "古稀";
+    }else if(age>70&&age<91){
+      return "耄耋";
+    }else if(age>90){
+      return "黄发";
+    }else{
+      return "";
+    }
   }
 }

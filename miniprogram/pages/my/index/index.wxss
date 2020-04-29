@@ -1,3 +1,4 @@
+@import "/source/wxss/page_prompt.wxss";
 page {
   min-height: 100%;
 }

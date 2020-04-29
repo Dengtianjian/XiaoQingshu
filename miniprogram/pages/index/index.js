@@ -1,4 +1,5 @@
 //index.js
+import Cloud from "../../source/js/cloud";
 //获取应用实例
 const app = getApp();
 
@@ -16,6 +17,13 @@ Page({
         "postSwiper.height":res[0].height
       });
     });
+    this.getQuotes();
+
+    Cloud.collection("post_sort").get().then(res=>{
+      this.setData({
+        "publish.postType":res.data
+      });
+    })
   },
   onPageScroll(e){
     this.setData({
@@ -36,21 +44,7 @@ Page({
     },
     publish:{
       hidden:true,
-      postType:[
-        {
-          icon:"/material/icon/topic_type_icon.png",
-          name:"topic",
-          title:"话题"
-        },{
-          icon:"/material/icon/qa_type_icon.png",
-          name:"topic",
-          title:"qa"
-        },{
-          icon:"/material/icon/note_type_icon.png",
-          name:"note",
-          title:"笔记"
-        }
-      ]
+      postType:[]
     },
     posts:[
       {
@@ -64,8 +58,13 @@ Page({
       },{
         type:"qa"
       }
+    ],
+    quotes:[
+      {
+        content:"困难像弹簧，你弱它就强，你强它就弱。",
+        likes:0
+      }
     ]
-
   },
   postSwiperSwitch(e) {
     this.setData({
@@ -82,5 +81,16 @@ Page({
     this.setData({
       "publish.hidden":dataset.mode=="show"?false:true
     });
+  },
+  getQuotes(){
+    Cloud.collection("quote").aggregate().sample({
+      size:5
+    }).end().then(res=>{
+      let quotes=this.data.quotes;
+      quotes.push(...res['list']);
+      this.setData({
+        quotes
+      });
+    })
   }
 })

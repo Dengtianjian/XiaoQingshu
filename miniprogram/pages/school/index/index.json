@@ -3,6 +3,8 @@
   "usingComponents": {
     "NavigationBar":"/components/navigationBar/navigationBar",
     "Tabs":"/components/tabs/tabs",
-    "PostCoverItem":"/components/postCoverItem/postCoverItem"
+    "PostCoverItem":"/components/postCoverItem/postCoverItem",
+    "PagePrompt":"/components/pagePrompt/pagePrompt",
+    "Dialog":"/components/dialog/dialog"
   }
 }

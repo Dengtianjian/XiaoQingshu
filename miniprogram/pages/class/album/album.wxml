@@ -1,4 +1,5 @@
 <!-- pages/class/album/album.wxml -->
+<NavigationBar pageTitle="班级相册" />
 <Tabs tabs="{{ tabs }}" current="{{ currentShowType }}" swiperHeight="{{ swiperHeight }}" bind:change="tabChange">
   <view class="album-list album-list-photo" slot="photo">
     <view class="album-item album-upload qcicon qcicon-upload" bindtap="upload"></view>

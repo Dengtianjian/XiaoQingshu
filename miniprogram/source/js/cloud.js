@@ -13,11 +13,15 @@ export default {
           },
         })
         .then((res) => {
-          if (res.result) {
-            if (res.result.error) {
-              reject(res.result);
+          let result=res.result;
+          if (result.error == undefined) {
+            resolve(result);
+          } else {
+            console.log(res,result);
+            if (result.error == 200 ) {
+              resolve(result.data);
             } else {
-              resolve(res.result);
+              reject(result);
             }
           }
         })
@@ -26,4 +30,7 @@ export default {
         });
     });
   },
+  DB(){
+    return wx.cloud.database()
+  }
 };

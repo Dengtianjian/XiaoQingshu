@@ -1,4 +1,7 @@
 /* pages/school.wxss */
+page {
+  min-height:100%;
+}
 .switch-school {
   color: #ffffff;
   font-size: 36rpx;
@@ -48,6 +51,37 @@
   height: 140rpx;
   border-radius: 50%;
 }
+/* 已加入的学校列表 */
+.joined-school-item {
+  display:grid;
+  grid-template-columns: auto 100rpx;
+  align-items: center;
+  justify-content: space-between;
+  height:100rpx;
+}
+.joined-school-info {
+  display:flex;
+  align-items:center;
+}
+.joined-school-logo {
+  width:70rpx;
+  height:70rpx;
+  border-radius:50%;
+}
+.joined-school-name {
+  margin-left:10rpx;
+  font-size:32rpx;
+}
+.joined-school-exit {
+  color:var(--font-light-color);
+}
+.joined-school-current {
+  margin-right:16rpx;
+  color:var(--main-color);
+}
+.joined-school-operate {
+  text-align:right;
+}
 /* 没有加入学校显示提示 */
 .not-join-school {
   display: flex;
@@ -94,4 +128,8 @@
 }
 .post-list .post-item {
   margin-bottom: 20rpx;
+}
+
+.page-prompt {
+  display:block;
 }

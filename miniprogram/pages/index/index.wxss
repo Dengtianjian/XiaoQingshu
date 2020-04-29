@@ -16,11 +16,20 @@
   border-radius: 10rpx;
   box-sizing: border-box;
 }
+.quote-swiper {
+  flex: 7;
+  height:90rpx;
+}
 .quote-signin .quote {
-  flex: 8;
+  display: -webkit-box ;
   font-weight: bold;
   font-size: 32rpx;
   color: var(--font-color);
+  text-overflow: ellipsis;
+  overflow:hidden;
+  -webkit-line-clamp: 2;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
 }
 .quote-signin .signin {
   flex: 2;

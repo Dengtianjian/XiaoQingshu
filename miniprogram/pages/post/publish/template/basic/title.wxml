@@ -1,0 +1,3 @@
+<template name="title" >
+  <input class="publish-post-form-item publish-post-title" type="text" name="title" placeholder="{{ placeholder }}" placeholder-style="color:var(--font-color);" value="{{ title }}" />
+</template>

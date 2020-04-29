@@ -3,6 +3,7 @@
   "usingComponents": {
     "NavigationBar":"/components/navigationBar/navigationBar",
     "statisticsGrid":"/components/statisticsGrid/statisticsGrid",
-    "Icon":"/components/icon/icon"
+    "Icon":"/components/icon/icon",
+    "PagePrompt":"/components/pagePrompt/pagePrompt"
   }
 }

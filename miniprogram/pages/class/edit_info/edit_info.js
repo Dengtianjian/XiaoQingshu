@@ -40,9 +40,7 @@ Page({
       });
       return;
     }
-    this.setData({
-      userInfo,
-    });
+
     if (!options.classid) {
       wx.setNavigationBarTitle({
         title: "创建班级",
@@ -101,18 +99,7 @@ Page({
   },
 
   saveClassInfo(e) {
-    if (this.data.userInfo["isLogin"] == false) {
-      Prompt.toast("宁还未登录哦，请登录后再创建", {
-        switchTab: "/pages/class/index/index",
-      });
-      return;
-    }
-    if (!this.data.userInfo["_default_school"]) {
-      Prompt.toast("宁还未加入任何一所学校，请加入后再创建", {
-        switchTab: "/pages/school/index/index",
-      });
-      return;
-    }
+    let that=this;
     let value = e.detail.value;
     let profession = value.profession;
     let buildDate = Date.parse(value.build_date);
@@ -123,7 +110,7 @@ Page({
       profession,
       buildDate,
       gradeNumber,
-      _schoolid: this.data.userInfo["_default_school"],
+      _schoolid: App.userInfo["_default_school"],
       allow_join: allowJoin,
     })
       .then((res) => {
@@ -132,12 +119,16 @@ Page({
             switchTab: "/pages/class/index/index",
           });
         } else {
-          let pages=getCurrentPages();
-          let prvePage=pages[pages.length-2];
-          prvePage.data.classInfo={
-            _id:res['_classid']
-          };
-          prvePage.getClassInfo();
+          // let pages=getCurrentPages();
+          // let prvePage=pages[pages.length-2];
+          // prvePage.data.classInfo={
+          //   _id:res['_classid']
+          // };
+          // prvePage.getClassInfo();
+          const eventChannel=that.getOpenerEventChannel();
+          eventChannel.emit("buildClass",{
+            _classid:res['_classid']
+          });
           Prompt.toast("创建成功", {
             switchTab: "/pages/class/index/index",
           });

@@ -1,54 +1,93 @@
 <!-- pages/school.wxml -->
-<!-- 顶部导航栏 -->
-<block wx:if="{{ true }}">
-  <NavigationBar pageScrollTop="{{ pageScrollTop }}" backgroundColor="blue" opacity="0.8">
-    <view class="switch-school">
-      <text class="qcicon qcicon-qiehuan switch-school-icon"></text>
-      华南师范大学
-    </view>
-  </NavigationBar>
-  <view class="school-info">
-    <view class="school-info-left">
-      <view class="school-info-name">2018届 软件工程</view>
-      <view class="school-info-statictics">
-        <view class="school-info-statictics-item">
-          <view class="school-info-statictics-item-count">1K</view>
-          <view class="school-info-statictics-item-title">人数</view>
+<block wx:if="{{ pageLoadingCompleted }}">
+  <block wx:if="{{ userIsLogin&&schoolInfo }}">
+    <NavigationBar pageScrollTop="{{ pageScrollTop }}" backgroundColor="white" opacity="0.8" defaultColor="#ffffff" downColor="#000000" hiddenReturnPage="{{ true }}">
+      <view class="switch-school" bind:tap="showSwitchSchoolPopup">
+        <text class="qcicon qcicon-qiehuan switch-school-icon"></text>
+        {{ schoolInfo['name'] }}
+      </view>
+    </NavigationBar>
+    <Dialog hidden="{{ hideSwitchSchoolPopup }}" position="center" title="请选择要切换的学校" height="800rpx" bind:confirm="confirmSwitchSchool" bind:cancel="cancelSwitchSchool">
+      <view class="joined-school-list" slot="content">
+        <view class="joined-school-item" bind:tap="goToSelectSchool">
+          <view class="joined-school-info">
+            <!-- <image class="joined-school-logo" src="{{ item.logo }}" mode="aspectFill"></image> -->
+            <text class="joined-school-name">加入学校</text>
+          </view>
+          <view class="joined-school-operate">
+            <text class="joined-school-exit qcicon qcicon-arrow-right"></text>
+          </view>
         </view>
-        <view class="school-info-statictics-item">
-          <view class="school-info-statictics-item-count">1234</view>
-          <view class="school-info-statictics-item-title">帖子</view>
-        </view>
-        <view class="school-info-statictics-item">
-          <view class="school-info-statictics-item-count">3</view>
-          <view class="school-info-statictics-item-title">人数</view>
+        <block wx:for="{{ joinedSchool }}">
+          <view class="joined-school-item" bind:tap="switchSchool" data-schoolid="{{ item._id }}">
+            <view class="joined-school-info">
+              <image class="joined-school-logo" src="{{ item.logo }}" mode="aspectFill"></image>
+              <text class="joined-school-name">{{ item.name }}</text>
+            </view>
+            <view class="joined-school-operate">
+              <block wx:if="{{ item._id==currentSchool }}">
+                <text class="joined-school-current qcicon qcicon-seleted"></text>
+              </block>
+              <text class="joined-school-exit qcicon qcicon-tuichu" catch:tap="quitSchool" data-index="{{ index }}"></text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </Dialog>
+    <view class="school-info">
+      <view class="school-info-left">
+        <!-- <view class="school-info-name" wx:if="{{ userInfo['class'] }}">
+          {{ userInfo['class']['grade'] }}届 {{ userInfo['class']['profession'] }}
+        </view> -->
+        <view class="school-info-statictics">
+          <view class="school-info-statictics-item">
+            <view class="school-info-statictics-item-count">{{ schoolInfo['classes'] }}</view>
+            <view class="school-info-statictics-item-title">人数</view>
+          </view>
+          <view class="school-info-statictics-item">
+            <view class="school-info-statictics-item-count">{{ schoolInfo['posts'] }}</view>
+            <view class="school-info-statictics-item-title">帖子</view>
+          </view>
+          <!-- <view class="school-info-statictics-item">
+            <view class="school-info-statictics-item-count">3</view>
+            <view class="school-info-statictics-item-title">人数</view>
+          </view> -->
         </view>
       </view>
+      <image class="school-info-logo" src="{{ schoolInfo['logo'] }}"></image>
     </view>
-    <image class="school-info-logo" src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=3468775424,3129958234&fm=74&app=80&f=GIF&size=f121,121?sec=1880279984&t=e43e103c4d4dc7171d2bb9b18d156772"></image>
-  </view>
-  <image class="navigator-bar-background" src="/material/images/school_head_default_background.png"></image>
-  <view class="container">
-    <navigator class="pinche-entry" open-type="navigate" url="" hover-class="">
-      <image class="pinche-entry-banner" src="/material/images/school_pinche_entry.png" mode="aspectFill"></image>
-    </navigator>
-  </view>
-  <Tabs class="post-list" current="all" tabs="{{ {all:'全部',qa:'问答',note:'笔记'} }}">
-    <view slot="all">
-      <block wx:for="{{ 5 }}" wx:key="index">
-        <PostCoverItem class="post-item" />
-      </block>
+    <image class="navigator-bar-background" src="/material/images/school_head_default_background.png"></image>
+    <view class="container">
+      <navigator class="pinche-entry" open-type="navigate" url="" hover-class="">
+        <image class="pinche-entry-banner" src="/material/images/school_pinche_entry.png" mode="aspectFill"></image>
+      </navigator>
     </view>
-    <view slot="qa">问答</view>
-    <view slot="note">笔记</view>
-  </Tabs>
-</block>
-<block wx:else>
-  <!-- 图片&加入学校按钮 -->
-  <view class="not-join-school">
-    <image class="not-join-school-image" src="/material/images/school_center_picture.png"></image>
-    <navigator class="not-join-school-selectschool-entry" open-type="navigate" url="/pages/school/select_school/select_school">
-      选择学校
-    </navigator>
-  </view>
+    <Tabs class="post-list" current="all" tabs="{{ {all:'全部',qa:'问答',note:'笔记'} }}">
+      <view slot="all">
+        <block wx:for="{{ 5 }}" wx:key="index">
+          <PostCoverItem class="post-item" />
+        </block>
+      </view>
+      <view slot="qa">问答</view>
+      <view slot="note">笔记</view>
+    </Tabs>
+  </block>
+  <block wx:elif="{{ userIsLogin&&schoolInfo==null }}">
+    <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" />
+    <PagePrompt class="page-prompt" icon="/material/images/not_school.png" description="您还未加入任何一所学校呢">
+      <view class="page-prompt-operate" bind:tap="goToSelectSchool">
+        <button class="button-common">那就加入一所吧</button>
+      </view>
+    </PagePrompt>
+  </block>
+  <block wx:elif="{{ userIsLogin==false }}">
+    <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" />
+    <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="您还未登录哦，登录后才可以查看自己的学校呢">
+      <view class="page-prompt-operate">
+        <button class="button-common" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+          登录
+        </button>
+      </view>
+    </PagePrompt>
+  </block>
 </block>

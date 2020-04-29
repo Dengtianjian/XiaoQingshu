@@ -63,7 +63,7 @@
   line-height: inherit;
 }
 .post-option-item .post-option-item-content {
-  width: auto;
+  width: 100%;
   line-height: inherit;
 }
 button[type='primary'] {

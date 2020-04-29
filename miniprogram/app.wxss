@@ -4,6 +4,7 @@ page {
   position: relative;
   z-index: 9999998;
   background: #fff;
+  min-height:100%;
 
   --container-padding:30rpx;
   --container-width:calc( 100% - (var(--container-padding) * 2) );
@@ -31,5 +32,6 @@ button,.button-common {
   width:auto!important;
   font-weight:400!important;
   font-size:28rpx;
+  color:white;
   background-color:var(--main-color);
 }

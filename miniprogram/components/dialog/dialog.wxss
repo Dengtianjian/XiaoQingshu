@@ -10,7 +10,8 @@
   color:var(--font-light-color);
 }
 .dialog-content {
-  margin:10rpx;
+  flex-grow:1;
+  margin:10rpx 0;
   color:var(--font-color);
   font-size:36rpx;
 }

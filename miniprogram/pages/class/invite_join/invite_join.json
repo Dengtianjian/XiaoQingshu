@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText":"加入班级",
-  "usingComponents": {}
+  "usingComponents": {
+    "NavigationBar":"/components/navigationBar/navigationBar"
+  }
 }

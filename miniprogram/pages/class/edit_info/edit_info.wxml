@@ -1,4 +1,5 @@
 <!-- pages/class/edit_info/edit_info.wxml -->
+<NavigationBar pageTitle="班级信息" />
 <form class="form-common class-info-edit-form" bindsubmit="saveClassInfo">
   <label class="form-common-item">
     <view class="form-common-item-title">专业</view>

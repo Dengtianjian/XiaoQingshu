@@ -1,0 +1,5 @@
+<import src="./basic/main_content.wxml"/>
+
+<template name="dynamic">
+  <template is="main_content" />
+</template>

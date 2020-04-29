@@ -8,10 +8,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    pageLoading: true,
+    pageLoadingCompleted: false,
     scrollTop: 0,
     classInfo: null,
-    userInfo: null,
+    userIsLogin: false,
     statistics: [],
     joinClass: {
       searchResult: null,
@@ -35,17 +35,22 @@ Page({
     });
   },
   onPullDownRefresh: function () {
-    this.getClassInfo();
+    if (this.data.classInfo) {
+      this.getClassInfo();
+    } else {
+      wx.stopPullDownRefresh();
+    }
   },
-  onShareAppMessage	(e){
-    let students=this.data.classInfo.students;
-    let albumCount=this.data.classInfo.album_count;
-    let title=`已经有 ${students} 位同学👬加入同学录啦。还有 ${albumCount} 张同学们的丑照🤭在里面`;
-    let path="/pages/class/invite_join/invite_join?classid="+this.data.classInfo._id;
+  onShareAppMessage(e) {
+    let students = this.data.classInfo.students;
+    let albumCount = this.data.classInfo.album_count;
+    let title = `已经有 ${students} 位同学👬加入同学录啦。还有 ${albumCount} 张同学们的丑照🤭在里面`;
+    let path =
+      "/pages/class/invite_join/invite_join?classid=" + this.data.classInfo._id;
     return {
       title,
-      path
-    }
+      path,
+    };
   },
 
   /**
@@ -53,16 +58,13 @@ Page({
    */
   async onLoad(options) {
     wx.showShareMenu({
-      withShareTicket: true
+      withShareTicket: true,
     });
     wx.showLoading({
       title: "加载中",
     });
     await App.getUserInfo()
       .then(async (userInfo) => {
-        this.setData({
-          userInfo,
-        });
         let schoolid = userInfo["_default_school"];
         if (userInfo["_default_school"]) {
           wx.hideLoading();
@@ -70,52 +72,87 @@ Page({
             _schoolid: schoolid,
           })
             .then((res) => {
+              if (res == null) {
+                this.setData({
+                  pageLoadingCompleted: true,
+                  userIsLogin: userInfo["isLogin"],
+                });
+                return;
+              }
               this.setData({
                 classInfo: res,
+                pageLoadingCompleted: true,
+                userIsLogin: userInfo["isLogin"],
               });
-              this.updateStatistics();
-              this.updateNewClassmateList();
-              this.getClassStudent();
-
-              Cloud.collection("school_class_album").where({
-                _classid:res['_id'],
-                type:"photo"
-              }).limit(5).get().then(res=>{
-                this.setData({
-                  photos:res['data']
-                });
-              })
+              if (userInfo["isLogin"]) {
+                this.updateStatistics();
+                this.updateNewClassmateList();
+                this.getClassStudent();
+                this.getClassPhoto();
+              }
             })
             .catch((res) => {
               wx.hideLoading();
+              this.setData({
+                pageLoadingCompleted: true,
+                userIsLogin: userInfo["isLogin"],
+              });
               Prompt.codeToast(res.error, res.code, {
                 404: {
                   404001: "抱歉，班级不存在或者正在审核中",
                 },
               });
             });
+        } else {
+          this.setData({
+            userIsLogin: userInfo["isLogin"],
+          });
         }
-
         wx.hideLoading();
       })
       .catch((res) => {
-        if (this.data.isLogin) {
-          return;
-        }
         this.setData({
-          userInfo: res,
+          pageLoadingCompleted: true,
         });
-        wx.hideLoading();
       });
+    this.setData({
+      pageLoadingCompleted: true,
+    });
+  },
+  onReady() {
+    this.setData({
+      pageLoadingCompleted: true,
+    });
+  },
+  onShow() {
+    if (this.data.userIsLogin == false && App.userInfo["isLogin"]) {
+      this.setData({
+        userIsLogin: true,
+      });
+    }
+    if (App.userInfo.class) {
+      this.setData({
+        classInfo: App.userInfo.class,
+      });
+      this.getClassInfo();
+    } else {
+      this.setData({
+        classInfo: null,
+        statistics: [],
+        newClassmate: { has: false, hiddenPopup: true, list: null },
+        classmates: [],
+        classmateInfo: { hiddenPopup: true, info: null },
+        photos: [],
+      });
+    }
   },
   updateStatistics() {
     //计算 已过去时间
-    let userInfo = this.data.userInfo;
     let nowDate = new Date();
     let nowYear = nowDate.getFullYear();
     let nowMonth = nowDate.getMonth();
     let nowDay = nowDate.getDate();
-    let buildDate = new Date(userInfo.build_date);
+    let buildDate = new Date(this.data.classInfo.build_date);
     let buildYear = buildDate.getFullYear();
     let buildMonth = buildDate.getMonth();
     let buildDay = buildDate.getDate();
@@ -126,7 +163,7 @@ Page({
     if (nowMonth - buildMonth) {
       lessString += `${nowMonth - buildMonth}个月`;
     }
-    lessString += `${buildDay - nowDay || 0}天`;
+    lessString += `${nowDay-buildDay || 0}天`;
     let statistics = [
       {
         title: "人数",
@@ -146,7 +183,7 @@ Page({
     });
   },
   updateNewClassmateList() {
-    if (this.data.classInfo["_adminid"] == this.data.userInfo["_openid"]) {
+    if (this.data.classInfo["_adminid"] == App.userInfo["_openid"]) {
       Cloud.collection("school_class_apply")
         .where({
           _classid: this.data.classInfo["_id"],
@@ -170,16 +207,21 @@ Page({
         if (res.data.length > 0) {
           this.updateStatistics();
           this.updateNewClassmateList();
+          this.getClassStudent();
+          this.getClassPhoto();
           wx.setNavigationBarColor({
             frontColor: "#ffffff",
             backgroundColor: "#000000",
           });
+          App.userInfo.class = res.data[0];
           this.setData({
             classInfo: res.data[0],
+            pageLoadingCompleted: true,
           });
         } else {
           this.setData({
             classInfo: null,
+            pageLoadingCompleted: true,
           });
         }
       });
@@ -196,10 +238,10 @@ Page({
     } else {
       let index = dataset.index;
       let selectUser = this.data.classmates[index];
-      if (selectUser["brithday"] != "") {
-        selectUser["age"] = Utils.computedAge(selectUser["brithday"]);
-        selectUser["brithday"] = Utils.formatDate(
-          selectUser["brithday"],
+      if (selectUser["birthday"] != "") {
+        selectUser["age"] = Utils.computedAge(selectUser["birthday"]);
+        selectUser["birthday"] = Utils.formatDate(
+          selectUser["birthday"],
           "y-m-d"
         );
       }
@@ -221,18 +263,13 @@ Page({
     if (e.detail.userInfo) {
       let userInfo = e.detail.userInfo;
       await App.getUserInfo(userInfo)
-        .then((res) => {
-          userInfo["isLogin"] = true;
-          App.userInfo = userInfo;
+        .then((userInfo) => {
           this.setData({
-            userInfo: res,
+            userIsLogin: true,
           });
           wx.hideLoading();
         })
         .catch((res) => {
-          this.setData({
-            userInfo: res,
-          });
           wx.hideLoading();
         });
     }
@@ -355,6 +392,36 @@ Page({
       this.setData({
         classmates: res,
       });
+    });
+  },
+  getClassPhoto() {
+    Cloud.collection("school_class_album")
+      .where({
+        _classid: this.data.classInfo["_id"],
+        type: "photo",
+      })
+      .limit(5)
+      .get()
+      .then((res) => {
+        this.setData({
+          photos: res["data"],
+        });
+      });
+  },
+  goToBuildClass() {
+    let that = this;
+    wx.navigateTo({
+      url: "/pages/class/edit_info/edit_info",
+      events: {
+        buildClass(data) {
+          let _classid = data._classid;
+          that.setData({
+            "classInfo._id": _classid,
+            pageLoadingCompleted: false,
+          });
+          that.getClassInfo();
+        },
+      },
     });
   },
 });
