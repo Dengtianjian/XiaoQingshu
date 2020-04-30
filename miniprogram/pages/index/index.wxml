@@ -12,26 +12,19 @@
       </swiper-item>
     </block>
   </swiper>
-  <view class="signin">SignIn</view>
+  <view class="signin" bind:tap="getPost">SignIn</view>
 </view>
 <!-- 信息流 -->
 <view class="post">
-  <view class="post-tabbar">
-    <block wx:for="{{ postSwiper.tabbar }}" wx:key="item">
-      <view class="post-tabbar-item {{ postSwiper.current==index?'post-tabbar-item-active':'' }}" bindtap="switchPostSwiper" data-index="{{ index }}">
-        {{ item }}
-      </view>
-    </block>
-  </view>
-  <swiper class="post-swiper" bindchange="postSwiperSwitch" current="{{ postSwiper.current }}" style="height:{{ postSwiper.height }}px">
-    <block wx:for="{{postSwiper.tabbar}}" wx:key="index">
-      <swiper-item class="post-swiper-item post-swiper-item-{{ index }}">
-        <block wx:for="{{ posts }}" wx:key="index">
-          <PostCoverItem class="post-swiper-post-item" type="{{ item.type }}" />
-        </block>
-      </swiper-item>
-    </block>
-  </swiper>
+  <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" >
+    <view slot="all">
+      <block wx:for="{{ posts }}" wx:key="index">
+        <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
+      </block>
+    </view>
+    <view slot="qa">QA</view>
+    <view slot="note">note</view>
+  </Tabs>
 </view>
 <!-- 发布内容入口 -->
 <view class="publish-entrance" bindtap="displayPublishPopup" data-mode="show">

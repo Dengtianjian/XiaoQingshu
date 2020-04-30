@@ -31,7 +31,7 @@ Page({
       title:"加载中",
       mask:true
     });
-    Cloud.cfunction("User", "getUser", {
+    Cloud.cfunction("User", "getUserProfile", {
       _userid,
     })
       .then((res) => {
@@ -106,7 +106,7 @@ Page({
     });
   },
   getUser() {
-    Cloud.cfunction("User", "getUser", {
+    Cloud.cfunction("User", "getUserProfile", {
       _userid:"oKXC25L4s6Y8r97Jf54o37c6Xoc4",
     }).then((res) => {
       console.log(res);

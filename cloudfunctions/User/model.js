@@ -58,13 +58,19 @@ let functions = {
       });
   },
   async getUserProfileByOpenId(_openid) {
+    let _openids=[];
+    if(_openid instanceof String ){
+      _openids=[_openid];
+    }else{
+      _openids=_oepnid;
+    }
     let userInfo = await User.aggregate()
       .match({
-        _openid,
+        _id:_.in(_openids),
       })
       .lookup({
         from: "user_profile",
-        localField: "_openid",
+        localField: "_id",
         foreignField: "_userid",
         as: "profile",
       })

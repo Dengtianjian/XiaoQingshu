@@ -1,14 +1,14 @@
 <!-- components/postCoverItem/postCoverItem.wxml -->
-<import src="/templates/CommonPost.wxml" />
-<import src="/templates/QAPost.wxml" />
+<import src="/templates/post/dynamic.wxml" />
+<import src="/templates/post/qa.wxml" />
 <navigator class="post" open-type="navigate" hover-class="none" url="/pages/post/view/view">
   <view class="post-author">
-    <image class="post-author-avatar" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1586945353&t=2c73e6effc0e5b9686d2cd7b3229f65f"></image>
-    <text class="post-author-nickname">Cheery</text>
+    <image class="post-author-avatar" src="{{ post.author.avatar_url }}"></image>
+    <text class="post-author-nickname">{{ post.author.nickname }}</text>
   </view>
-  <view class="post-title">4 月 4 日举行全国性哀悼活动，哀悼抗疫牺牲烈士和逝世同胞...</view>
+  <view class="post-title">{{ post.title }}</view>
   <view class="post-body {{ postBodyClass }}">
-    <template is="{{ templateName }}" data="{{ ...templateData }}"></template>
+    <template is="{{ templateName }}" data="{{ ...post }}"></template>
   </view>
   <view class="post-footer">
     <view class="post-attribute">

@@ -5,25 +5,16 @@ const app = getApp();
 
 Page({
   onLoad() {
-    this.setData({
-      statusBarHeight: app.globalData.statusBarHeight
-    });
+    this.getPost();
   },
   onReady() {
-    let query = wx.createSelectorQuery();
-    query.select(`.post-swiper-item-${this.data.postSwiper.current}`).boundingClientRect();
-    query.exec((res)=>{
-      this.setData({
-        "postSwiper.height":res[0].height
-      });
-    });
     this.getQuotes();
 
     Cloud.collection("post_sort").get().then(res=>{
       this.setData({
         "publish.postType":res.data
       });
-    })
+    });
   },
   onPageScroll(e){
     this.setData({
@@ -31,50 +22,24 @@ Page({
     });
   },
   data: {
-    statusBarHeight: 0,
-    pageScrollTop:0,
-    postSwiper: {
-      current: 0,
-      height: 0,
-      tabbar: [
-        "All",
-        "QA",
-        "Note"
-      ]
+    postTabs:{
+      all:"全部",
+      qa:"问答",
+      note:"笔记"
     },
+    updateSwiperHeight:false,
+    pageScrollTop:0,
     publish:{
       hidden:true,
       postType:[]
     },
-    posts:[
-      {
-        type:"qa"
-      },{
-        type:"common"
-      },{
-        type:"common"
-      },{
-        type:"common"
-      },{
-        type:"qa"
-      }
-    ],
+    posts:[],
     quotes:[
       {
         content:"困难像弹簧，你弱它就强，你强它就弱。",
         likes:0
       }
     ]
-  },
-  postSwiperSwitch(e) {
-    this.setData({
-      "postSwiper.current": e.detail.current
-    });
-  },
-  switchPostSwiper(e) {
-    this.setData({
-      "postSwiper.current": e.currentTarget.dataset.index
-    });
   },
   displayPublishPopup(e){
     let dataset=e.currentTarget.dataset;
@@ -90,6 +55,14 @@ Page({
       quotes.push(...res['list']);
       this.setData({
         quotes
+      });
+    })
+  },
+  async getPost(){
+    await Cloud.cfunction("Post","getPost").then(res=>{
+      this.setData({
+        posts:res,
+        updateSwiperHeight:true
       });
     })
   }

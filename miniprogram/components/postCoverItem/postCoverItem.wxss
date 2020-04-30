@@ -25,16 +25,16 @@
 .post-body {
   margin-top: 10rpx;
 }
-.post-body.post-body-common {
+.post-body.post-body-dynamic {
   margin-top: 16rpx;
 }
-.post-body.post-body-common .post-body-images {
+.post-body.post-body-dynamic .post-body-images {
   display: grid;
   grid-template-columns: repeat(3, 224rpx);
   grid-row-gap: 10rpx;
   justify-content: space-between;
 }
-.post-body.post-body-common .post-body-image-item {
+.post-body.post-body-dynamic .post-body-image-item {
   width: 100%;
   height: 214rpx;
   border-radius: var(--border-radius);

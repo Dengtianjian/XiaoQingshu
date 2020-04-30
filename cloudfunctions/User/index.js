@@ -15,13 +15,13 @@ let functions = {
    * 获取当前登录的用户信息
    * @param {Object} info 用户的信息
    */
-  async getUserInfo(event) {
+  async login(event) {
     const wxContext = cloud.getWXContext();
     let info = event.info;
     let _openid = wxContext.OPENID;
     let userInfo = await DB.collection("user")
       .where({
-        _id: wxContext.OPENID,
+        _id: _openid,
       })
       .get()
       .then((res) => {
@@ -80,7 +80,7 @@ let functions = {
     return userInfo;
   },
   /* 根据openid获取用户的信息 */
-  async getUser(event) {
+  async getUserProfile(event) {
     let userProfile = await getUserProfileByOpenId(event._userid);
     if (userProfile == null) {
       return {
@@ -92,10 +92,25 @@ let functions = {
 
     return userProfile;
   },
+  async getUser(event){
+    let _openids=[];
+
+    if(event._openid instanceof String){
+      _openids.push(event._openid);
+    }else{
+      _openids=event._openid;
+    }
+    let user=User.where({
+      _id:_.in(_openids)
+    }).get().then(res=>{
+      return res['data'];
+    });
+    return user;
+  },
   async saveUserInfo(event) {
     const wxContext = cloud.getWXContext();
     await User.where({
-      _openid: wxContext.OPENID,
+      _id: wxContext.OPENID,
     }).update({
       data: {
         ...event,
@@ -232,13 +247,14 @@ let functions = {
 // 云函数入口函数
 exports.main = async (event, context) => {
   const methods = [
-    "getUserInfo",
-    "getUser",
+    "login",
+    "getUserprofile",
     "saveUserProfile",
     "getJoinedSchool",
     "saveUserInfo",
     "quitSchool",
     "submitFeedback",
+    "getUser"
   ];
   let method = event.method;
   if (!methods.includes(method)) {

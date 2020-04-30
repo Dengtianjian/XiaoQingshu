@@ -7,38 +7,36 @@ Component({
     type: {
       type: String,
       value: "common"
+    },
+    post:{
+      type:Object,
+      observe(value){
+        if(!value){
+          console.error("帖子组件必须传入 data");
+        }
+      }
     }
   },
 
   ready() {
-    let type = this.data.type;
-    let templateName = "common-post";
+    let templateName = "dynamic-post";
     let postBodyClass = "";
-    let templateData=null;
-    switch (type) {
-      case "common":
-        templateName = "common-post";
-        postBodyClass = "post-body-common";
-        templateData={
-          images:[
-            "http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587393770&t=b98b180f3ea57f9dd2aadba556543e1d",
-            "http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587393770&t=b50575157de1241e59bdc4b0709f3270",
-            "http://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1587393770&t=fc2c3a31f969369cf4662ccb6e468317",
-            "http://img8.zol.com.cn/bbs/upload/23197/23196119.jpg",
-            "http://attach.bbs.miui.com/forum/201310/19/235356fyjkkugokokczyo0.jpg"
-          ]
-        };
+    let templateData={};
+    switch (this.data.post.sort) {
+      case "dynamic":
+        templateName = "dynamic-post";
+        postBodyClass = "post-body-dynamic";
         break;
       case "qa":
         templateName = "qa-post";
         postBodyClass = "post-body-qa";
-        templateData="";
+        templateData={};
         break;
     }
+
     this.setData({
       templateName,
-      postBodyClass,
-      templateData
+      postBodyClass
     });
   },
 
@@ -46,8 +44,8 @@ Component({
    * 组件的初始数据
    */
   data: {
-    templateName: "common-post",
-    postBodyClass: "post-body-common",
+    templateName: "dynamic-post",
+    postBodyClass: "post-body-dynamic",
     templateData:null
   },
 

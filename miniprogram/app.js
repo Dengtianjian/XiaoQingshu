@@ -45,7 +45,7 @@ App({
   },
   async cloudGetUserInfo(userInfo) {
     let _that = this;
-    return await Cloud.cfunction("User", "getUserInfo", {
+    return await Cloud.cfunction("User", "login", {
       info: userInfo,
     })
       .then((res) => {

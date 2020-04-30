@@ -7,6 +7,7 @@ cloud.init();
 const DB = cloud.database();
 const _ = DB.command;
 const Post = DB.collection("post");
+const postSort = DB.collection("post_sort");
 const wxContext = cloud.getWXContext();
 
 let functions = {
@@ -35,6 +36,8 @@ let functions = {
       data["closed"] = false;
       data["status"] = "normal";
       data["likes"] = 0;
+      data["images"] = data["imagesList"];
+      delete data["imageList"];
       let addResult = await Post.add({
         data,
       }).then((res) => {
@@ -70,11 +73,70 @@ let functions = {
       }
     }
   },
+  async getPost(event) {
+    let limit = event.limit || 5;
+    let page = event.page || 0;
+    let sort = event.sort || null;
+
+    let postDB = Post;
+    if (sort) {
+      sort = await postSort
+        .where({
+          identifier: sort,
+        })
+        .get()
+        .then((res) => {
+          return res["data"];
+        });
+      if (sort.length == 0) {
+        return Response.error(400, 400001, "分类不存在");
+      }
+      sort = sort[0];
+      postDB = postDB.where({
+        sort: sort["_id"],
+      });
+    }
+    let posts = await cloud
+      .database()
+      .collection("post")
+      .limit(limit)
+      .skip(limit * page)
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    let users = [];
+    posts.forEach((item) => {
+      users.push(item._authorid);
+    });
+    users=await cloud.callFunction({
+      name: "User",
+      data: {
+        method: "getUser",
+        _openid:users
+      },
+    }).then(res=>{
+      return res['result'];
+    });
+    function arrayToObject(array,key){
+      let obj={};
+      array.forEach(item=>{
+        obj[item[key]]=item;
+      });
+      return obj;
+    }
+    users=arrayToObject(users,"_id");
+    posts.forEach(item=>{
+      item['author']=users[item['_authorid']];
+    });
+
+    return posts;
+  },
 };
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const methods = ["savePost"];
+  const methods = ["savePost", "getPost"];
   let method = event.method;
   if (!methods.includes(method)) {
     return {

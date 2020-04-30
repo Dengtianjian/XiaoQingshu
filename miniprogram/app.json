@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
-    "pages/index/index",
     "pages/class/index/index",
     "pages/my/index/index",
     "pages/school/select_school/select_school",
