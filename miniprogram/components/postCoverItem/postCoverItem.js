@@ -1,5 +1,6 @@
 // components/postCoverItem/postCoverItem.js
 Component({
+  styleIsolation:"apply-shared",
   /**
    * 组件的属性列表
    */
@@ -22,7 +23,7 @@ Component({
     let templateName = "dynamic-post";
     let postBodyClass = "";
     let templateData={};
-    switch (this.data.post.sort) {
+    switch (this.data.post.sort['identifier']) {
       case "dynamic":
         templateName = "dynamic-post";
         postBodyClass = "post-body-dynamic";

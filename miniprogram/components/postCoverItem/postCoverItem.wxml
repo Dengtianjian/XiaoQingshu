@@ -1,9 +1,9 @@
 <!-- components/postCoverItem/postCoverItem.wxml -->
-<import src="/templates/post/dynamic.wxml" />
-<import src="/templates/post/qa.wxml" />
-<navigator class="post" open-type="navigate" hover-class="none" url="/pages/post/view/view">
+<import src="./template/dynamic.wxml" />
+<import src="./template/qa.wxml" />
+<navigator class="post" open-type="navigate" hover-class="none" url="/pages/post/view/view?postid={{ post['_id'] }}">
   <view class="post-author">
-    <image class="post-author-avatar" src="{{ post.author.avatar_url }}"></image>
+    <image class="post-author-avatar" src="{{ post.author.avatar_url }}" lazy-load></image>
     <text class="post-author-nickname">{{ post.author.nickname }}</text>
   </view>
   <view class="post-title">{{ post.title }}</view>
@@ -12,13 +12,13 @@
   </view>
   <view class="post-footer">
     <view class="post-attribute">
-      <view class="post-attribute-item post-attribute-item-qa">
-        <text class="post-attribute-item-icon qcicon qcicon-wenda"></text>
-        <text class="post-attribute-item-name">问答</text>
+      <view class="post-attribute-item post-attribute-item-type" >
+        <text class="post-attribute-item-icon qcicon qcicon-{{ post['sort']['identifier'] }}"></text>
+        <text class="post-attribute-item-name">{{ post['sort']['name'] }}</text>
       </view>
-      <view class="post-attribute-item">
+      <view class="post-attribute-item" wx:if="{{ post['topic'] }}">
         <text class="post-attribute-item-icon">#</text>
-        <text class="post-attribute-item-name">话题</text>
+        <text class="post-attribute-item-name">{{ post['topic']['name'] }}</text>
       </view>
     </view>
   </view>

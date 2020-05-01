@@ -10,8 +10,17 @@ const Post = DB.collection("post");
 const postSort = DB.collection("post_sort");
 const wxContext = cloud.getWXContext();
 
+function arrayToObject(array, key) {
+  let obj = {};
+  array.forEach((item) => {
+    obj[item[key]] = item;
+  });
+  return obj;
+}
+
 let functions = {
   async savePost(event) {
+    const wxContext = cloud.getWXContext();
     let postId = event._postid || null;
     if (event.title !== undefined) {
       if (event.title == "") {
@@ -36,8 +45,6 @@ let functions = {
       data["closed"] = false;
       data["status"] = "normal";
       data["likes"] = 0;
-      data["images"] = data["imagesList"];
-      delete data["imageList"];
       let addResult = await Post.add({
         data,
       }).then((res) => {
@@ -45,7 +52,7 @@ let functions = {
       });
       if (addResult["errMsg"] == "collection.add:ok") {
         await DB.collection("user")
-          .doc(wxContext.OPENID)
+          .doc(`${wxContext.OPENID}`)
           .update({
             data: {
               posts: _.inc(1),
@@ -77,8 +84,9 @@ let functions = {
     let limit = event.limit || 5;
     let page = event.page || 0;
     let sort = event.sort || null;
+    console.log(sort);
 
-    let postDB = Post;
+    let postsQuery = cloud.database().collection("post");
     if (sort) {
       sort = await postSort
         .where({
@@ -92,13 +100,11 @@ let functions = {
         return Response.error(400, 400001, "分类不存在");
       }
       sort = sort[0];
-      postDB = postDB.where({
-        sort: sort["_id"],
+      postsQuery = postsQuery.where({
+        sort: sort["identifier"],
       });
     }
-    let posts = await cloud
-      .database()
-      .collection("post")
+    let posts = await postsQuery
       .limit(limit)
       .skip(limit * page)
       .get()
@@ -106,28 +112,54 @@ let functions = {
         return res["data"];
       });
     let users = [];
+    let sorts = [];
+    let topics = [];
     posts.forEach((item) => {
       users.push(item._authorid);
+      sorts.push(item.sort);
+      topics.push(item.topic);
     });
-    users=await cloud.callFunction({
-      name: "User",
-      data: {
-        method: "getUser",
-        _openid:users
-      },
-    }).then(res=>{
-      return res['result'];
-    });
-    function arrayToObject(array,key){
-      let obj={};
-      array.forEach(item=>{
-        obj[item[key]]=item;
+
+    //帖子做作业
+    users = await cloud
+      .callFunction({
+        name: "User",
+        data: {
+          method: "getUser",
+          _openid: users,
+        },
+      })
+      .then((res) => {
+        return res["result"];
       });
-      return obj;
-    }
-    users=arrayToObject(users,"_id");
-    posts.forEach(item=>{
-      item['author']=users[item['_authorid']];
+    users = arrayToObject(users, "_id");
+
+    // 帖子分类
+    sorts = await DB.collection("post_sort")
+      .where({
+        identifier: _.in(sorts),
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    sorts = arrayToObject(sorts, "identifier");
+
+    //帖子话题
+    topics = await DB.collection("post_topic")
+      .where({
+        _id: _.in(topics),
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    topics = arrayToObject(topics, "_id");
+
+    posts.forEach((item) => {
+      item["author"] = users[item["_authorid"]];
+      item["sort"] = sorts[item["sort"]];
+      item["topic"] = topics[item["topic"]];
     });
 
     return posts;

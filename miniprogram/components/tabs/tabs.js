@@ -36,7 +36,7 @@ Component({
       type: Object,
     },
     current: {
-      type:String,
+      type: String,
       optionalTypes: [String, Number],
       value: "",
     },
@@ -97,12 +97,14 @@ Component({
       let query = wx.createSelectorQuery().in(this);
       query.select(`.swiper-item-${this.data.current}`).boundingClientRect();
       query.exec((res) => {
-        if (parseInt(res[0].height) > parseInt(this.data.swiperHeight)) {
-          this.setData({
-            swiperHeight: res[0].height,
-            updateSwiperHeight:false
-          });
+        let swiperHeight = 300;
+        if (parseInt(res[0].height) > 300) {
+          swiperHeight = res[0].height;
         }
+        this.setData({
+          swiperHeight,
+          updateSwiperHeight: false,
+        });
       });
     },
   },

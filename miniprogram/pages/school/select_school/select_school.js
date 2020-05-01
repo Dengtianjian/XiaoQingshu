@@ -115,7 +115,7 @@ Page({
                 409: {
                   409001: {
                     title: `您已是 ${selectSchool["name"]} 的学生了，请勿重复加入🙅`,
-                    switchTab: "/pages/school/school",
+                    switchTab: "/pages/school/index/index",
                   },
                 },
               });

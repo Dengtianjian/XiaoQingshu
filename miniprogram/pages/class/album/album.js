@@ -207,7 +207,6 @@ Page({
         filePath: tempFile,
       })
       .then((res) => {
-        console.log(res);
         return res.fileID;
       });
   },
@@ -259,7 +258,6 @@ Page({
         .then((res) => {
           return res;
         });
-        console.log(chooseFile);
       wx.showLoading({
         title: "上传中Up up！",
       });

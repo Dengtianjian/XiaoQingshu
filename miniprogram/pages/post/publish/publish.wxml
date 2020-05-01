@@ -7,8 +7,8 @@
   <template is="{{ currentSort }}"></template>
   <view class="image-upload">
     <scroll-view scroll-x="{{ true }}" class="image-upload-list">
-      <block wx:for="{{ imageList }}" wx:key="id">
-        <image class="image-upload-item" src="{{ item.url }}" mode="aspectFill" data-index="{{ index }}" bindtap="previewImage"></image>
+      <block wx:for="{{ images }}" wx:key="id">
+        <image class="image-upload-item" src="{{ item }}" mode="aspectFill" data-index="{{ index }}" bindtap="previewImage"></image>
       </block>
     </scroll-view>
     <view class="image-upload-button qcicon qcicon-upload" bindtap="uploadImage"></view>

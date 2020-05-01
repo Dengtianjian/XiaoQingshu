@@ -1,12 +1,12 @@
 <!-- index.wxml -->
 <!-- 顶部导航栏 -->
-<NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.8">
+<NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.95">
   <view class="search-entry"></view>
 </NavigationBar>
 <!-- 语录&签到 -->
 <view class="quote-signin">
   <swiper class="quote-swiper" indicator-dots="{{false}}" autoplay="{{true}}" interval="{{5000}}" duration="{{500}}" vertical circular>
-    <block wx:for="{{quotes}}">
+    <block wx:for="{{quotes}}" wx:key="_id">
       <swiper-item>
         <view class="quote">{{ item.content }}</view>
       </swiper-item>
@@ -16,14 +16,16 @@
 </view>
 <!-- 信息流 -->
 <view class="post">
-  <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" >
-    <view slot="all">
-      <block wx:for="{{ posts }}" wx:key="index">
-        <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
-      </block>
-    </view>
-    <view slot="qa">QA</view>
-    <view slot="note">note</view>
+  <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" bind:change="postTabChange">
+    <block wx:for="{{ postTabs }}" wx:key="{{ index }}">
+      <view slot="{{ index }}">
+        <block wx:for="{{ posts[index] }}" wx:for-item="postArray" wx:for-index="postArrayIndex" wx:key="postArrayIndex">
+          <block wx:for="{{ postArray }}" wx:key="index">
+            <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
+          </block>
+        </block>
+      </view>
+    </block>
   </Tabs>
 </view>
 <!-- 发布内容入口 -->

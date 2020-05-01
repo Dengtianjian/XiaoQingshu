@@ -1,4 +1,5 @@
 import Cloud from "../../../source/js/cloud";
+import Utils from "../../../source/js/utils";
 
 // pages/publish_post/publish_post.js
 const App = getApp();
@@ -7,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    imageList: [],
+    images: [],
     topic: null,
     currentSort: "dynamic",
     schoolInfo: null,
@@ -19,7 +20,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    options.identifier="dynamic";
+    // options.identifier="dynamic";
 
     let setData = {
       currentSort: options.identifier,
@@ -73,7 +74,7 @@ Page({
   onShareAppMessage: function () {},
 
   uploadImage() {
-    let currentCount = this.data.imageList.length;
+    let currentCount = this.data.images.length;
     if (currentCount >= 9) {
       wx.showToast({
         icon: "none",
@@ -86,30 +87,38 @@ Page({
     }).then((res) => {
       let filePaths = res.tempFilePaths;
       if (filePaths.length > 0) {
-        let imageList = this.data.imageList;
+        wx.showLoading({
+          title:"上传中!Up up"
+        });
+        let images = this.data.images;
+        let files=[];
         for (let i = 0; i < filePaths.length; i++) {
           filePaths[i] = {
             id: currentCount + i,
             url: filePaths[i],
           };
+          files.push(filePaths[i]['url']);
         }
-        imageList.unshift(...filePaths);
-        this.setData({
-          imageList,
-        });
+        Utils.uploadFile(files,"post/").then(res=>{
+          images.unshift(...filePaths);
+          this.setData({
+            images:res
+          });
+          wx.hideLoading();
+        })
       }
     });
   },
   previewImage(option) {
     let index = option.currentTarget.dataset.index;
-    let imageList = this.data.imageList;
+    let images = this.data.images;
     let urls = [];
-    imageList.forEach((item) => {
+    images.forEach((item) => {
       urls.push(item.url);
     });
     wx.previewImage({
       urls,
-      current: imageList[index]["url"],
+      current: images[index]["url"],
     });
   },
   goToSelectTopic() {
@@ -134,12 +143,12 @@ Page({
       }
     }
     let topic = this.data.topic;
-    let imageList = this.data.imageList;
+    let images = this.data.images;
     Cloud.cfunction("Post", "savePost", {
       ...formValue,
       school,
       topic,
-      imageList,
+      images,
       sort:this.data.currentSort
     }).then((res) => {
       console.log(res);

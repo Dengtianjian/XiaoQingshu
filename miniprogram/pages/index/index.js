@@ -1,69 +1,193 @@
 //index.js
 import Cloud from "../../source/js/cloud";
 //获取应用实例
-const app = getApp();
+const App = getApp();
 
 Page({
   onLoad() {
+    Cloud.collection("post_sort")
+      .get()
+      .then((res) => {
+        if (res["data"].length > 0) {
+          let sorts = res["data"];
+          let postTabs = this.data.postTabs;
+          let posts = this.data.posts;
+          let postLoad = this.postLoad;
+          sorts.forEach((item) => {
+            postTabs[item["identifier"]] = item["name"];
+            posts[item["identifier"]] = [];
+            postLoad[item["identifier"]] = {
+              count: 0,
+              page: 0,
+              finished: false,
+            };
+          });
+          this.postLoad = postLoad;
+          this.setData({
+            postTabs,
+            posts,
+          });
+        }
+      });
+
     this.getPost();
   },
   onReady() {
     this.getQuotes();
 
-    Cloud.collection("post_sort").get().then(res=>{
-      this.setData({
-        "publish.postType":res.data
+    Cloud.collection("post_sort")
+      .get()
+      .then((res) => {
+        this.setData({
+          "publish.postType": res.data,
+        });
       });
+  },
+  onPageScroll(e) {
+    this.setData({
+      pageScrollTop: e.scrollTop,
     });
   },
-  onPageScroll(e){
-    this.setData({
-      pageScrollTop:e.scrollTop
-    });
+  onPullDownRefresh() {
+    let currentShowPostSort=this.data.currentShowPostSort;
+    this.postLoad[currentShowPostSort] = { count: 0, page: 0, finished: false };
+    this.setData(
+      {
+        [`posts.${currentShowPostSort}`]:[],
+      },
+      () => {
+        this.getPost();
+      }
+    );
+  },
+  onReachBottom() {
+    if (this.postLoad[this.data.currentShowPostSort].finished === false) {
+      this.getPost();
+    }
   },
   data: {
-    postTabs:{
-      all:"全部",
-      qa:"问答",
-      note:"笔记"
+    sorts: null,
+    postTabs: {
+      all: "全部",
     },
-    updateSwiperHeight:false,
-    pageScrollTop:0,
-    publish:{
-      hidden:true,
-      postType:[]
+    updateSwiperHeight: false,
+    pageScrollTop: 0,
+    publish: {
+      hidden: true,
+      postType: [],
     },
-    posts:[],
-    quotes:[
+    posts: {
+      all: [],
+    },
+    currentShowPostSort: "all",
+    quotes: [
       {
-        content:"困难像弹簧，你弱它就强，你强它就弱。",
-        likes:0
-      }
-    ]
+        content: "困难像弹簧，你弱它就强，你强它就弱。",
+        likes: 0,
+      },
+    ],
   },
-  displayPublishPopup(e){
-    let dataset=e.currentTarget.dataset;
+  displayPublishPopup(e) {
+    let dataset = e.currentTarget.dataset;
     this.setData({
-      "publish.hidden":dataset.mode=="show"?false:true
+      "publish.hidden": dataset.mode == "show" ? false : true,
     });
   },
-  getQuotes(){
-    Cloud.collection("quote").aggregate().sample({
-      size:5
-    }).end().then(res=>{
-      let quotes=this.data.quotes;
-      quotes.push(...res['list']);
-      this.setData({
-        quotes
+  getQuotes() {
+    Cloud.collection("quote")
+      .aggregate()
+      .sample({
+        size: 5,
+      })
+      .end()
+      .then((res) => {
+        let quotes = this.data.quotes;
+        quotes.push(...res["list"]);
+        this.setData({
+          quotes,
+        });
       });
-    })
   },
-  async getPost(){
-    await Cloud.cfunction("Post","getPost").then(res=>{
-      this.setData({
-        posts:res,
-        updateSwiperHeight:true
-      });
-    })
-  }
-})
+  postLoad: {
+    all: { count: 0, page: 0, finished: false },
+  },
+  postTabChange(e) {
+    this.setData(
+      {
+        currentShowPostSort: e.detail.current,
+      },
+      () => {
+        console.log(this.postLoad[this.data.currentShowPostSort].count);
+        if (
+          !this.data.posts[this.data.currentShowPostSort][
+            this.postLoad[this.data.currentShowPostSort].count
+          ] ||
+          this.data.posts[this.data.currentShowPostSort][
+            this.postLoad[this.data.currentShowPostSort].count
+          ].length == 0
+        ) {
+          this.getPost();
+        }
+      }
+    );
+  },
+  async getPost() {
+    let currentShowPostSort = this.data.currentShowPostSort;
+    let currentPageLoad = this.postLoad[currentShowPostSort];
+    if (currentPageLoad.finished) {
+      return;
+    }
+    let currentPosts = this.data.posts[currentShowPostSort];
+    await Cloud.cfunction("Post", "getPost", {
+      page: currentPageLoad.page,
+      sort: currentShowPostSort == "all" ? null : currentShowPostSort,
+    }).then((res) => {
+      if (res.length < 5) {
+        currentPageLoad.finished = true;
+      } else {
+        currentPageLoad.page++;
+      }
+      let postPath = `posts.${currentShowPostSort}`;
+      if (currentPosts.length > 0) {
+        let current = currentPosts[currentPageLoad.count];
+        if (current.length == 5) {
+          currentPageLoad.count += 1;
+          current = res;
+          this.setData(
+            {
+              [`${postPath}[${currentPageLoad.count}]`]: current,
+            },
+            () => {
+              this.setData({
+                updateSwiperHeight: true,
+              });
+            }
+          );
+        } else {
+          this.setData(
+            {
+              [`${postPath}[${currentPageLoad.count}]`]: current,
+            },
+            () => {
+              this.setData({
+                updateSwiperHeight: true,
+              });
+            }
+          );
+        }
+      } else {
+        this.setData(
+          {
+            [`${postPath}[0]`]: res,
+          },
+          () => {
+            this.setData({
+              updateSwiperHeight: true,
+            });
+          }
+        );
+      }
+      wx.stopPullDownRefresh();
+    });
+  },
+});

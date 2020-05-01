@@ -7,7 +7,7 @@ cloud.init();
 
 const DB = cloud.database();
 const User = DB.collection("user");
-const userProfile = DB.collection("user_profile");
+const UserProfile = DB.collection("user_profile");
 const _ = DB.command;
 
 let functions = {
@@ -29,7 +29,7 @@ let functions = {
       });
     if (userInfo.length == 0) {
       userInfo = {
-        _id:_openid,
+        _id: _openid,
         nickname: info.nickName,
         avatar_url: info.avatarUrl,
         _default_school: "",
@@ -92,19 +92,21 @@ let functions = {
 
     return userProfile;
   },
-  async getUser(event){
-    let _openids=[];
+  async getUser(event) {
+    let _openids = [];
 
-    if(event._openid instanceof String){
+    if (event._openid instanceof String) {
       _openids.push(event._openid);
-    }else{
-      _openids=event._openid;
+    } else {
+      _openids = event._openid;
     }
-    let user=User.where({
-      _id:_.in(_openids)
-    }).get().then(res=>{
-      return res['data'];
-    });
+    let user = User.where({
+      _id: _.in(_openids),
+    })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
     return user;
   },
   async saveUserInfo(event) {
@@ -238,7 +240,7 @@ let functions = {
       });
     if (addResult["errMsg"] == "collection.add:ok") {
       return Response.result({
-        _id:addResult['_id']
+        _id: addResult["_id"],
       });
     }
   },
@@ -254,7 +256,7 @@ exports.main = async (event, context) => {
     "saveUserInfo",
     "quitSchool",
     "submitFeedback",
-    "getUser"
+    "getUser",
   ];
   let method = event.method;
   if (!methods.includes(method)) {

@@ -1,5 +1,6 @@
-<import src="./basic/main_content.wxml"/>
-
+<import src="./basic/main_content.wxml" />
+<import src="./basic/title.wxml" />
 <template name="dynamic">
+  <template is="title" data="{{ ...{ placeholder:'请在这里输入标题',title:title||''} }}"></template>
   <template is="main_content" />
 </template>

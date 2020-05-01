@@ -1,5 +1,6 @@
 {
   "pages": [
+
     "pages/index/index",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
