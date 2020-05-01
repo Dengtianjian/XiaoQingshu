@@ -17,7 +17,7 @@
 <!-- 信息流 -->
 <view class="post">
   <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" bind:change="postTabChange">
-    <block wx:for="{{ postTabs }}" wx:key="{{ index }}">
+    <block wx:for="{{ postTabs }}" wx:key="index">
       <view slot="{{ index }}">
         <block wx:for="{{ posts[index] }}" wx:for-item="postArray" wx:for-index="postArrayIndex" wx:key="postArrayIndex">
           <block wx:for="{{ postArray }}" wx:key="index">

@@ -117,7 +117,6 @@ Page({
         currentShowPostSort: e.detail.current,
       },
       () => {
-        console.log(this.postLoad[this.data.currentShowPostSort].count);
         if (
           !this.data.posts[this.data.currentShowPostSort][
             this.postLoad[this.data.currentShowPostSort].count
