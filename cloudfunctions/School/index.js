@@ -1,8 +1,10 @@
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
+const Response = require("./response");
 
 cloud.init();
 const DB = cloud.database();
+const _ =DB.command;
 const School = DB.collection("school");
 
 let functions = {
@@ -62,13 +64,25 @@ let functions = {
         return res;
       })
     })
+  },
+  async getSchoolById(event){
+    let schoolIds=event.schoolid;
+    if(typeof schoolIds =="string"){
+      schoolIds=[schoolIds];
+    }
+
+    let school= await School.where({
+      _id:_.in(schoolIds)
+    }).get().then(res=>res['data']);
+
+    return Response.result(school);
   }
 };
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
-  const methods = ["joinSchool","updateSchoolStudents"];
+  const methods = ["joinSchool","updateSchoolStudents","getSchoolById"];
   let method = event.method;
   if (!methods.includes(method)) {
     return {

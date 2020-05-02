@@ -1,23 +1,19 @@
 <!-- components/commentItem/commentItem.wxml -->
-<template name="comment">
+<view class="comment-item">
   <view class="comment-author">
-    <image class="comment-author-avatar" src="https://imgavater.ui.cn/avatar/6/2/6/3/113626.png?imageMogr2/auto-orient/crop/!960x960a94a79/thumbnail/148x148"></image>
+    <image class="comment-author-avatar" src="{{ comment['author']['avatar_url'] }}"></image>
     <view class="comment-author-info">
-      <view class="comment-author-nickname">你的猫猫哇🐱</view>
-      <view class="comment-author-school">成都东软学院</view>
+      <view class="comment-author-nickname">{{ comment['author']['nickname'] }}</view>
+      <view class="comment-author-school">{{ comment['author']['school']['name'] }}</view>
     </view>
     <text class="comment-operate qcicon ">···</text>
   </view>
-  <view class="comment-content">今天 河北 上海 广东商量好
-给学生们惊喜啊 😂</view>
+  <view class="comment-content">{{ comment['content'] }}</view>
   <view class="comment-bottom">
-    <view class="comment-publish-date">10小时前</view>
-    <view class="comment-like">
-      <text class="comment-like-icon qcicon qcicon-good"></text>
-      <text class="comment-like-text">48</text>
+    <view class="comment-publish-date">{{ comment['date'] }}</view>
+    <view class="comment-like {{ comment['isLike']?'comment-like-yes':'' }}" bind:tap="like">
+      <text class="comment-like-icon qcicon qcicon-{{ comment['isLike']?'good-fill':'good' }}" ></text>
+      <text class="comment-like-text">{{ comment['likes']||'' }}</text>
     </view>
   </view>
-</template>
-<view class="comment-item">
-  <template is="comment"></template>
 </view>

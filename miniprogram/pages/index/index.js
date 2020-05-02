@@ -137,7 +137,7 @@ Page({
       return;
     }
     let currentPosts = this.data.posts[currentShowPostSort];
-    await Cloud.cfunction("Post", "getPost", {
+    await Cloud.cfunction("Post", "getPosts", {
       page: currentPageLoad.page,
       sort: currentShowPostSort == "all" ? null : currentShowPostSort,
     }).then((res) => {

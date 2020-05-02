@@ -39,3 +39,6 @@
   color:var(--font-light-color);
   font-size:24rpx;
 }
+.comment-like-yes {
+  color:var(--main-color);
+}

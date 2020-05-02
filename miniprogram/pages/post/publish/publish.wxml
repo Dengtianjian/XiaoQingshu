@@ -4,7 +4,7 @@
 <import src="./template/note.wxml" />
 <NavigationBar />
 <form class="publish-post-form" bindsubmit="savePost">
-  <template is="{{ currentSort }}"></template>
+  <template is="{{ currentSort }}" data="{{ ...post }}"></template>
   <view class="image-upload">
     <scroll-view scroll-x="{{ true }}" class="image-upload-list">
       <block wx:for="{{ images }}" wx:key="id">
@@ -20,13 +20,16 @@
         <text hidden="{{ topic!=null }}">选择话题</text>
         <text hidden="{{ topic==null }}"># {{ topic.name }} #</text>
       </view>
+      <view class="post-option-item-operate">
+        <text class="remove-topic qcicon qcicon-close" bind:tap="removeTopic" hidden="{{ topic==null }}"></text>
+      </view>
     </view>
     <view class="post-option-item" hidden="{{ schoolInfo==null }}">
       <view class="post-option-item-title">
-        <checkbox name="school" checked="{{ schoolInfo!=null&&schoolEntry }}" model:value="{{ schoolOnly }}" />
+        <switch id="schoolOnly" type="checkbox" checked="{{ schoolOnly||schoolInfo!=null&&schoolEntry }}" name="school_only" />
       </view>
-      <label class="post-option-item-content">仅限 {{ schoolInfo['name'] }} 的同学们可以看到</label>
+      <label for="schoolOnly" class="post-option-item-content">仅限 {{ schoolInfo['name'] }} 的同学们可以看到</label>
     </view>
   </view>
-  <button class="publish-form-submit" type="primary" form-type="submit">发布</button>
+  <button class="publish-form-submit" type="primary" form-type="submit">{{ post?'保存':'发布' }}</button>
 </form>

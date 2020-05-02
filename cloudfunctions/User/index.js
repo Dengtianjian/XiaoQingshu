@@ -6,11 +6,17 @@ const cloud = require("wx-server-sdk");
 cloud.init();
 
 const DB = cloud.database();
+const _ = DB.command;
 const User = DB.collection("user");
 const UserProfile = DB.collection("user_profile");
-const _ = DB.command;
+
+const Favorite=require("./functions/favorite");
+
+
+let injectKey=[].concat(Object.keys(Favorite));
 
 let functions = {
+  ...Favorite,
   /**
    * 获取当前登录的用户信息
    * @param {Object} info 用户的信息
@@ -95,18 +101,21 @@ let functions = {
   async getUser(event) {
     let _openids = [];
 
-    if (event._openid instanceof String) {
+    if (typeof event._openid == "string") {
       _openids.push(event._openid);
     } else {
       _openids = event._openid;
     }
-    let user = User.where({
+    let user = await User.where({
       _id: _.in(_openids),
     })
       .get()
       .then((res) => {
         return res["data"];
       });
+    if (typeof event._openid == "string") {
+      return user[0];
+    }
     return user;
   },
   async saveUserInfo(event) {
@@ -243,12 +252,13 @@ let functions = {
         _id: addResult["_id"],
       });
     }
-  },
+  }
 };
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   const methods = [
+    ...injectKey,
     "login",
     "getUserprofile",
     "saveUserProfile",
