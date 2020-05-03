@@ -41,6 +41,7 @@ Page({
     currentShowCommentArrayReplyIndex: null,
     currentShowCommentReplyIndex: null,
     currentShowCommentReply: null,
+    selectReplyreplyIndex: null,
     replyReply: null,
     commentReply: {},
     isHiddenCommentPopup: true,
@@ -238,10 +239,9 @@ Page({
   },
   commentSubmit(e) {
     let sendType = this.data.sendType;
-    console.log(sendType);
     if (sendType == "postComment") {
       this.publishComment(e);
-    } else if (sendType == "replyComment") {
+    } else if (sendType == "replyComment" || sendType == "replyReply") {
       this.replyComment(e);
     }
   },
@@ -281,11 +281,16 @@ Page({
     });
   },
   showCommentPopup(e) {
-    let type = e.currentTarget.dataset.type;
-    this.setData({
+    let dataset = e.currentTarget.dataset;
+    let type = dataset.type;
+    let setData = {
       isHiddenCommentPopup: false,
       sendType: type,
-    });
+    };
+    if (type == "replyReply") {
+      setData["replyReply"] = dataset["reply"];
+    }
+    this.setData(setData);
     this.animate(
       ".comment-post-form",
       [{ top: "100%", ease: "ease-out" }, { top: 0 }],
@@ -337,7 +342,6 @@ Page({
     let currentReplyLoad = this.commentReplyLoad[
       `'${arrayReplyIndex}-${replyIndex}'`
     ];
-    let currentReplyLoadPath = `commentReplyLoad['${arrayReplyIndex}-${replyIndex}']`;
     let comment = this.data.currentShowComment;
 
     if (currentReply == undefined) {
@@ -351,18 +355,34 @@ Page({
         finished: false,
         page: 0,
         count: 0,
+        loading: false,
       };
     }
 
     if (currentReplyLoad.finished) {
       return;
     }
+    if (currentReplyLoad.loading) {
+      return;
+    }
+    if (
+      this.commentReplyLoad[`'${arrayReplyIndex}-${replyIndex}'`] == undefined
+    ) {
+      this["commentReplyLoad"][`'${arrayReplyIndex}-${replyIndex}'`] = {
+        loading: true,
+      };
+    } else {
+      this["commentReplyLoad"][`'${arrayReplyIndex}-${replyIndex}'`][
+        "loading"
+      ] = true;
+    }
 
     Cloud.cfunction("Post", "getCommentReply", {
       commentid: comment["_id"],
       page: currentReplyLoad.page,
+      limit: 7,
     }).then((replys) => {
-      if (replys.length < 5) {
+      if (replys.length < 7) {
         currentReplyLoad.finished = true;
       }
       replys.forEach((item) => {
@@ -376,9 +396,14 @@ Page({
         ),
         currentShowCommentReply: currentReplyPath,
       });
+      currentReplyLoad["loading"] = false;
+      console.log(currentReplyLoad);
       this["commentReplyLoad"][
         `'${arrayReplyIndex}-${replyIndex}'`
       ] = currentReplyLoad;
+      console.log(
+        this["commentReplyLoad"][`'${arrayReplyIndex}-${replyIndex}'`]
+      );
     });
   },
   async replyComment(e) {
@@ -392,13 +417,11 @@ Page({
       let replyReplyData = this.data.replyReply;
       replyReply = {
         replyid: replyReplyData["_id"],
-        replyauthor: {
-          nickname: replyReplyData["author"]["nickname"],
-          _id: replyReplyData["author"]["_id"],
-          avatar_url: replyReplyData["author"]["avatar_url"],
-        },
+        replyauthor: replyReplyData["author"]["nickname"],
       };
+      console.log(replyReply);
     }
+
     await Cloud.cfunction("Post", "replyComment", {
       content: formValue["content"],
       commentid: this.data.currentShowComment["_id"],
@@ -416,11 +439,13 @@ Page({
         arr = [];
       }
       arr.unshift({
+        _id: res._replyid,
         content: formValue["content"],
         commentid: this.data.currentShowComment["_id"],
         postid: this.data.post["_id"],
-        ...replyReply,
-        date:Utils.formatDate(Date.now(),"y-m-d"),
+        _reply_author: replyReply["replyauthor"],
+        _replyid: replyReply["replyid"],
+        date: Utils.formatDate(Date.now(), "y-m-d"),
         author: {
           _id: this.userInfo["_id"],
           avatar_url: this.userInfo["avatar_url"],
@@ -435,6 +460,7 @@ Page({
       });
       this.setData({
         [`commentReply.${arrayReplyIndex}-${replyIndex}.0`]: arr,
+        replyReply: null,
       });
     });
   },

@@ -4,6 +4,28 @@ import Cloud from "../../source/js/cloud";
 const App = getApp();
 
 Page({
+  data: {
+    sorts: null,
+    postTabs: {
+      all: "全部",
+    },
+    updateSwiperHeight: false,
+    pageScrollTop: 0,
+    publish: {
+      hidden: true,
+      postType: [],
+    },
+    posts: {
+      all: [],
+    },
+    currentShowPostSort: "all",
+    quotes: [
+      {
+        content: "困难像弹簧，你弱它就强，你强它就弱。",
+        likes: 0,
+      },
+    ],
+  },
   onLoad() {
     Cloud.collection("post_sort")
       .get()
@@ -64,28 +86,6 @@ Page({
     if (this.postLoad[this.data.currentShowPostSort].finished === false) {
       this.getPost();
     }
-  },
-  data: {
-    sorts: null,
-    postTabs: {
-      all: "全部",
-    },
-    updateSwiperHeight: false,
-    pageScrollTop: 0,
-    publish: {
-      hidden: true,
-      postType: [],
-    },
-    posts: {
-      all: [],
-    },
-    currentShowPostSort: "all",
-    quotes: [
-      {
-        content: "困难像弹簧，你弱它就强，你强它就弱。",
-        likes: 0,
-      },
-    ],
   },
   displayPublishPopup(e) {
     let dataset = e.currentTarget.dataset;

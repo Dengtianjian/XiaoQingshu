@@ -16,6 +16,5 @@
 .popup-content {
   position:fixed;
   z-index:31;
-  padding:var(--container-padding);
   background:white;
 }

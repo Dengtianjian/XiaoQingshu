@@ -62,15 +62,20 @@
         <image class="pinche-entry-banner" src="/material/images/school_pinche_entry.png" mode="aspectFill"></image>
       </navigator>
     </view>
-    <Tabs class="post-list" current="all" tabs="{{ {all:'全部',qa:'问答',note:'笔记'} }}">
-      <view slot="all">
-        <block wx:for="{{ 5 }}" wx:key="index">
-          <PostCoverItem class="post-item" />
+    <view class="post">
+      <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" bind:change="postTabChange">
+        <block wx:for="{{ postTabs }}" wx:key="index">
+          <view slot="{{ index }}">
+            <block wx:for="{{ posts[index] }}" wx:for-item="postArray" wx:for-index="postArrayIndex" wx:key="postArrayIndex">
+              <block wx:for="{{ postArray }}" wx:key="index">
+                <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
+              </block>
+            </block>
+          </view>
         </block>
-      </view>
-      <view slot="qa">问答</view>
-      <view slot="note">笔记</view>
-    </Tabs>
+      </Tabs>
+    </view>
+
   </block>
   <block wx:elif="{{ userIsLogin&&schoolInfo==null }}">
     <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" />

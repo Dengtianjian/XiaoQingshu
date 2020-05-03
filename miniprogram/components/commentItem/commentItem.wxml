@@ -4,19 +4,34 @@
     <image class="comment-author-avatar" src="{{ comment['author']['avatar_url'] }}"></image>
     <view class="comment-author-info">
       <view class="comment-author-nickname">{{ comment['author']['nickname'] }}</view>
-      <view class="comment-author-school">{{ comment['author']['school']?comment['author']['school']['name']:'TA还未加入一家学校' }}</view>
+      <view class="comment-author-school">
+        {{ comment['author']['school']?comment['author']['school']['name']:'TA还未加入一家学校' }}
+      </view>
     </view>
-    <text class="comment-operate qcicon ">···</text>
+    <view class="comment-operate">
+      <slot name="commentOperate"></slot>
+    </view>
   </view>
   <view class="comment-reply" wx:if="{{ comment['_reply_author'] }}">
     回复 {{ comment['_reply_author'] }}
   </view>
-  <view class="comment-content">{{ comment['content'] }}</view>
+  <view class="comment-content">
+    <slot name="commentContent"></slot>
+    {{ comment['content'] }}
+  </view>
   <view class="comment-bottom">
-    <view class="comment-publish-date">{{ comment['date'] }}</view>
-    <view class="comment-like {{ comment['isLike']?'comment-like-yes':'' }}" bind:tap="like">
-      <text class="comment-like-icon qcicon qcicon-{{ comment['isLike']?'good-fill':'good' }}"></text>
-      <text class="comment-like-text">{{ comment['likes']||'' }}</text>
+    <slot name="commentBottom-top"></slot>
+    <view class="comment-bottom-left">
+      <slot name="commentBottom-left"></slot>
+      <view class="comment-publish-date">{{ comment['date'] }}</view>
     </view>
+    <view class="comment-bottom-right">
+      <slot name="commentBottom-right"></slot>
+      <text class="comment-like {{ comment['isLike']?'comment-like-yes':'' }}" bind:tap="like">
+        <text class="comment-like-icon qcicon qcicon-{{ comment['isLike']?'good-fill':'good' }}"></text>
+        <text class="comment-like-text">{{ comment['likes']||'' }}</text>
+      </text>
+    </view>
+    <slot name="commentBottom-bottom"></slot>
   </view>
 </view>

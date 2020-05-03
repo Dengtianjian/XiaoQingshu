@@ -1,13 +1,13 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/school/index/index",
     "pages/post/view/view",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
     "pages/class/index/index",
     "pages/my/index/index",
     "pages/school/select_school/select_school",
-    "pages/school/index/index",
     "pages/my/edit_profile/edit_profile",
     "pages/my/space/space",
     "pages/class/invite_join/invite_join",

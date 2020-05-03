@@ -5,6 +5,7 @@
   flex-direction:column;
   justify-content: space-between;
   height:100%;
+  padding:var(--container-padding);
 }
 .dialog-title {
   color:var(--font-light-color);

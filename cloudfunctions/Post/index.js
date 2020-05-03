@@ -15,7 +15,7 @@ const Comment = require("./functions/comment");
 const injectKey = [].concat(Object.keys(Like), Object.keys(Comment));
 const injectFunctions = {
   ...Like,
-  ...Comment
+  ...Comment,
 };
 
 function arrayToObject(array, key) {
@@ -217,8 +217,10 @@ let functions = {
     let limit = event.limit || 5;
     let page = event.page || 0;
     let sort = event.sort || null;
+    let school = event.school || null;
 
     let postsQuery = cloud.database().collection("post");
+    let whereQuery = {};
     if (sort) {
       sort = await postSort
         .where({
@@ -232,11 +234,13 @@ let functions = {
         return Response.error(400, 400001, "分类不存在");
       }
       sort = sort[0];
-      postsQuery = postsQuery.where({
-        sort: sort["identifier"],
-      });
+      whereQuery["sort"] = sort["identifier"];
+    }
+    if (school) {
+      whereQuery["_school"] = school;
     }
     let posts = await postsQuery
+      .where(whereQuery)
       .limit(limit)
       .skip(limit * page)
       .orderBy("date", "desc")

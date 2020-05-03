@@ -51,7 +51,7 @@
               <text class="ablum-item-name">{{ item.name }}</text>
               <text class="ablum-item-count">{{ item.count }}</text>
             </view>
-             <text class="ablum-item-select qcicon {{ favorite.currentSelect==index?'qcicon-seleted':'' }}"></text>
+            <text class="ablum-item-select qcicon {{ favorite.currentSelect==index?'qcicon-seleted':'' }}"></text>
           </view>
         </block>
       </scroll-view>
@@ -66,7 +66,9 @@
       <block wx:for="{{ commentArray }}" wx:key="index">
         <view class="comment-item">
           <CommentItem comment="{{ item }}" />
-          <view class="comment-view-reply" bind:tap="showAllCommentReply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}">查看回复</view>
+          <view class="comment-view-reply" bind:tap="showAllCommentReply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}">
+            查看回复
+          </view>
         </view>
       </block>
     </view>
@@ -81,16 +83,22 @@
   </form>
   <view class="comment-post-popup-mask" catch:touchmove bindtap="hiddenCommentPopup" hidden="{{ isHiddenCommentPopup }}"></view>
 </view>
-<Popup position="bottom" hidden="{{ isHiddenCommentReplyPopup }}" customStyle="height:85%;">
-  <scroll-view scroll-y class="comment-reply-popup" bindscrolltolower="getCommentReply" >
-    <CommentItem comment="{{ currentShowComment }}" />
-    <view class="comment-reply-list">
-      <block wx:for="{{ commentReply[currentShowCommentArrayReplyIndex+'-'+currentShowCommentReplyIndex] }}" wx:key="index" wx:for-item="commentArray">
-        <block wx:for="{{ commentArray }}">
-          <CommentItem class="comment-reply-item" comment="{{ item }}" />
+<Popup class="comment-reply" position="bottom" hidden="{{ isHiddenCommentReplyPopup }}" customStyle="height:90%;" >
+  <view class="comment-reply-content">
+    <scroll-view class="comment-reply-scroll" lower-threshold="300" scroll-y bindscrolltolower="getCommentReply" >
+      <CommentItem class="comment-reply-current" comment="{{ currentShowComment }}" />
+      <view class="comment-reply-list">
+        <block wx:for="{{ commentReply[currentShowCommentArrayReplyIndex+'-'+currentShowCommentReplyIndex] }}" wx:key="index" wx:for-item="commentArray">
+          <block wx:for="{{ commentArray }}">
+            <CommentItem class="comment-reply-item" comment="{{ item }}" >
+              <text class="qcicon qcicon-comments comment-reply-reply" slot="commentBottom-right" bind:tap="showCommentPopup" data-type="replyReply" data-reply="{{ item }}" />
+            </CommentItem>
+          </block>
         </block>
-      </block>
+      </view>
+    </scroll-view>
+    <view class="comment-post-tips comment-reply-button" bind:tap="showCommentPopup" data-type="replyComment">
+      回复一个
     </view>
-    <view class="comment-post-tips" bind:tap="showCommentPopup" data-type="replyComment" >回复一个</view>
-  </scroll-view>
+  </view>
 </Popup>

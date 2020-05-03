@@ -100,32 +100,32 @@
   font-size: 34rpx;
 }
 .post-operate-share-button {
-  display:inline;
-  padding:0;
-  margin:0;
+  display: inline;
+  padding: 0;
+  margin: 0;
   font-size: 28rpx;
   color: var(--font-light-color);
-  background:none;
+  background: none;
 }
 /* 收藏夹列表 */
 .album-list {
-  text-align:left;
+  text-align: left;
 }
 .album-item {
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom:10rpx;
-  height:60rpx;
-  font-size:30rpx;
+  margin-bottom: 10rpx;
+  height: 60rpx;
+  font-size: 30rpx;
 }
 .ablum-item-count {
-  margin-left:10rpx;
-  font-size:28rpx;
-  color:var(--font-light-color);
+  margin-left: 10rpx;
+  font-size: 28rpx;
+  color: var(--font-light-color);
 }
 .ablum-item-select {
-  color:var(--main-color);
+  color: var(--main-color);
 }
 
 .post .post-publish-date {
@@ -152,7 +152,7 @@
   font-size: 24rpx;
 }
 .comment-item {
-  margin-bottom:30rpx;
+  margin-bottom: 30rpx;
 }
 /* 评论帖子悬浮窗 */
 .comment-post-tips {
@@ -217,17 +217,26 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
 }
-.comment-reply-popup {
+.comment-reply-content {
+  padding-bottom:70rpx;
+  height: 100%;
+  overflow: hidden;
+}
+.comment-reply-scroll {
   height: 100%;
   overflow-y: scroll;
 }
-.comment-reply-popup .comment-reply-list {
-  margin-top: 20rpx;
-  margin-left: 80rpx;
-  padding-bottom: 40rpx;
-  width: auto;
-}
-.comment-reply-popup .comment-reply-item {
+.comment-reply-current {
   display: block;
-  margin-bottom: 20rpx;
+  padding:var(--container-padding);
+  border-bottom:10rpx solid #eee;
+}
+.comment-reply-item {
+  display: block;
+  padding:var(--container-padding);
+  border-bottom:1px solid #eee;
+}
+.comment-reply-reply {
+  margin-right:20rpx;
+  color:var(--font-light-color);
 }

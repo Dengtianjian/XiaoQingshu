@@ -126,8 +126,11 @@ page {
 .post-list {
   display: block;
 }
-.post-list .post-item {
-  margin-bottom: 20rpx;
+.post-item {
+  display:block;
+  padding-bottom:40rpx;
+  margin-bottom: 40rpx;
+  border-bottom:2rpx solid #eee;
 }
 
 .page-prompt {
