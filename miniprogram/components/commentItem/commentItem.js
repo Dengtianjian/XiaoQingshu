@@ -1,12 +1,15 @@
 // components/commentItem/commentItem.js
 import Cloud from "../../source/js/cloud";
 import Prompt from "../../source/js/prompt";
+import Uitils from "../../source/js/utils";
 Component({
   /**
    * 组件的属性列表
    */
   properties: {
-    comment: Object,
+    comment: {
+      type:Object
+    },
   },
 
   /**

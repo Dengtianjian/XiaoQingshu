@@ -37,9 +37,16 @@ Page({
       dataline: "昨晚 凌晨02:45",
     },
     comments: [[]],
+    currentShowComment: null,
+    currentShowCommentArrayReplyIndex: null,
+    currentShowCommentReplyIndex: null,
+    currentShowCommentReply: null,
+    replyReply: null,
+    commentReply: {},
     isHiddenCommentPopup: true,
     hiddenCommentPopupTextarea: true,
     isHiddenCommentReplyPopup: true,
+    sendType: "comment",
     favorite: {
       popupIsHide: true,
       currentSelect: 0,
@@ -48,7 +55,6 @@ Page({
   },
   onLoad(options) {
     let _postid = options.postid;
-    _postid = "fddd30c55eacf20e003e17c7705d1583";
 
     this.setData(
       {
@@ -62,7 +68,10 @@ Page({
       }
     );
   },
-  onReady() {
+  async onReady() {
+    if (this.userInfo == null) {
+      this.userInfo = await App.getUserInfo().then((r) => r);
+    }
     this.setData({
       navigationBarHeight: App.globalData.navigationBarHeight,
     });
@@ -72,10 +81,6 @@ Page({
       this.getComment();
     }
   },
-
-  /**
-   * 用户点击右上角分享
-   */
   onShareAppMessage: function () {
     let post = this.data.post;
     let config = {
@@ -200,9 +205,6 @@ Page({
   userInfo: null,
   async publishComment(e) {
     let formValue = e.detail.value;
-    if (this.userInfo == null) {
-      this.userInfo = await App.getUserInfo().then((r) => r);
-    }
     wx.showLoading({
       title: "发送中",
     });
@@ -213,7 +215,9 @@ Page({
       wx.hideLoading();
       let that = this;
       let comments = this.data.comments[0];
+      console.log(res);
       comments.unshift({
+        _id: res._id,
         content: formValue.content,
         date: Utils.formatDate(Date.now(), "y-m-d"),
         _post: this.data.post._id,
@@ -231,6 +235,15 @@ Page({
         },
       });
     });
+  },
+  commentSubmit(e) {
+    let sendType = this.data.sendType;
+    console.log(sendType);
+    if (sendType == "postComment") {
+      this.publishComment(e);
+    } else if (sendType == "replyComment") {
+      this.replyComment(e);
+    }
   },
   getComment() {
     if (this.commentLoad.finished) {
@@ -267,9 +280,11 @@ Page({
       });
     });
   },
-  showCommentPopup() {
+  showCommentPopup(e) {
+    let type = e.currentTarget.dataset.type;
     this.setData({
       isHiddenCommentPopup: false,
+      sendType: type,
     });
     this.animate(
       ".comment-post-form",
@@ -295,9 +310,132 @@ Page({
       }
     );
   },
-  showAllCommentReply() {
-    this.setData({
-      isHiddenCommentReplyPopup: false,
+  showAllCommentReply(e) {
+    let dataset = e.currentTarget.dataset;
+    let index = dataset.index;
+    let arrayIndex = dataset.arrayindex;
+    this.setData(
+      {
+        currentShowComment: this.data.comments[arrayIndex][index],
+        currentShowCommentArrayReplyIndex: arrayIndex,
+        currentShowCommentReplyIndex: index,
+        isHiddenCommentReplyPopup: false,
+      },
+      () => {
+        this.getCommentReply();
+      }
+    );
+  },
+  commentReplyLoad: {},
+  async getCommentReply() {
+    let arrayReplyIndex = this.data.currentShowCommentArrayReplyIndex;
+    let replyIndex = this.data.currentShowCommentReplyIndex;
+    let currentReply = this.data.commentReply[
+      arrayReplyIndex + "-" + replyIndex
+    ];
+    let currentReplyPath = `commentReply.${arrayReplyIndex}-${replyIndex}`;
+    let currentReplyLoad = this.commentReplyLoad[
+      `'${arrayReplyIndex}-${replyIndex}'`
+    ];
+    let currentReplyLoadPath = `commentReplyLoad['${arrayReplyIndex}-${replyIndex}']`;
+    let comment = this.data.currentShowComment;
+
+    if (currentReply == undefined) {
+      this.setData({
+        [currentReplyPath]: { 0: [] },
+      });
+    }
+    let current = [];
+    if (currentReplyLoad == undefined) {
+      currentReplyLoad = {
+        finished: false,
+        page: 0,
+        count: 0,
+      };
+    }
+
+    if (currentReplyLoad.finished) {
+      return;
+    }
+
+    Cloud.cfunction("Post", "getCommentReply", {
+      commentid: comment["_id"],
+      page: currentReplyLoad.page,
+    }).then((replys) => {
+      if (replys.length < 5) {
+        currentReplyLoad.finished = true;
+      }
+      replys.forEach((item) => {
+        item["date"] = Utils.formatDate(item["date"], "y-m-d");
+      });
+      currentReplyLoad.page++;
+      currentReplyLoad.count++;
+      this.setData({
+        [`${currentReplyPath}.${currentReplyLoad.count}`]: current.concat(
+          replys
+        ),
+        currentShowCommentReply: currentReplyPath,
+      });
+      this["commentReplyLoad"][
+        `'${arrayReplyIndex}-${replyIndex}'`
+      ] = currentReplyLoad;
+    });
+  },
+  async replyComment(e) {
+    let formValue = e.detail.value;
+
+    wx.showLoading({
+      title: "发送中",
+    });
+    let replyReply = {};
+    if (this.data.replyReply) {
+      let replyReplyData = this.data.replyReply;
+      replyReply = {
+        replyid: replyReplyData["_id"],
+        replyauthor: {
+          nickname: replyReplyData["author"]["nickname"],
+          _id: replyReplyData["author"]["_id"],
+          avatar_url: replyReplyData["author"]["avatar_url"],
+        },
+      };
+    }
+    await Cloud.cfunction("Post", "replyComment", {
+      content: formValue["content"],
+      commentid: this.data.currentShowComment["_id"],
+      postid: this.data.post["_id"],
+      ...replyReply,
+    }).then((res) => {
+      wx.hideLoading();
+      Prompt.toast("回复成功", {
+        icon: "success",
+      });
+      let arrayReplyIndex = this.data.currentShowCommentArrayReplyIndex;
+      let replyIndex = this.data.currentShowCommentReplyIndex;
+      let arr = this.data.commentReply[arrayReplyIndex + "-" + replyIndex]["0"];
+      if (arr == undefined) {
+        arr = [];
+      }
+      arr.unshift({
+        content: formValue["content"],
+        commentid: this.data.currentShowComment["_id"],
+        postid: this.data.post["_id"],
+        ...replyReply,
+        date:Utils.formatDate(Date.now(),"y-m-d"),
+        author: {
+          _id: this.userInfo["_id"],
+          avatar_url: this.userInfo["avatar_url"],
+          nickname: this.userInfo["nickname"],
+          school: this.userInfo["school"]
+            ? {
+                _id: this.userInfo["school"]["_id"],
+                name: this.userInfo["school"]["name"],
+              }
+            : null,
+        },
+      });
+      this.setData({
+        [`commentReply.${arrayReplyIndex}-${replyIndex}.0`]: arr,
+      });
     });
   },
   changeSelectAlbum(e) {
@@ -335,21 +473,23 @@ Page({
   },
   confirmFavorite() {
     wx.showLoading({
-      title:"存放到收藏夹中"
+      title: "存放到收藏夹中",
     });
-    let currentAlbum=this.data.favorite.albums[this.data.favorite.currentSelect];
+    let currentAlbum = this.data.favorite.albums[
+      this.data.favorite.currentSelect
+    ];
     Cloud.cfunction("User", "addFavorite", {
       type: "post",
       contentid: this.data.post._id,
-      album:currentAlbum['_id']
+      album: currentAlbum["_id"],
     })
       .then((res) => {
         wx.hideLoading();
-        let albumCountPath=`favorite.albums[${this.data.favorite.currentSelect}].count`;
+        let albumCountPath = `favorite.albums[${this.data.favorite.currentSelect}].count`;
         this.setData({
           [`post.isFavorite`]: true,
-          [albumCountPath]:currentAlbum.count+1,
-          [`post.popupIsHide`]:true
+          [albumCountPath]: currentAlbum.count + 1,
+          [`post.popupIsHide`]: true,
         });
         Prompt.toast("嘻🤭嘻，收藏成功✨");
       })

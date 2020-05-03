@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/post/view/view",
     "pages/index/index",
+    "pages/post/view/view",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
     "pages/class/index/index",

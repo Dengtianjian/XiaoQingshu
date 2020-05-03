@@ -61,36 +61,36 @@
 </view>
 <view class="comment">
   <view class="comment-title" bind:tap="getComment">评论</view>
-  <block wx:for="{{ comments }}" wx:key="index" wx:for-item="commentArray">
+  <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
     <view class="comment-list">
-      <block wx:for="{{ commentArray }}">
+      <block wx:for="{{ commentArray }}" wx:key="index">
         <view class="comment-item">
           <CommentItem comment="{{ item }}" />
-          <view class="comment-view-reply" bind:tap="showAllCommentReply">查看回复</view>
+          <view class="comment-view-reply" bind:tap="showAllCommentReply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}">查看回复</view>
         </view>
       </block>
     </view>
   </block>
 </view>
-<view class="comment-post-tips" bind:tap="showCommentPopup">评论一个</view>
+<view class="comment-post-tips" bind:tap="showCommentPopup" data-type="postComment">评论一个</view>
 <view class="comment-post-placeholder"></view>
 <view class="comment-post-popup" catch:touchmove hidden="{{ isHiddenCommentPopup }}">
-  <form class="comment-post-form" style="padding-top:{{ navigationBarHeight }}px;" hidden="{{ isHiddenCommentPopup }}" bindsubmit="publishComment">
+  <form class="comment-post-form" style="padding-top:{{ navigationBarHeight }}px;" hidden="{{ isHiddenCommentPopup }}" bindsubmit="commentSubmit">
     <textarea class="comment-post-form-content" name="content" placeholder="请注意文明发言，做一个有素质的学生" />
     <button class="comment-post-form-submit" type="primary" form-type="submit">发送</button>
   </form>
   <view class="comment-post-popup-mask" catch:touchmove bindtap="hiddenCommentPopup" hidden="{{ isHiddenCommentPopup }}"></view>
 </view>
 <Popup position="bottom" hidden="{{ isHiddenCommentReplyPopup }}" customStyle="height:85%;">
-  <scroll-view scroll-y class="comment-reply-popup">
-    <CommentItem />
+  <scroll-view scroll-y class="comment-reply-popup" bindscrolltolower="getCommentReply" >
+    <CommentItem comment="{{ currentShowComment }}" />
     <view class="comment-reply-list">
-      <block wx:for="{{ comments }}" wx:key="index" wx:for-item="commentArray">
+      <block wx:for="{{ commentReply[currentShowCommentArrayReplyIndex+'-'+currentShowCommentReplyIndex] }}" wx:key="index" wx:for-item="commentArray">
         <block wx:for="{{ commentArray }}">
           <CommentItem class="comment-reply-item" comment="{{ item }}" />
         </block>
       </block>
     </view>
-    <view class="comment-post-tips" bind:tap="showCommentPopup">回复一个</view>
+    <view class="comment-post-tips" bind:tap="showCommentPopup" data-type="replyComment" >回复一个</view>
   </scroll-view>
 </Popup>
