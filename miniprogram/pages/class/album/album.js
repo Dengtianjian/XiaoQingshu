@@ -1,169 +1,377 @@
 // pages/class/album/album.js
+import Cloud from "../../../source/js/cloud";
+import Prompt from "../../../source/js/prompt";
 Page({
+  async onLoad(options) {
+    let classId = options.classid;
+    this.setData({
+      classId,
+    });
+    this.getClassPhoto();
+  },
 
   /**
    * 页面的初始数据
    */
   data: {
+    classId: "",
     tabs: {
       photo: "照片",
-      video: "视频"
+      video: "视频",
     },
-    photos: [
-      {
-        id: 0,
-        url: "https://template.canva.cn/EADcCHxozWY/1/0/400w-s4rbPjj9a4E.jpg"
-      }, {
-        id: 1,
-        url: "https://template.canva.cn/EADcCNQJ6DU/1/0/400w-SSb0xG6U7Ts.jpg"
-      }, {
-        id: 2,
-        url: "https://template.canva.cn/EADcB6qbIos/1/0/400w-aPcaRy_1Qps.jpg"
-      }, {
-        id: 3,
-        url: "https://template.canva.cn/EADcCLme0bc/1/0/400w-7DXWqxysMXQ.jpg"
-      }, {
-        id: 4,
-        url: "https://template.canva.cn/EADhZsT9UXk/1/0/400w-Klvuo0ABDb4.jpg"
-      }, {
-        id: 5,
-        url: "https://template.canva.cn/EADcCSmIxGc/1/0/400w-ZS9CX4sj6R0.jpg"
-      }
-    ],
-    hiddenPreviewVideoPopup:true,
-    currentPreviewVideo:"",
-    videos:[
-      {
-        cover:"/material/images/index.png",
-        url:'http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/2fcc59275285890794073114126/ySa5LZ3k4EcA.mp4'
-      },{
-        cover:"/material/images/index.png",
-        url:'http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/320ee16a5285890794073203247/okwtzftAVuwA.mp4'
-      },{
-        cover:"/material/images/index.png",
-        url:'http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/320ed9255285890794073203062/JyqT3zzDH4MA.mp4'
-      },{
-        cover:"/material/images/index.png",
-        url:"http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/30287db75285890794073167278/WVQpwkgnb9EA.mp4"
-      },{
-        cover:"/material/images/index.png",
-        url:"http://1252076676.vod2.myqcloud.com/d7eee309vodgzp1252076676/30287db75285890794073167278/WVQpwkgnb9EA.mp4"
-      }
-    ]
+    swiperHeight: 200,
+    currentShowType: "photo",
+    photo: {
+      page: 0,
+      list: [],
+      loadCount: 0,
+      finished: false,
+    },
+    video: {
+      hiddenPopup: true,
+      currentPreviewVideo: null,
+      page: 0,
+      list: [],
+      loadCount: 0,
+      finished: false,
+    },
   },
 
-  uploadPhoto(){
-    wx.chooseImage().then(res=>{
-      let length=this.data.photos.length;
-      let arrayIndex="";
-      res.tempFilePaths.map((item,index)=>{
-        arrayIndex=`photos[${length+index}]`;
-        this.setData({
-          [arrayIndex]:{
-            id:arrayIndex,
-            url:item
-          }
-        });
+  onReachBottom() {
+    if (this.data.currentShowType == "photo") {
+      this.getClassPhoto();
+    } else {
+      this.getClassVideo();
+    }
+  },
+
+  onPullDownRefresh() {
+    if (this.data.currentShowType == "photo") {
+      this.setData({
+        photo: {
+          page: 0,
+          list: [],
+          loadCount: 0,
+          finished: false,
+        },
       });
-    })
+      this.getClassPhoto();
+    } else {
+      this.setData({
+        video: {
+          hiddenPopup: true,
+          currentPreviewVideo: null,
+          page: 0,
+          list: [],
+          loadCount: 0,
+          finished: false,
+        },
+      });
+      this.getClassVideo();
+    }
+  },
+
+  tabChange(e) {
+    this.setData({
+      currentShowType: e.detail.current,
+    });
+    if (this.data[this.data.currentShowType]["list"].length == 0) {
+      if (this.data.currentShowType == "photo") {
+        this.getClassPhoto();
+      } else {
+        this.getClassVideo();
+      }
+    }
+  },
+
+  getClassPhoto() {
+    if (this.data.photo.loadCount == 2) {
+      this.setData({
+        "photo.loadCount": 0,
+      });
+      return;
+    }
+    if (this.data.photo.finished == true) {
+      return;
+    }
+
+    wx.showLoading({
+      title: "从相册取出中",
+      mask: true,
+    });
+    Cloud.collection("school_class_album")
+      .where({
+        _classid: this.data.classId,
+        type: "photo",
+      })
+      .limit(15)
+      .skip(this.data.photo.page * 15)
+      .get()
+      .then((res) => {
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
+        if (res.data.length == 0) {
+          this.setData({
+            "photo.finished": true,
+          });
+          return;
+        }
+        this.setData(
+          {
+            "photo.loadCount": this.data.photo.loadCount + 1,
+            "photo.page": this.data.photo.page + 1,
+            "photo.finished": res.data.length < 15,
+          },
+          () => {
+            let photosLength = this.data.photo.list.length;
+            let images = res.data;
+            images.forEach((item, index) => {
+              this.setData({
+                [`photo.list[${photosLength + index}]`]: item,
+              });
+            });
+            this.updateSwiperHeight();
+            this.getClassPhoto();
+          }
+        );
+      });
+  },
+  getClassVideo() {
+    if (this.data.video.loadCount == 2) {
+      this.setData({
+        "video.loadCount": 0,
+      });
+      return;
+    }
+    if (this.data.video.finished == true) {
+      return;
+    }
+    wx.showLoading({
+      title: "从相册取出中",
+      mask: true,
+    });
+    Cloud.collection("school_class_album")
+      .where({
+        _classid: this.data.classId,
+        type: "video",
+      })
+      .limit(15)
+      .skip(this.data.video.page * 15)
+      .get()
+      .then((DBVideos) => {
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
+        if (DBVideos.data.length == 0) {
+          this.setData({
+            "video.finished": true,
+          });
+          return;
+        }
+        DBVideos = DBVideos.data;
+        this.setData(
+          {
+            "video.loadCount": this.data.video.loadCount + 1,
+            "video.page": this.data.video.page + 1,
+            "video.finished": DBVideos.length < 15,
+          },
+          () => {
+            let videosLength = this.data.video.list.length;
+            DBVideos.forEach((item, index) => {
+              this.setData({
+                [`video.list[${videosLength + index}]`]: item,
+              });
+            });
+            this.updateSwiperHeight();
+            this.getClassVideo();
+          }
+        );
+      });
+  },
+  updateSwiperHeight() {
+    let selector = `.album-list-${this.data.currentShowType}`;
+    let query = wx.createSelectorQuery();
+    query.select(selector).boundingClientRect((rect) => {
+      this.setData({
+        swiperHeight: rect.height,
+      });
+    });
+    query.exec();
+  },
+  async uploadFile(tempFile) {
+    let fileName = `${Math.round(Math.random() * 100000000)}${Date.now()}`;
+    let fileExtension = tempFile.slice(tempFile.lastIndexOf("."));
+    fileName += fileExtension;
+    return await wx.cloud
+      .uploadFile({
+        cloudPath: `class_album/${this.data.classId}/${fileName}`,
+        filePath: tempFile,
+      })
+      .then((res) => {
+        return res.fileID;
+      });
+  },
+  async upload() {
+    let chooseFile = null;
+    let length = null;
+    let arrayIndex = 0;
+    let that = this;
+    if (this.data.currentShowType == "photo") {
+      length = this.data.photo.list.length;
+      chooseFile = await wx.chooseImage().then((localImages) => {
+        return localImages;
+      });
+
+      chooseFile.tempFilePaths.forEach(async (item, index) => {
+        wx.showLoading({
+          title: "上传中Up up！",
+        });
+        let _fileid = await this.uploadFile(item);
+        Cloud.cfunction("Class", "saveAlbum", {
+          _classid: this.data.classId,
+          _fileid,
+          type: "photo",
+        });
+        arrayIndex = `photo.list[${length + index}]`;
+        that.setData(
+          {
+            [arrayIndex]: {
+              _fileid,
+            },
+          },
+          () => {
+            if (
+              that.data.photo.list.length % 4 > 0 ||
+              chooseFile.tempFilePaths.length > 4
+            ) {
+              that.updateSwiperHeight();
+            }
+            wx.hideLoading();
+          }
+        );
+      });
+    } else {
+      length = this.data.video.list.length;
+      chooseFile = await wx
+        .chooseVideo({
+          compressed: true,
+        })
+        .then((res) => {
+          return res;
+        });
+      wx.showLoading({
+        title: "上传中Up up！",
+      });
+      let coverFileid=null;
+      if(chooseFile["thumbTempFilePath"]){
+        coverFileid = await this.uploadFile(chooseFile["thumbTempFilePath"]);
+      }
+      let videoFileid = await this.uploadFile(chooseFile["tempFilePath"]);
+      Cloud.cfunction("Class", "saveAlbum", {
+        _classid: this.data.classId,
+        _fileid: videoFileid,
+        type: "video",
+        cover: coverFileid,
+        duration: chooseFile["duration"],
+      }).then((res) => {
+        console.log(res);
+        arrayIndex = `video.list[${length}]`;
+        this.setData(
+          {
+            [arrayIndex]: {
+              _fileid: videoFileid,
+              cover: coverFileid,
+            },
+          },
+          () => {
+            this.updateSwiperHeight();
+            wx.hideLoading();
+          }
+        );
+      });
+    }
   },
   previewPhoto(e) {
-    let index=e.currentTarget.dataset.index;
+    let index = e.currentTarget.dataset.index;
     let urls = [];
-    let photos = this.data.photos;
-    photos.forEach(element => {
-      urls.push(element.url);
+    let photos = this.data.photo.list;
+    console.log(photos);
+    photos.forEach((element) => {
+      urls.push(element._fileid);
     });
     wx.previewImage({
-      current:urls[index],
-      urls
+      current: urls[index],
+      urls,
     });
   },
-  deletePhoto(e){
-    let _this=this;
+  deletePhoto(e) {
+    let _this = this;
     wx.showModal({
-      title:"Are you 确定？",
-      content:"确定要删除这张照片吗？",
-      success(res){
-        if(res.confirm){
-          let index=e.currentTarget.dataset.index;
-          let key=`photos[${index}]`;
+      title: "Are you 确定？",
+      content: "确定要删除这张照片吗？",
+      success(res) {
+        if (res.confirm) {
+          let index = e.currentTarget.dataset.index;
+          let selectPhoto=_this.data.photo.list[index];
+          Cloud.cfunction("Class","deleteAlbumContent",{
+            _classid:_this.data.classId,
+            _fileid:selectPhoto._fileid,
+            _id:selectPhoto._id,
+            type:"photo"
+          }).then(res=>{
+            Prompt.toast("删除成功");
+          })
+          let key = `photo.list[${index}]`;
           _this.setData({
-            [key]:"deleted"
+            [key]: "deleted",
           });
         }
-      }
+      },
     });
-
   },
-  uploadVideo(){
-    let _this=this;
-    let videos=this.data.videos;
-    wx.chooseVideo({
-      success(e) {
-        wx.showLoading({
-          title:"上传中"
-        });
-        wx.cloud.uploadFile({
-          cloudPath:`${Math.random()}.jpg`,
-          filePath:e.thumbTempFilePath,
-          success(res){
-            wx.cloud.getTempFileURL({
-              fileList:[
-                {
-                  fileID:res['fileID']
-                }
-              ]
-            }).then(result=>{
-              videos.push({
-                url:e.tempFilePath,
-                cover:result['fileList'][0]['tempFileURL']
-              });
-              _this.setData({
-                videos
-              });
-              wx.hideLoading();
-            });
-          }
-        });
-      }
-    })
-  },
-  previewVideo(e){
-    let videos=this.data.videos;
-    let dataset=e.currentTarget.dataset;
-    if(videos[dataset['index']]=="deleted"){
+  previewVideo(e) {
+    let videos = this.data.video.list;
+    let dataset = e.currentTarget.dataset;
+    if (videos[dataset["index"]] == "deleted") {
       wx.showToast({
-        title:"视频已被删除",
-        icon:"none"
+        title: "视频已被删除",
+        icon: "none",
       });
       return;
     }
     this.setData({
-      hiddenPreviewVideoPopup:false,
-      currentPreviewVideo:videos[dataset['index']]['url']
+      "video.hiddenPopup": false,
+      "video.currentPreviewVideo": videos[dataset["index"]]["_fileid"],
     });
   },
-  deleteVideo(e){
-    let _this=this;
+  deleteVideo(e) {
+    let _this = this;
     wx.showModal({
-      title:"Are you 确定？",
-      content:"确定要删除这条视频吗？",
-      success(res){
-        if(res.confirm){
-          let index=e.currentTarget.dataset.index;
-          let key=`videos[${index}]`;
+      title: "Are you 确定？",
+      content: "确定要删除这条视频吗？",
+      success(res) {
+        if (res.confirm) {
+          let index = e.currentTarget.dataset.index;
+          let selectVideo=_this.data.video.list[index];
+          Cloud.cfunction("Class","deleteAlbumContent",{
+            _classid:_this.data.classId,
+            _fileid:selectVideo._fileid,
+            _id:selectVideo._id,
+            cover:selectVideo.cover,
+            type:"video"
+          }).then(res=>{
+            Prompt.toast("删除成功");
+          });
+          let key = `video.list[${index}]`;
           _this.setData({
-            [key]:"deleted"
+            [key]: "deleted",
           });
         }
-      }
+      },
     });
-
   },
-  cancelPreviewVideo(){
+  cancelPreviewVideo() {
     this.setData({
-      hiddenPreviewVideoPopup:true
+      "video.hiddenPopup": true,
     });
-  }
-})
+  },
+});

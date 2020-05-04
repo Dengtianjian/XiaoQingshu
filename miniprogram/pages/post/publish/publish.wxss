@@ -3,6 +3,7 @@
   padding: 0 var(--container-padding) 40rpx;
 }
 .publish-post-form .publish-post-title {
+  width:100%;
   font-size: 38rpx;
   color: var(--font-color);
 }
@@ -63,7 +64,7 @@
   line-height: inherit;
 }
 .post-option-item .post-option-item-content {
-  width: auto;
+  width: 100%;
   line-height: inherit;
 }
 button[type='primary'] {

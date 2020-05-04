@@ -1,0 +1,6 @@
+<import src="./basic/title.wxml" />
+<import src="./basic/main_content.wxml" />
+<template name="qa">
+  <template is="title" data="{{ ...{ placeholder:'请在这里输入问题，带？结束',title:title||''} }}"></template>
+  <template is="main_content" data="{{ ...{ placeholder:'请输入对问题的描述，这样同学们就可以更快的理解你提出的问题',content:content||''} }}"></template>
+</template>

@@ -4,49 +4,44 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    color:{
-      type:String,
-      value:"white"
+    color: {
+      type: String,
+      value: "white",
     },
-    titleFontSize:{
-      type:String,
-      value:"24rpx"
+    titleFontSize: {
+      type: String,
+      value: "24rpx",
     },
-    countFontSize:{
-      type:String,
-      value:"36rpx"
+    countFontSize: {
+      type: String,
+      value: "36rpx",
     },
-    statistics:{
-      type:Array,
-      value:[]
+    statistics: {
+      type: Array,
+      value: [],
+      observer(e) {
+        let length = e.length;
+        let result = Math.round(100 / length);
+        this.setData({
+          itemWidth: `${result}%`,
+        });
+      },
     },
-    textAlign:{
-      type:String,
-      value:"center"
-    }
-  },
-
-  lifetimes:{
-    ready(){
-      let length=this.data.statistics.length;
-      let result=Math.round(100/length);
-      this.setData({
-        itemWidth:`${result}%`
-      });
-    }
+    textAlign: {
+      type: String,
+      value: "center",
+    },
   },
 
   /**
    * 组件的初始数据
    */
   data: {
-    itemWidth:"33.3%",
+    itemWidth: "33.3%",
   },
 
   /**
    * 组件的方法列表
    */
-  methods: {
-
-  }
-})
+  methods: {},
+});

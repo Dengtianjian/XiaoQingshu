@@ -1,7 +1,10 @@
 {
   "navigationStyle":"custom",
+  "enablePullDownRefresh":true,
+  "onReachBottomDistance":300,
   "usingComponents": {
     "PostCoverItem":"/components/postCoverItem/postCoverItem",
-    "NavigationBar":"/components/navigationBar/navigationBar"
+    "NavigationBar":"/components/navigationBar/navigationBar",
+    "Tabs":"/components/tabs/tabs"
   }
 }

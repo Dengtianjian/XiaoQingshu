@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText":"选择话题",
-  "usingComponents": {}
+  "usingComponents": {
+    "NavigationBar":"/components/navigationBar/navigationBar"
+  }
 }

@@ -16,11 +16,20 @@
   border-radius: 10rpx;
   box-sizing: border-box;
 }
+.quote-swiper {
+  flex: 7;
+  height:90rpx;
+}
 .quote-signin .quote {
-  flex: 8;
+  display: -webkit-box ;
   font-weight: bold;
   font-size: 32rpx;
   color: var(--font-color);
+  text-overflow: ellipsis;
+  overflow:hidden;
+  -webkit-line-clamp: 2;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
 }
 .quote-signin .signin {
   flex: 2;
@@ -37,128 +46,19 @@
 .post {
   margin-top: 26rpx;
 }
-.post .post-tabbar {
-  display: flex;
-  align-items: center;
-  height: 70rpx;
-  width: 100%;
+.post-item {
+  display:block;
+  padding-bottom:40rpx;
+  margin-bottom: 40rpx;
+  border-bottom:2rpx solid #eee;
 }
-.post .post-tabbar .post-tabbar-item {
-  position: relative;
-  padding: 0 26rpx;
-  height: 70rpx;
-  line-height: 70rpx;
-  color: var(--font-light-color);
-  transition: all 0.2s linear;
-}
-.post .post-tabbar .post-tabbar-item::after {
-  display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 0;
-  height: 4rpx;
-  background: var(--main-color);
-  transition: all 0.2s linear;
-  border-radius: 4rpx;
-  content: "";
-}
-.post .post-tabbar .post-tabbar-item.post-tabbar-item-active {
-  color: var(--main-color);
-}
-.post .post-tabbar .post-tabbar-item.post-tabbar-item-active::after {
-  width: 28%;
-}
-.post .post-swiper {
-  margin-top: 30rpx;
-}
-.post .post-swiper .post-swiper-item {
-  padding: 0 var(--container-padding) 20rpx;
-  margin-bottom: 20rpx;
-  width: 100%;
-  height: auto!important;
-  color: #ffffff;
-  border-bottom: 1px solid #eee;
-  box-sizing: border-box;
-}
-.post .post-swiper .post-swiper-post-item {
-  display: block;
-  margin-bottom: 30rpx;
-}
-.post-item .post-author {
-  display: flex;
-  align-items: center;
-  height: 50rpx;
-}
-.post-item .post-author .post-author-avatar {
-  width: 50rpx;
-  height: 50rpx;
-  border-radius: 50%;
-}
-.post-item .post-author .post-author-nickname {
-  margin-left: 10rpx;
-  height: 50rpx;
-  line-height: 50rpx;
-  font-size: 28rpx;
-  color: var(--font-color);
-}
-.post-item .post-title {
-  margin-top: 10rpx;
-  line-height: 42rpx;
-  font-size: 32rpx;
-  font-weight: bold;
-  color: var(--font-color);
-}
-.post-item .post-body {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10rpx;
-}
-.post-item .post-body .post-body-description {
-  flex: 9 2;
-  line-height: 48rpx;
-  font-size: 28rpx;
-  color: var(--font-light-color);
-}
-.post-item .post-body .post-body-image {
-  flex: 1 1 176rpx;
-  margin-left: 54rpx;
-  width: 176rpx;
-  height: 132rpx;
-  border-radius: 10rpx;
-}
-.post-item .post-footer {
-  margin-top: 20rpx;
-}
-.post-item .post-attribute .post-attribute-item {
-  display: inline-block;
-  margin-right: 20rpx;
-  padding: 0 18rpx 6rpx;
-  color: var(--font-color);
-  border-radius: 30rpx;
-  background: #F0F0F0;
-}
-.post-item .post-attribute .post-attribute-item.post-attribute-item-qa {
-  color: var(--main-color);
-  background: rgba(25, 119, 202, 0.11);
-}
-.post-item .post-attribute .post-attribute-item-icon {
-  width: 20rpx;
-  height: 20rpx;
-  font-size: 26rpx;
-}
-.post-item .post-attribute .post-attribute-item-name {
-  margin-left: 8rpx;
-  font-size: 24rpx;
-}
+
 /* 发布入口 */
 .publish-entrance {
   position: fixed;
   z-index: 10;
   right: 20rpx;
-  bottom: 280rpx;
+  bottom: 120rpx;
   width: 90rpx;
   height: 90rpx;
   line-height: 90rpx;

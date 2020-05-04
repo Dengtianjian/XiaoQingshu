@@ -1,0 +1,9 @@
+<!-- components/pagePrompt/pagePrompt.wxml -->
+<view class="page-prompt">
+  <Icon class="page-prompt-icon" icon="{{ icon }}" size="400rpx"></Icon>
+  <view class="page-prompt-title">{{ title }}</view>
+  <view class="page-prompt-description">{{ description }}</view>
+  <view class="page-prompt-operate">
+    <slot></slot>
+  </view>
+</view>

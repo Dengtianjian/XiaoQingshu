@@ -1,24 +1,24 @@
 <!-- components/postCoverItem/postCoverItem.wxml -->
-<import src="/templates/CommonPost.wxml" />
-<import src="/templates/QAPost.wxml" />
-<navigator class="post" open-type="navigate" hover-class="none" url="/pages/post/view/view">
+<import src="./template/dynamic.wxml" />
+<import src="./template/qa.wxml" />
+<navigator class="post" open-type="navigate" hover-class="none" url="/pages/post/view/view?postid={{ post['_id'] }}">
   <view class="post-author">
-    <image class="post-author-avatar" src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1586945353&t=2c73e6effc0e5b9686d2cd7b3229f65f"></image>
-    <text class="post-author-nickname">Cheery</text>
+    <image class="post-author-avatar" src="{{ post.author.avatar_url }}" lazy-load></image>
+    <text class="post-author-nickname">{{ post.author.nickname }}</text>
   </view>
-  <view class="post-title">4 月 4 日举行全国性哀悼活动，哀悼抗疫牺牲烈士和逝世同胞...</view>
+  <view class="post-title">{{ post.title }}</view>
   <view class="post-body {{ postBodyClass }}">
-    <template is="{{ templateName }}" data="{{ ...templateData }}"></template>
+    <template is="{{ templateName }}" data="{{ ...post }}"></template>
   </view>
   <view class="post-footer">
     <view class="post-attribute">
-      <view class="post-attribute-item post-attribute-item-qa">
-        <text class="post-attribute-item-icon qcicon qcicon-wenda"></text>
-        <text class="post-attribute-item-name">问答</text>
+      <view class="post-attribute-item post-attribute-item-type" >
+        <text class="post-attribute-item-icon qcicon qcicon-{{ post['sort']['identifier'] }}"></text>
+        <text class="post-attribute-item-name">{{ post['sort']['name'] }}</text>
       </view>
-      <view class="post-attribute-item">
+      <view class="post-attribute-item" wx:if="{{ post['topic'] }}">
         <text class="post-attribute-item-icon">#</text>
-        <text class="post-attribute-item-name">话题</text>
+        <text class="post-attribute-item-name">{{ post['topic']['name'] }}</text>
       </view>
     </view>
   </view>

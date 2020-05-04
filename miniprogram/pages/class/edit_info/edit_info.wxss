@@ -9,6 +9,7 @@ page {
 .class-info-edit-form-submit {
   position:absolute;
   bottom:30rpx;
+  width:var(--container-width)!important;
   box-sizing: border-box;
 }
 .class-info-edit-form-submit-placeholder {

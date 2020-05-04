@@ -1,7 +1,0 @@
-<template name="common-post">
-  <view class="post-body-images">
-    <block wx:for="{{ images }}" wx:key="index">
-      <image class="post-body-image-item" src=" {{ item }}" mode="aspectFill"></image>
-    </block>
-  </view>
-</template>

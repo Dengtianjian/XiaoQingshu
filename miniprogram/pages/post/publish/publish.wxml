@@ -1,35 +1,35 @@
 <!-- pages/publish_post/publish_post.wxml -->
-<form class="publish-post-form" bindsubmit="publishPost">
-  <input class="publish-post-form-item publish-post-title" type="text" name="title" placeholder="请在这里输入问题" placeholder-style="color:var(--font-color);" />
-  <textarea  class="publish-post-form-item publish-post-content" name="content" placeholder="输入正文"></textarea>
+<import src="./template/dynamic.wxml" />
+<import src="./template/qa.wxml" />
+<import src="./template/note.wxml" />
+<NavigationBar />
+<form class="publish-post-form" bindsubmit="savePost">
+  <template is="{{ currentSort }}" data="{{ ...post }}"></template>
   <view class="image-upload">
-    <scroll-view scroll-x="{{ true }}" class="image-upload-list" >
-      <block wx:for="{{ imageList }}" wx:key="id">
-        <image class="image-upload-item" src="{{ item.url }}" mode="aspectFill" data-index="{{ index }}" bindtap="previewImage"></image>
+    <scroll-view scroll-x="{{ true }}" class="image-upload-list">
+      <block wx:for="{{ images }}" wx:key="id">
+        <image class="image-upload-item" src="{{ item }}" mode="aspectFill" data-index="{{ index }}" bindtap="previewImage"></image>
       </block>
     </scroll-view>
     <view class="image-upload-button qcicon qcicon-upload" bindtap="uploadImage"></view>
   </view>
   <view class="post-option">
-    <view class="post-option-item"  >
+    <view class="post-option-item">
       <view class="post-option-item-title">话题</view>
-      <navigator class="post-option-item-content" hover-class="none" url="/pages/post/select_topic/select_topic">
-        <block wx:if="{{ topic.id=='' }}">
-          选择话题
-        </block>
-        <block wx:else>
-          {{ topic.text }}
-        </block>
-      </navigator>
+      <view class="post-option-item-content" bind:tap="goToSelectTopic">
+        <text hidden="{{ topic!=null }}">选择话题</text>
+        <text hidden="{{ topic==null }}"># {{ topic.name }} #</text>
+      </view>
+      <view class="post-option-item-operate">
+        <text class="remove-topic qcicon qcicon-close" bind:tap="removeTopic" hidden="{{ topic==null }}"></text>
+      </view>
     </view>
-    <label class="post-option-item">
+    <view class="post-option-item" hidden="{{ schoolInfo==null }}">
       <view class="post-option-item-title">
-        <checkbox checked="{{true}}" />
+        <switch id="schoolOnly" type="checkbox" checked="{{ schoolOnly||schoolInfo!=null&&schoolEntry }}" name="school_only" />
       </view>
-      <view class="post-option-item-content">
-        仅限我所在学校的同学可看到
-      </view>
-    </label>
+      <label for="schoolOnly" class="post-option-item-content">仅限 {{ schoolInfo['name'] }} 的同学们可以看到</label>
+    </view>
   </view>
-  <button class="publish-form-submit" type="primary" form-type="submit">发布</button>
+  <button class="publish-form-submit" type="primary" form-type="submit">{{ post?'保存':'发布' }}</button>
 </form>

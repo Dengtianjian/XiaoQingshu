@@ -1,23 +1,37 @@
 <!-- components/commentItem/commentItem.wxml -->
-<template name="comment">
-  <view class="comment-author">
-    <image class="comment-author-avatar" src="https://imgavater.ui.cn/avatar/6/2/6/3/113626.png?imageMogr2/auto-orient/crop/!960x960a94a79/thumbnail/148x148"></image>
-    <view class="comment-author-info">
-      <view class="comment-author-nickname">你的猫猫哇🐱</view>
-      <view class="comment-author-school">成都东软学院</view>
-    </view>
-    <text class="comment-operate qcicon ">···</text>
-  </view>
-  <view class="comment-content">今天 河北 上海 广东商量好
-给学生们惊喜啊 😂</view>
-  <view class="comment-bottom">
-    <view class="comment-publish-date">10小时前</view>
-    <view class="comment-like">
-      <text class="comment-like-icon qcicon qcicon-good"></text>
-      <text class="comment-like-text">48</text>
-    </view>
-  </view>
-</template>
 <view class="comment-item">
-  <template is="comment"></template>
+  <view class="comment-author">
+    <image class="comment-author-avatar" src="{{ comment['author']['avatar_url'] }}"></image>
+    <view class="comment-author-info">
+      <view class="comment-author-nickname">{{ comment['author']['nickname'] }}</view>
+      <view class="comment-author-school">
+        {{ comment['author']['school']?comment['author']['school']['name']:'TA还未加入一家学校' }}
+      </view>
+    </view>
+    <view class="comment-operate">
+      <slot name="commentOperate"></slot>
+    </view>
+  </view>
+  <view class="comment-reply" wx:if="{{ comment['_reply_author'] }}">
+    回复 {{ comment['_reply_author'] }}
+  </view>
+  <view class="comment-content">
+    <slot name="commentContent"></slot>
+    {{ comment['content'] }}
+  </view>
+  <view class="comment-bottom">
+    <slot name="commentBottom-top"></slot>
+    <view class="comment-bottom-left">
+      <slot name="commentBottom-left"></slot>
+      <view class="comment-publish-date">{{ comment['date'] }}</view>
+    </view>
+    <view class="comment-bottom-right">
+      <slot name="commentBottom-right"></slot>
+      <text class="comment-like {{ comment['isLike']?'comment-like-yes':'' }}" bind:tap="like">
+        <text class="comment-like-icon qcicon qcicon-{{ comment['isLike']?'good-fill':'good' }}"></text>
+        <text class="comment-like-text">{{ comment['likes']||'' }}</text>
+      </text>
+    </view>
+    <slot name="commentBottom-bottom"></slot>
+  </view>
 </view>

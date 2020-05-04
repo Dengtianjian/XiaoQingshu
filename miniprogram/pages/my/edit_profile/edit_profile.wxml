@@ -1,58 +1,78 @@
 <!-- miniprogram/pages/my/edit_profile/edit_profile.wxml -->
 <NavigationBar pageTitle="编辑资料" />
-<view class="chenge-avatar">
-  <image class="change-avatar-preview" src="{{ avatar }}" mode="aspectFill"></image>
+<!-- <view class="chenge-avatar">
+  <image class="change-avatar-preview" src="{{ userInfo['avatar_url'] }}" mode="aspectFill"></image>
   <view class="change-avatar-overlay">
-    <view class="change-avatar-overlay-preview qcicon qcicon-viewlarger" bind:tap="pewviewAvatar"></view>
+    <view class="change-avatar-overlay-preview qcicon qcicon-viewlarger" bind:tap="previewAvatar"></view>
     <view class="change-avatar-overlay-upload qcicon qcicon-camera" bind:tap="changeAvatar"></view>
   </view>
-</view>
-<form class="profile-form form-common">
-  <label class="form-common-item">
+</view> -->
+<form class="profile-form form-common" bindsubmit="saveProfile">
+  <!-- <label class="form-common-item">
     <view class="form-common-item-title">昵称</view>
     <view class="form-common-item-el">
-      <input type="text" name="nickname" id="" placeholder="请输入昵称" />
+      <input type="text" name="nickname" value="{{ userInfo['nickname'] }}" placeholder="请输入昵称" />
     </view>
-  </label>
+  </label> -->
   <label class="form-common-item">
     <view class="form-common-item-title">邮箱地址</view>
     <view class="form-common-item-el">
-      <input type="text" name="email" id="" placeholder="请输入邮箱地址" />
+      <input type="text" name="email" value="{{ userInfo['email'] }}" placeholder="请输入邮箱地址" />
+    </view>
+  </label>
+  <label class="form-common-item">
+    <view class="form-common-item-title">手机号码</view>
+    <view class="form-common-item-el">
+      <input type="number" name="phone_number" value="{{ userInfo['phone_number'] }}" placeholder="请输入手机号码" />
     </view>
   </label>
   <label class="form-common-item">
     <view class="form-common-item-title">真实姓名</view>
     <view class="form-common-item-el">
-      <input type="text" name="realname" id="" placeholder="请输入真实姓名" />
+      <input type="text" name="realname" value="{{ userInfo['realname'] }}" placeholder="请输入真实姓名" />
     </view>
   </label>
-  <label class="form-common-item">
+  <!-- <label class="form-common-item">
     <view class="form-common-item-title">性别</view>
     <view class="form-common-item-el">
       <radio-group>
-        <radio value="male" />
         男
-        <radio value="female" />
+        <radio value="male" />
         女
+        <radio value="female" />
+        保密
+        <radio value="secre" />
       </radio-group>
     </view>
-  </label>
+  </label> -->
   <label class="form-common-item">
     <view class="form-common-item-title">生日</view>
     <view class="form-common-item-el">
-      <picker mode="date" value="{{date}}" bindchange="bindDateChange">
-        <view>当前选择: {{date}}</view>
+      <picker mode="date" name="birthday" value="{{userInfo['birthday']}}" bindchange="bindDateChange">
+        {{userInfo['birthday']}}
       </picker>
     </view>
   </label>
   <label class="form-common-item">
-    <view class="form-common-item-title">所在地</view>
+    <view class="form-common-item-title">个人说明</view>
     <view class="form-common-item-el">
-      <picker mode="region" value="{{region}}" bindchange="bindRegionChange">
-        <view>当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}</view>
-      </picker>
+      <textarea name="statement" placeholder="让同学们更容易了解你🌞" value="{{ userInfo['statement'] }}"></textarea>
     </view>
   </label>
+  <label class="form-common-item">
+    <view class="form-common-item-title">学历</view>
+    <view class="form-common-item-el">
+      <input type="text" name="education" value="{{ userInfo['education'] }}" placeholder="请填写最高学历" />
+    </view>
+  </label>
+  <!-- <label class="form-common-item">
+    <view class="form-common-item-title">所在地</view>
+    <view class="form-common-item-el">
+      <picker mode="region" bindchange="bindRegionChange">
+        <view>当前选择</view>
+      </picker>
+    </view>
+  </label> -->
   <button class="profile-form-submit" type="primary" form-type="submit" style="padding:0;width:100%;height:70rpx;line-height:70rpx;">
     保存
   </button>

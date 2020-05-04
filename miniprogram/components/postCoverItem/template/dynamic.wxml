@@ -1,0 +1,8 @@
+<template name="dynamic-post">
+  {{ content }}
+  <view class="post-body-images {{ images.length==1?'post-body-images-single':'post-body-images-multi' }}" hidden="{{ !images }}">
+    <block wx:for="{{ images }}" wx:key="index">
+      <image class="post-body-image-item" src="{{ item }}" mode="aspectFill" lazy-load></image>
+    </block>
+  </view>
+</template>

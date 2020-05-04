@@ -1,6 +1,8 @@
 {
   "navigationBarTitleText":"班级相册",
+  "enablePullDownRefresh":true,
   "usingComponents": {
+    "NavigationBar":"/components/navigationBar/navigationBar",
     "Tabs":"/components/tabs/tabs"
   }
 }

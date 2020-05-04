@@ -1,4 +1,5 @@
 //app.js
+import Cloud from "./source/js/cloud";
 wx.cloud.init({
   env: "develogment-env",
 });
@@ -21,8 +22,12 @@ App({
         this.globalData.navigationBarHeight = res.statusBarHeight * 2 + 20;
       },
     });
+    wx.showLoading({
+      title: "加载中",
+      mask: true,
+    });
     this.getUserInfo();
-    this.isLogining = true;
+    this.user.logging = true;
   },
 
   globalData: {
@@ -33,40 +38,93 @@ App({
   userInfo: {
     isLogin: false,
   },
-  getUserInfo() {
-    let that = this;
-    if (this.userInfo.isLogin == true) {
+  user:{
+    intervalHandle:null,
+    finished:false,
+    logging:false
+  },
+  async cloudGetUserInfo(userInfo) {
+    let _that = this;
+    return await Cloud.cfunction("User", "login", {
+      info: userInfo,
+    })
+      .then((res) => {
+        let userInfo = res;
+        userInfo["isLogin"] = true;
+        _that.userInfo = userInfo;
+        return userInfo;
+      })
+      .catch((res) => {
+        return _that.userInfo;
+      });
+  },
+  async getUserInfo(userInfo = null) {
+    if(this.userInfo.isLogin){
       return Promise.resolve(this.userInfo);
+    }
+    if (this.user.logging) {
+      return new Promise((resolve, reject) => {
+        this.loginHandle = setInterval(() => {
+          if (this.user.finished) {
+            clearInterval(this.user.intervalHandle);
+            return resolve(this.userInfo);
+          }
+        }, 1000);
+      });
     } else {
-      return new Promise((resolve) => {
-        wx.getSetting({
-          async success(res) {
+      let _that = this;
+      return new Promise(async (resolve, reject) => {
+        if (userInfo) {
+          await this.cloudGetUserInfo(userInfo)
+            .then((res) => {
+              resolve(res);
+            })
+            .catch((res) => {
+              reject(res);
+            });
+          wx.hideLoading();
+        } else {
+          await wx.getSetting().then(async (res) => {
             if (res.authSetting["scope.userInfo"]) {
-              await wx.getUserInfo({
-                async success(res) {
-                  let userInfo = {
-                    isLogin: true,
-                    cloudID: res.cloudID,
-                    ...res.userInfo,
-                  };
-                  await wx.cloud
-                    .callFunction({
-                      name: "getUserInfo",
-                    })
+              await wx
+                .getUserInfo()
+                .then(async (res) => {
+                  userInfo = res.userInfo;
+                  await this.cloudGetUserInfo(userInfo)
                     .then((res) => {
+                      wx.hideLoading();
+                      this.userInfo = res;
 
-                      userInfo = Object.assign(userInfo, res.result);
+                      this.user.finished = true;
+                      this.user.logging = false;
+
+                      resolve(res);
+                    })
+                    .catch((res) => {
+                      wx.hideLoading();
+
+                      this.user.finished= true;
+                      this.user.logging = false;
+
+                      reject(res);
                     });
-                  that.userInfo = userInfo;
+                })
+                .catch((res) => {
+                  wx.hideLoading();
 
-                  resolve(userInfo);
-                },
-              });
-            }else{
-              resolve(that.userInfo);
+                  this.user.finished = true;
+                  this.user.logging = false;
+
+                  reject(_that.userInfo);
+                });
+            } else {
+              wx.hideLoading();
+              this.user.finished = true;
+              this.user.logging = false;
+              reject(_that.userInfo);
             }
-          },
-        });
+          });
+        }
       });
     }
   },

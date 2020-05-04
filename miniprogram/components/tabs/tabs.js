@@ -1,7 +1,7 @@
 // components/tabs/tabs.js
 Component({
   options: {
-    multipleSlots: true
+    multipleSlots: true,
   },
   lifetimes: {
     attached() {
@@ -15,14 +15,17 @@ Component({
       }
       this.setData({
         current,
-        active: tabs.indexOf(current)
+        active: tabs.indexOf(current),
       });
     },
     ready() {
-      setTimeout(() => {
-        this.computedSwiperHeight()
-      }, 1000);
-    }
+      if (
+        this.data.updateSwiperHeight === null ||
+        this.data.updateSwiperHeight === true
+      ) {
+        this.computedSwiperHeight();
+      }
+    },
   },
   /**
    * 组件的属性列表
@@ -30,20 +33,33 @@ Component({
   properties: {
     tabs: {
       required: true,
-      type: Object
+      type: Object,
     },
     current: {
-      type: [String, Number],
-      value: ""
-    }
+      type: String,
+      optionalTypes: [String, Number],
+      value: "",
+    },
+    swiperHeight: {
+      type: Number,
+      value: "200",
+    },
+    updateSwiperHeight: {
+      type: [Boolean, null],
+      value: null,
+      observer(value) {
+        if (value) {
+          this.computedSwiperHeight();
+        }
+      },
+    },
   },
 
   /**
    * 组件的初始数据
    */
   data: {
-    swiperHeight: 200,
-    active: 0
+    active: 0,
   },
 
   /**
@@ -55,8 +71,14 @@ Component({
       let tabs = this.data.tabs;
       tabs = Object.keys(tabs);
       this.setData({
-        "active": index,
-        "current": tabs[index]
+        active: index,
+        current: tabs[index],
+      });
+      wx.pageScrollTo({
+        scrollTop: 0,
+      });
+      this.triggerEvent("change", {
+        current: this.data.current,
       });
     },
     switchPostSwiper(e) {
@@ -64,20 +86,26 @@ Component({
       tabs = Object.keys(tabs);
       let key = e.currentTarget.dataset.index;
       this.setData({
-        "active": tabs.indexOf(key),
-        "current": key
+        active: tabs.indexOf(key),
+        current: key,
+      });
+      wx.pageScrollTo({
+        scrollTop: 0,
       });
     },
     computedSwiperHeight() {
       let query = wx.createSelectorQuery().in(this);
       query.select(`.swiper-item-${this.data.current}`).boundingClientRect();
       query.exec((res) => {
-        if(parseInt(res[0].height)>parseInt(this.data.swiperHeight)){
-          this.setData({
-            "swiperHeight": res[0].height
-          });
+        let swiperHeight = 300;
+        if (parseInt(res[0].height) > 300) {
+          swiperHeight = res[0].height;
         }
+        this.setData({
+          swiperHeight,
+          updateSwiperHeight: false,
+        });
       });
-    }
-  }
-})
+    },
+  },
+});

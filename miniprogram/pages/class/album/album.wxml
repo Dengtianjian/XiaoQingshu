@@ -1,19 +1,25 @@
 <!-- pages/class/album/album.wxml -->
-<Tabs tabs="{{ tabs }}" current="photo">
-  <view class="album-list" slot="photo">
-  <view class="album-item album-upload qcicon qcicon-upload" bindtap="uploadPhoto"></view>
-    <block wx:for="{{ photos }}">
-      <image class="album-item" src="{{ item.url }}" mode="aspectFill" bindtap="previewPhoto" data-index="{{ index }}" bindlongpress="deletePhoto" wx:if="{{ item!='deleted' }}"></image>
+<NavigationBar pageTitle="班级相册" />
+<Tabs tabs="{{ tabs }}" current="{{ currentShowType }}" swiperHeight="{{ swiperHeight }}" bind:change="tabChange">
+  <view class="album-list album-list-photo" slot="photo">
+    <view class="album-item album-upload qcicon qcicon-upload" bindtap="upload"></view>
+    <block wx:for="{{ photo.list }}">
+      <image class="album-item" src="{{ item._fileid }}" mode="aspectFill" bindtap="previewPhoto" data-index="{{ index }}" bindlongpress="deletePhoto" wx:if="{{ item!='deleted' }}" lazy-load></image>
     </block>
   </view>
-  <view class="album-list" slot="video">
-    <view class="album-item album-upload qcicon qcicon-upload" bindtap="uploadVideo"></view>
-    <block wx:for="{{ videos }}">
-      <image class="album-item" src="{{ item.cover }}" mode="aspectFill" bindtap="previewVideo" data-index="{{ index }}" wx:if="{{ item!='deleted' }}"></image>
+  <view class="album-list album-list-video" slot="video">
+    <view class="album-item album-upload qcicon qcicon-upload" bindtap="upload"></view>
+    <block wx:for="{{ video.list }}">
+      <block wx:if="{{ item.cover }}">
+        <image class="album-item" src="{{ item.cover }}" mode="aspectFill" bindtap="previewVideo" data-index="{{ index }}" bindlongpress="deleteVideo" wx:if="{{ item!='deleted' }}" lazy-load></image>
+      </block>
+      <block wx:else>
+        <view class="album-item album-item-no-cover qcicon qcicon-play" bindlongpress="deleteVideo" bindtap="previewVideo" data-index="{{ index }}" wx:if="{{ item!='deleted' }}"></view>
+      </block>
     </block>
   </view>
 </Tabs>
-<view class="preview-video" catch:touchmove hidden="{{ hiddenPreviewVideoPopup }}">
-  <video class="preview-video-source" src="{{ currentPreviewVideo }}"></video>
+<view class="preview-video" catch:touchmove hidden="{{ video.hiddenPopup }}">
+  <video class="preview-video-source" src="{{ video.currentPreviewVideo }}"></video>
   <view class="preview-video-mask" catch:touchmove bindtap="cancelPreviewVideo"></view>
 </view>

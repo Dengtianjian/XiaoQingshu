@@ -1,14 +1,16 @@
-<!--pages/post/select_topic/select_topic.wxml-->
+<!-- pages/post/select_topic/select_topic.wxml -->
+<NavigationBar pageTitle="话题" />
 <view class="search">
   <text class="search-icon qcicon qcicon-search"></text>
-  <input type="text" name="keyword" class="search-input" placeholder="搜索话题" />
+  <input type="text" name="keyword" class="search-input" placeholder="搜索话题" bindinput="keyInputChange" />
 </view>
-
-<view class="search-result">
-  <view class="search-result-item" bindtap="selectTopic" data-index="0">
-    100天学习打卡
-  </view>
-  <view class="search-result-item">
-    100天学习打卡
-  </view>
+<view class="topic-list" hidden="{{ isSearch }}">
+  <block wx:for="{{ topics }}" wx:key="_id">
+    <view class="topic-item" bindtap="selectTopic" data-index="{{ index }}">{{ item.name }}</view>
+  </block>
+</view>
+<view class="topic-list" hidden="{{ isSearch==false }}">
+  <block wx:for="{{ searchTopics }}" wx:key="_id">
+    <view class="topic-item" bindtap="selectTopic" data-index="{{ index }}">{{ item.name }}</view>
+  </block>
 </view>

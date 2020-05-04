@@ -1,0 +1,6 @@
+<import src="./basic/title.wxml"/>
+<import src="./basic/main_content.wxml"/>
+<template name="note">
+  <template is="title" data="{{ ...{ placeholder:'请在这里输入笔记标题',title } }}"></template>
+  <template is="main_content" data="{{ ...{ placeholder:'请在这里输入对笔记的描述，让同学们知道笔记是否是需要的内容',content } }}"></template>
+</template>

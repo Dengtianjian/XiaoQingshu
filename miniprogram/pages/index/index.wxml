@@ -1,31 +1,32 @@
 <!-- index.wxml -->
 <!-- 顶部导航栏 -->
-<NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.8">
+<NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.95">
   <view class="search-entry"></view>
 </NavigationBar>
 <!-- 语录&签到 -->
 <view class="quote-signin">
-  <view class="quote">没有人能改变你，别人只能影响你，能改变你的只有你自己。</view>
-  <view class="signin">SignIn</view>
-</view>
-<!-- 信息流 -->
-<view class="post">
-  <view class="post-tabbar">
-    <block wx:for="{{ postSwiper.tabbar }}" wx:key="item">
-      <view class="post-tabbar-item {{ postSwiper.current==index?'post-tabbar-item-active':'' }}" bindtap="switchPostSwiper" data-index="{{ index }}">
-        {{ item }}
-      </view>
-    </block>
-  </view>
-  <swiper class="post-swiper" bindchange="postSwiperSwitch" current="{{ postSwiper.current }}" style="height:{{ postSwiper.height }}px">
-    <block wx:for="{{postSwiper.tabbar}}" wx:key="index">
-      <swiper-item class="post-swiper-item post-swiper-item-{{ index }}">
-        <block wx:for="{{ posts }}" wx:key="index">
-          <PostCoverItem class="post-swiper-post-item" type="{{ item.type }}" />
-        </block>
+  <swiper class="quote-swiper" indicator-dots="{{false}}" autoplay="{{true}}" interval="{{5000}}" duration="{{500}}" vertical circular>
+    <block wx:for="{{quotes}}" wx:key="_id">
+      <swiper-item>
+        <view class="quote">{{ item.content }}</view>
       </swiper-item>
     </block>
   </swiper>
+  <view class="signin" bind:tap="getPost">SignIn</view>
+</view>
+<!-- 信息流 -->
+<view class="post">
+  <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" bind:change="postTabChange">
+    <block wx:for="{{ postTabs }}" wx:key="index">
+      <view slot="{{ index }}">
+        <block wx:for="{{ posts[index] }}" wx:for-item="postArray" wx:for-index="postArrayIndex" wx:key="postArrayIndex">
+          <block wx:for="{{ postArray }}" wx:key="index">
+            <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
+          </block>
+        </block>
+      </view>
+    </block>
+  </Tabs>
 </view>
 <!-- 发布内容入口 -->
 <view class="publish-entrance" bindtap="displayPublishPopup" data-mode="show">
@@ -37,9 +38,9 @@
     <view class="publish-type-select-title">请选择要发布得帖子类型</view>
     <view class="publish-type-select-list">
       <block wx:for="{{ publish.postType }}" wx:key="name">
-        <navigator class="publish-type-select-item" open-type="navigate" url="/pages/post/publish/publish?type={{ item.name }}">
+        <navigator class="publish-type-select-item" open-type="navigate" url="/pages/post/publish/publish?identifier={{ item.identifier }}">
           <image class="publish-type-select-item-icon" src="{{ item.icon }}"></image>
-          <view class="publish-type-select-item-text">{{ item.title }}</view>
+          <view class="publish-type-select-item-text">{{ item.name }}</view>
         </navigator>
       </block>
     </view>

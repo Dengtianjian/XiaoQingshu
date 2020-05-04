@@ -1,24 +1,26 @@
-<!--pages/school/select_school/select_school.wxml-->
+<!-- pages/school/select_school/select_school.wxml -->
+<NavigationBar pageTitle="选择学校" />
 <view class="search">
   <text class="search-icon qcicon qcicon-search"></text>
-  <input type="text" name="keyword" class="search-input" placeholder="请输入学校名称" />
+  <input type="text" name="keyword" class="search-input" placeholder="请输入学校名称" bindinput="keywordInput" model:value="{{ keywords }}" />
 </view>
-
-<view class="search-result">
-  <view class="search-result-item">
-    <image class="search-result-item-icon" src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=3468775424,3129958234&fm=74&app=80&f=GIF&size=f121,121?sec=1880279984&t=e43e103c4d4dc7171d2bb9b18d156772"></image>
-    <text class="search-result-item-name">华南师范大学</text>
-  </view>
-  <view class="search-result-item">
-    <image class="search-result-item-icon" src="https://dss0.bdstatic.com/6Ox1bjeh1BF3odCf/it/u=2490617731,346506777&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=66386b118bf0cdde05db6ca1c856cac6"></image>
-    <text class="search-result-item-name">华南农业大学</text>
-  </view>
-  <view class="search-result-item">
-    <image class="search-result-item-icon" src="https://dss2.bdstatic.com/6Ot1bjeh1BF3odCf/it/u=1988002103,1279595663&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=4884bd5e7749487cd1810b2c42aa6f59"></image>
-    <text class="search-result-item-name">华南理工大学</text>
-  </view>
+<view class="search-result" hidden="{{ schools.length==0 }}">
+  <block wx:for="{{ schools }}">
+    <view class="search-result-item" bind:tap="selectSchool" data-index="{{ index }}">
+      <image class="search-result-item-icon" src="{{ item.logo }}"></image>
+      <text class="search-result-item-name">{{ item.name }}</text>
+    </view>
+  </block>
 </view>
-
-<navigator class="without-my-school" open-type="navigate" url="/pages/school/feedback_school/feedback_school" >
+<view class="without-my-school" bind:tap="displayFeedbackSchoolDialog">
   没有我的学校🙃
-</navigator>
+</view>
+<Dialog title="没有找到我的学校反馈😟" hidden="{{ hideFeedbackSchool }}" height="400rpx" bind:confirm="submitFeedback" cancelButton="">
+  <view class="feedback-school-form" slot="content">
+    <input class="feedback-school-form-el-input" type="text" name="school_name" placeholder="请在这里输入学校名称" model:value="{{ feedbackSchoolName }}" />
+    <view class="feedback-school-form-prompt">
+      <view>非常抱歉没有找到您的学校</view>
+      我们将在收到反馈核实后添加上去
+    </view>
+  </view>
+</Dialog>

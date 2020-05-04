@@ -1,12 +1,15 @@
 <!-- pages/post/view/view.wxml -->
 <navigationBar opacity="0.8" backgroundColor="#ffffff" />
 <view class="author">
-  <image class="author-avatar" src="{{ post.author.avatar }}"></image>
+  <image class="author-avatar" src="{{ post.author.avatar_url }}"></image>
   <view class="author-info">
     <view class="author-nickname">{{ post.author.nickname }}</view>
     <view class="author-school">
-      <text class="author-school-name">{{ post.author.school }}</text>
-      <text class="author-school-prefession">{{ post.author.prefessional }}</text>
+      <block hidden="{{ post.author._default_school==null }}">
+        <text class="author-school-name">{{ post.author.school }}</text>
+        <text class="author-school-prefession">{{ post.author.prefessional }}</text>
+      </block>
+      <block hidden="{{ post.author._default_school }}">TA还未加入一家学校</block>
     </view>
   </view>
   <view class="author-attention {{ post.author.isAttention?'author-attention-yes':'' }}">
@@ -18,60 +21,84 @@
   <view class="post-content">{{ post.content }}</view>
   <view class="post-images">
     <block wx:for="{{ post.images }}" wx:key="index">
-      <image class="post-image-item" src="{{ item }}" mode="aspectFill"></image>
+      <image class="post-image-item" src="{{ item }}" mode="aspectFill" bind:tap="previewImage" data-index="{{ index }}"></image>
     </block>
   </view>
   <view class="post-attribute">
-    <Badge class="post-attribute-item" icon="qcicon-wenda" text="问答" color="var(--main-color)" background="rgba(25, 119, 202, 0.11)"></Badge>
-    <Badge class="post-attribute-item" icon="#" text="{{ post.topic }}" />
+    <Badge class="post-attribute-item" icon="qcicon-{{ post.sort.identifier }}" text="{{ post.sort.name }}" color="var(--main-color)" background="rgba(25, 119, 202, 0.11)"></Badge>
+    <Badge class="post-attribute-item" icon="#" text="{{ post.topic.name }}" wx:if="{{ post.topic }}" />
   </view>
   <view class="post-operate">
     <view class="post-operate-item">
       <text class="post-operate-item-icon qcicon qcicon-share"></text>
-      <text class="post-operate-item-text">分享</text>
+      <button class="post-operate-item-text post-operate-share-button" open-type="share">分享</button>
     </view>
-    <view class="post-operate-item">
-      <text class="post-operate-item-icon qcicon qcicon-favorites"></text>
+    <view class="post-operate-item {{ post.isFavorite?'post-operate-highlight':'' }}" bind:tap="showFavoriteAlbum">
+      <text class="post-operate-item-icon qcicon qcicon-favorites-fill" wx:if="{{ post.isFavorite }}"></text>
+      <text class="post-operate-item-icon qcicon qcicon-favorites" wx:else></text>
       <text class="post-operate-item-text">收藏</text>
     </view>
-    <view class="post-operate-item post-operate-liked">
-      <text class="post-operate-item-icon qcicon qcicon-good" wx:if="{{ false }}"></text>
-      <text class="post-operate-item-icon qcicon qcicon-good-fill" wx:else></text>
-      <text class="post-operate-item-text">点赞</text>
+    <view class="post-operate-item {{ post.isLike?'post-operate-highlight':'' }}" bind:tap="likePost">
+      <text class="post-operate-item-icon qcicon qcicon-good-fill" wx:if="{{ post.isLike }}"></text>
+      <text class="post-operate-item-icon qcicon qcicon-good" wx:else></text>
+      <text class="post-operate-item-text">点赞 {{ post.likes||'' }}</text>
     </view>
+    <Dialog hidden="{{ favorite.popupIsHide }}" position="center" textAlign="center" title="请选择要存放到的收藏夹" height="40%" cancelButton="" bind:confirm="confirmFavorite">
+      <scroll-view scroll-y="{{true}}" class="album-list" slot="content">
+        <block wx:for="{{ favorite.albums }}" wx:key="index">
+          <view class="album-item" bind:tap="changeSelectAlbum" data-index="{{ index }}">
+            <view class="album-item-left">
+              <text class="ablum-item-name">{{ item.name }}</text>
+              <text class="ablum-item-count">{{ item.count }}</text>
+            </view>
+            <text class="ablum-item-select qcicon {{ favorite.currentSelect==index?'qcicon-seleted':'' }}"></text>
+          </view>
+        </block>
+      </scroll-view>
+    </Dialog>
   </view>
-  <view class="post-publish-date">{{ post.dataline }}</view>
+  <view class="post-publish-date">{{ post.date }}</view>
 </view>
 <view class="comment">
-  <view class="comment-title">评论</view>
-  <view class="comment-list">
-    <view class="comment-item">
-      <CommentItem />
-      <view class="comment-reply">
-        <CommentItem />
-        <view class="comment-reply-view-more" bind:tap="showAllCommentReply">查看更多回复</view>
-      </view>
+  <view class="comment-title" bind:tap="getComment">评论</view>
+  <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
+    <view class="comment-list">
+      <block wx:for="{{ commentArray }}" wx:key="index">
+        <view class="comment-item">
+          <CommentItem comment="{{ item }}" />
+          <view class="comment-view-reply" bind:tap="showAllCommentReply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}">
+            查看回复
+          </view>
+        </view>
+      </block>
     </view>
-  </view>
+  </block>
 </view>
-<view class="comment-post-tips" bind:tap="showCommentPopup">评论一个</view>
+<view class="comment-post-tips" bind:tap="showCommentPopup" data-type="postComment">评论一个</view>
 <view class="comment-post-placeholder"></view>
 <view class="comment-post-popup" catch:touchmove hidden="{{ isHiddenCommentPopup }}">
-  <form class="comment-post-form" style="padding-top:{{ navigationBarHeight }}px;" hidden="{{ isHiddenCommentPopup }}">
+  <form class="comment-post-form" style="padding-top:{{ navigationBarHeight }}px;" hidden="{{ isHiddenCommentPopup }}" bindsubmit="commentSubmit">
     <textarea class="comment-post-form-content" name="content" placeholder="请注意文明发言，做一个有素质的学生" />
-    <button class="comment-post-form-submit" type="primary">发送</button>
+    <button class="comment-post-form-submit" type="primary" form-type="submit">发送</button>
   </form>
   <view class="comment-post-popup-mask" catch:touchmove bindtap="hiddenCommentPopup" hidden="{{ isHiddenCommentPopup }}"></view>
 </view>
-
-<Popup position="bottom" hidden="{{ isHiddenCommentReplyPopup }}" customStyle="height:85%;">
-  <scroll-view scroll-y class="comment-reply-popup">
-    <CommentItem />
-    <view class="comment-reply-list">
-      <block wx:for="{{ 10 }}">
-        <CommentItem class="comment-reply-item" />
-      </block>
+<Popup class="comment-reply" position="bottom" hidden="{{ isHiddenCommentReplyPopup }}" customStyle="height:90%;" >
+  <view class="comment-reply-content">
+    <scroll-view class="comment-reply-scroll" lower-threshold="300" scroll-y bindscrolltolower="getCommentReply" >
+      <CommentItem class="comment-reply-current" comment="{{ currentShowComment }}" />
+      <view class="comment-reply-list">
+        <block wx:for="{{ commentReply[currentShowCommentArrayReplyIndex+'-'+currentShowCommentReplyIndex] }}" wx:key="index" wx:for-item="commentArray">
+          <block wx:for="{{ commentArray }}">
+            <CommentItem class="comment-reply-item" comment="{{ item }}" >
+              <text class="qcicon qcicon-comments comment-reply-reply" slot="commentBottom-right" bind:tap="showCommentPopup" data-type="replyReply" data-reply="{{ item }}" />
+            </CommentItem>
+          </block>
+        </block>
+      </view>
+    </scroll-view>
+    <view class="comment-post-tips comment-reply-button" bind:tap="showCommentPopup" data-type="replyComment">
+      回复一个
     </view>
-    <view class="comment-post-tips" bind:tap="showCommentPopup">回复一个</view>
-  </scroll-view>
+  </view>
 </Popup>

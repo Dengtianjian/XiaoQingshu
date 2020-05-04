@@ -14,10 +14,11 @@
 }
 .search .search-input {
   width: 100%;
+  font-size: 28rpx;
 }
 .search-result {
-  padding: 0 var(--container-padding) 66rpx;
-  margin-top: 30rpx;
+  padding: 0 var(--container-padding);
+  margin: 30rpx 0 100rpx;
 }
 .search-result .search-result-item {
   display: flex;
@@ -49,4 +50,21 @@
   font-size: 28rpx;
   background: var(--light-color);
   border-radius: var(--border-radius);
+}
+
+
+/* 反馈没有我的学校 */
+.feedback-school-form {
+  margin-top:20rpx;
+}
+.feedback-school-form-el-input {
+  padding:10rpx;
+  font-size:28rpx;
+  color:var(--font-color);
+  background:var(--light-color);
+}
+.feedback-school-form-prompt {
+  margin-top:20rpx;
+  font-size:24rpx;
+  color:var(--font-color2);
 }

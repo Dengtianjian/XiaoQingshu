@@ -1,23 +1,28 @@
 <!-- pages/class/edit_info/edit_info.wxml -->
+<NavigationBar pageTitle="班级信息" />
 <form class="form-common class-info-edit-form" bindsubmit="saveClassInfo">
   <label class="form-common-item">
     <view class="form-common-item-title">专业</view>
-    <input class="form-common-item-el" type="text" name="profession" placeholder="请输入班级所在专业" />
+    <input class="form-common-item-el" type="text" name="profession" value="{{ classInfo['profession'] }}" placeholder="请输入班级所在专业" />
   </label>
   <label class="form-common-item">
     <view class="form-common-item-title">创立时间</view>
-    <picker class="form-common-item-el" name="foundedDate" mode="date" value="{{createdData}}" bindchange="bindDateChange">
-      <view>{{createdData}}</view>
+    <picker class="form-common-item-el" name="build_date" mode="date" value="{{ buildDate }}" bindchange="bindDateChange" data-name="build_date">
+      <view>{{ buildDate }}</view>
     </picker>
   </label>
-  <view class="form-common-item">
-    <label class="form-common-item-title">毕业时间</label>
-    <picker class="form-common-item-el" name="graduationDate" mode="date" value="{{createdData}}" bindchange="bindDateChange">
-      <view>{{createdData}}</view>
-    </picker>
-  </view>
+  <label class="form-common-item">
+    <view class="form-common-item-title">班级号</view>
+    <input class="form-common-item-el" type="text" name="grade_number" value="{{ classInfo['number'] }}" placeholder="请输入数字。会记录为土木工程1班、软件工程4班" />
+  </label>
+  <label class="form-common-item">
+    <view class="form-common-item-title">是否允许新同学通过搜索ID申请加入</view>
+    <view class="form-common-item-el">
+      <switch name="allow_join" type="checkbox" checked="{{ classInfo['allow_join']==undefined?true:classInfo['allow_join'] }}" />是
+    </view>
+  </label>
   <view class="class-info-edit-form-submit-placeholder"></view>
-  <button class="form-common-submit class-info-edit-form-submit" type="primary" form-type="submit" style="width:var(--container-width);">
-    提交
+  <button class="button-common class-info-edit-form-submit" type="primary" form-type="submit" >
+    保存一个
   </button>
 </form>
