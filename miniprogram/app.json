@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/my/favorites/favorites",
+
     "pages/school/index/index",
     "pages/post/view/view",
     "pages/post/publish/publish",
@@ -13,7 +15,6 @@
     "pages/class/invite_join/invite_join",
     "pages/class/album/album",
     "pages/class/edit_info/edit_info",
-    "pages/my/favorites/favorites",
     "pages/my/notification/notification",
     "pages/post/answer_question/answer_question",
     "pages/test/test",

@@ -1,4 +1,5 @@
 const Response = require("../response");
+const Utils = require("../Utils");
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 
@@ -10,6 +11,31 @@ const Favorite = DB.collection("user_favorite");
 const FavoriteAlbum = DB.collection("user_favorite_album");
 
 let functions = {
+  async saveFavoriteAlbum(event) {
+    const wxContext = cloud.getWXContext();
+    let { name, description, cover } = event;
+
+    if (!name) {
+      return Response.error(400, 400001, "请输入收藏集名称");
+    }
+
+    let addResult = await FavoriteAlbum.add({
+      data: {
+        name,
+        description,
+        cover,
+        date: Date.now(),
+        count: 0,
+        _userid: wxContext.OPENID,
+      },
+    }).then((res) => res);
+
+    if (addResult["errMsg"] == "collection.add:ok") {
+      return Response.result({
+        _albumid: addResult["_id"],
+      });
+    }
+  },
   async getFavoriteByTypeId(event) {
     const wxContext = cloud.getWXContext();
     let type = event.type;
@@ -135,7 +161,46 @@ let functions = {
       .then((res) => {
         return res;
       });
-    return Response.result(albums);
+    return Response.result(albums["data"]);
+  },
+  async getFavorite(event) {
+    const wxContext = cloud.getWXContext();
+    let albumId = event.alubmid;
+    let page = event.page || 0;
+    let limit = event.limit || 10;
+
+    let favorites = await Favorite.where({
+      _collector: wxContext.OPENID,
+      _album: albumId,
+    })
+      .limit(limit)
+      .skip(limit * page)
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
+    let postId = [];
+    favorites.forEach((item) => {
+      postId.push(item._contentid);
+    });
+
+    let posts = await cloud
+      .callFunction({
+        name: "Post",
+        data: {
+          method: "getPost",
+          postid: postId
+        },
+      })
+      .then((res) => {
+        return res.result;
+      });
+    posts = Utils.arrayToObject(posts, "_id");
+    favorites.forEach((item) => {
+      item['post']=posts[item['_contentid']];
+    });
+
+    return favorites;
   },
 };
 

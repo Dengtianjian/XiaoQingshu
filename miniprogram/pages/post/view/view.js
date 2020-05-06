@@ -469,13 +469,33 @@ Page({
       ["favorite.currentSelect"]: e.currentTarget.dataset.index,
     });
   },
+  favoriteLoad:{
+    loading:false,
+    finished:false,
+    count:0,
+    page:0
+  },
   async getFavoriteAblum() {
-    await Cloud.cfunction("User", "getAlbums").then((res) => {
+    if(this.favoriteLoad.loading||this.favoriteLoad.finished){
+      return;
+    }
+    this.favoriteLoad.loading=true;
+    await Cloud.cfunction("User", "getAlbums",{
+      limit:12,
+      page:this.favoriteLoad.page
+    }).then((res) => {
+      if(res.length<12){
+        this.favoriteLoad.finished=true;
+      }
+      if(res.length==12){
+        this.favoriteLoad.page++;
+      }
       let albums = this.data.favorite.albums;
-      albums.push(...res.data);
+      albums.push(...res);
       this.setData({
         ["favorite.albums"]: albums,
       });
+      this.favoriteLoad.loading=false;
     });
   },
   showFavoriteAlbum() {
