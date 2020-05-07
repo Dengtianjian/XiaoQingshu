@@ -51,7 +51,6 @@
         </view>
       </navigator>
       <view class="classmate">
-        <!-- <button bind:tap="getClassStudent">Get</button> -->
         <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
         编辑我的信息
       </navigator> -->
