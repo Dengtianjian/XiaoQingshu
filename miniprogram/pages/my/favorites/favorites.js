@@ -13,7 +13,7 @@ let FavoritePagination = null;
 Page({
   onLoad() {
     FavoritePagination = new Pagination(this, "favorites", 0, true);
-    AlbumPagination = new Pagination(this, "albums", 1);
+    AlbumPagination = new Pagination(this, "albums", 5);
     this.getFavoriteAlbum();
   },
 
@@ -78,16 +78,30 @@ Page({
       isHiddenPopup: false,
       popupTemplateName: "favorite_list",
       selectAlbum: albumId,
+      templateData: {
+        favorite: [],
+      },
     });
 
-    if (FavoritePagination.isFinished(albumId)) {
+    if (this.data.favorites[albumId]) {
+      this.setData({
+        templateData: {
+          favorite: this.data.favorites[albumId],
+        },
+      });
       return;
     }
+
+    this.setData({
+      templateData: {
+        favorite: [],
+      },
+    });
+
     this.getFavorite();
   },
   getFavorite() {
     let selectAlbum = this.data.selectAlbum;
-    console.log(FavoritePagination);
     if (
       FavoritePagination.isFinished(selectAlbum) ||
       FavoritePagination.isLoading(selectAlbum)
@@ -102,14 +116,15 @@ Page({
       page: FavoritePagination.getPage(selectAlbum),
     }).then((res) => {
       wx.hideLoading();
-      if(res.length==0){
+      if (res.length == 0) {
         this.setData({
           templateData: {
             favorite: [],
           },
         });
-      }else{
-        if (FavoritePagination.getPage(selectAlbum)==0 && res.length < 12) {
+      } else {
+        FavoritePagination.insert(res, selectAlbum);
+        if (FavoritePagination.getPage(selectAlbum) == 0 && res.length < 12) {
           FavoritePagination.setFinished(true, selectAlbum);
         } else if (res.length < 5) {
           FavoritePagination.setFinished(true, selectAlbum);
@@ -121,7 +136,6 @@ Page({
           },
         });
       }
-
     });
   },
 });

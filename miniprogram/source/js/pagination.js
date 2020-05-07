@@ -4,15 +4,48 @@ class Pagination {
   pageThis = null;
   dataName = null;
   startHeaderIndex = 0;
-  constructor(pageThis, dataName, headerIndex = 0,key = false) {
+  limit = 5;
+  constructor(
+    pageThis,
+    dataName,
+    startHeaderIndex = 0,
+    key = false,
+    limit = 5
+  ) {
     this.pageThis = pageThis;
     this.dataName = dataName;
-    this.startHeaderIndex = headerIndex;
+    this.startHeaderIndex = startHeaderIndex;
     this.key = key;
+    this.limit = limit;
     if (key) {
       this.data = [];
     } else {
-      this.data = { finished: false, loading: false, page: 0, headerIndex: 0 };
+      if (
+        !this.pageThis[dataName] ||
+        (this.pageThis[dataName] instanceof Array &&
+          this.pageThis[dataName].length == 0)
+      ) {
+        let insertData = [];
+        for (let i = 0; i < startHeaderIndex; i++) {
+          insertData.push([]);
+        }
+        this.pageThis.setData({
+          [this.dataName]: insertData,
+        });
+      } else {
+        for (let i = 0; i < startHeaderIndex; i++) {
+          this.pageThis.setData({
+            [`${this.dataName}[${i}]`]: [],
+          });
+        }
+      }
+
+      this.data = {
+        finished: false,
+        loading: false,
+        page: 0,
+        headerIndex: startHeaderIndex,
+      };
     }
   }
   insert(data, pageKey = null) {
@@ -24,7 +57,7 @@ class Pagination {
           page: 0,
           headerIndex: this.startHeaderIndex,
         };
-        console.log(this.dataName,pageKey);
+        console.log(this.dataName, pageKey);
         this.pageThis.setData({
           [`${this.dataName}.${pageKey}`]: [data],
         });
@@ -51,6 +84,46 @@ class Pagination {
       this.data.headerIndex++;
     }
   }
+  insertNew(data, pageKey = null) {
+    if (this.key) {
+      for (let i = 0; i < this.startHeaderIndex; i++) {
+        if (
+          this.pageThis["data"][this.dataName][`${pageKey}`][i].length <=
+          this.limit
+        ) {
+          let currentLength = this.pageThis["data"][this.dataName][
+            `${pageKey}`
+          ][i].length;
+          this.pageThis.setData({
+            [`${this.dataName}.${pageKey}[${currentLength}][${i}]`]: data,
+          });
+          break;
+        }
+        let index =
+          this.startHeaderIndex - 1 < 0 ? 0 : this.startHeaderIndex - 1;
+        let currentLength = this.pageThis["data"][this.dataName][index].length;
+        this.pageThis.setData({
+          [`${this.dataName}.${pageKey}[${i}][${currentLength}]`]: data,
+        });
+      }
+    } else {
+      for (let i = 0; i < this.startHeaderIndex; i++) {
+        if (this.pageThis["data"][this.dataName][i].length <= this.limit) {
+          let currentLength = this.pageThis["data"][this.dataName][i].length;
+          this.pageThis.setData({
+            [`${this.dataName}[${i}][${currentLength}]`]: data,
+          });
+          break;
+        }
+        let index =
+          this.startHeaderIndex - 1 < 0 ? 0 : this.startHeaderIndex - 1;
+        let currentLength = this.pageThis["data"][this.dataName][index].length;
+        this.pageThis.setData({
+          [`${this.dataName}[${i}][${currentLength}]`]: data,
+        });
+      }
+    }
+  }
   remove(page, pageKey = null) {
     if (this.key) {
       delete this.data[pageKey][page];
@@ -64,9 +137,9 @@ class Pagination {
       });
     }
   }
-  setLoading(flag=true,pageKey = null) {
+  setLoading(flag = true, pageKey = null) {
     if (this.key) {
-      if(this.data[pageKey]==undefined){
+      if (this.data[pageKey] == undefined) {
         return;
       }
       this.data[pageKey]["loading"] = flag;
@@ -74,9 +147,9 @@ class Pagination {
       this.data["loading"] = flag;
     }
   }
-  setFinished(flag=true,pageKey = null) {
+  setFinished(flag = true, pageKey = null) {
     if (this.key) {
-      if(this.data[pageKey]==undefined){
+      if (this.data[pageKey] == undefined) {
         return;
       }
       this.data[pageKey]["finished"] = flag;
@@ -86,7 +159,7 @@ class Pagination {
   }
   isLoading(pageKey = null) {
     if (this.key) {
-      if(this.data[pageKey]==undefined){
+      if (this.data[pageKey] == undefined) {
         return false;
       }
       return this.data[pageKey]["loading"];
@@ -96,7 +169,7 @@ class Pagination {
   }
   isFinished(pageKey = null) {
     if (this.key) {
-      if(this.data[pageKey]==undefined){
+      if (this.data[pageKey] == undefined) {
         return false;
       }
       return this.data[pageKey]["finished"];
@@ -104,9 +177,9 @@ class Pagination {
       return this.data["finished"];
     }
   }
-  getPage(pageKey = null){
+  getPage(pageKey = null) {
     if (this.key) {
-      if(this.data[pageKey]==undefined){
+      if (this.data[pageKey] == undefined) {
         return 0;
       }
       return this.data[pageKey]["page"];
