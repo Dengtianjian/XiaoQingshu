@@ -165,7 +165,7 @@ let functions = {
   },
   async getFavorite(event) {
     const wxContext = cloud.getWXContext();
-    let albumId = event.alubmid;
+    let albumId = event.albumid;
     let page = event.page || 0;
     let limit = event.limit || 10;
 
@@ -180,6 +180,9 @@ let functions = {
         return res["data"];
       });
     let postId = [];
+    if(favorites.length==0){
+      return Response.result([]);
+    }
     favorites.forEach((item) => {
       postId.push(item._contentid);
     });

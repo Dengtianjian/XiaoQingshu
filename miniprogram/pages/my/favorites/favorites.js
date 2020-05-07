@@ -2,13 +2,18 @@
 import Prompt from "../../../source/js/prompt";
 import Cloud from "../../../source/js/cloud";
 import Utils from "../../../source/js/utils";
+import Pagination from "../../../source/js/pagination";
 const Form = require("./module/edit_favorite");
 const modules = {
   ...Form,
 };
 
+let AlbumPagination = null;
+let FavoritePagination = null;
 Page({
   onLoad() {
+    FavoritePagination = new Pagination(this, "favorites", 0, true);
+    AlbumPagination = new Pagination(this, "albums", 1);
     this.getFavoriteAlbum();
   },
 
@@ -22,39 +27,38 @@ Page({
     popupTemplateName: "",
     templateData: {},
     favorites: {},
-    selectAlbum:null
+    selectAlbum: null,
+    albums: null,
+  },
+  onReachBottom() {
+    this.getFavoriteAlbum();
   },
   favoriteLoad: {},
   getFavoriteAlbum(e) {
-    if (this.favoriteLoad.loading || this.favoriteLoad.finished) {
+    if (AlbumPagination.isLoading() || AlbumPagination.isFinished()) {
       return;
     }
+    AlbumPagination.setLoading();
     wx.showLoading({
       title: "加载中",
     });
 
     Cloud.cfunction("User", "getAlbums", {
       page: this.favoriteLoad.page,
-      limit: 20,
+      limit: 11,
+      page: AlbumPagination.getPage(),
     }).then((albums) => {
       wx.hideLoading();
       albums.forEach((item) => {
         item["date"] = Utils.formatDate(item["date"], "y-m-d");
-        if (this.favoriteLoad[item["_id"]] == undefined) {
-          this.favoriteLoad[item["_id"]] = {
-            finished: false,
-            page: 0,
-            loading: false,
-            count: 0,
-          };
-        }
       });
-      this.setData({
-        favoriteAlbums: albums,
-      });
+      if (albums.length < 11) {
+        AlbumPagination.setFinished();
+      }
+      AlbumPagination.insert(albums);
+      AlbumPagination.setLoading(false);
     });
   },
-
   showCreateFavoritePopup() {
     this.setData({
       isHiddenPopup: false,
@@ -73,68 +77,51 @@ Page({
     this.setData({
       isHiddenPopup: false,
       popupTemplateName: "favorite_list",
-      selectAlbum:albumId
+      selectAlbum: albumId,
     });
 
-    if (this.favoriteLoad[albumId] == undefined) {
-      this.favoriteLoad[albumId] = {
-        finished: false,
-        page: 0,
-        loading: false,
-        count: 0,
-      };
-    }
-    if(this.data.favorites[albumId]==undefined){
-      this.setData({
-        [`favorites.${albumId}`]:[[]]
-      });
-    }
-    if (this.favoriteLoad[albumId].finished) {
+    if (FavoritePagination.isFinished(albumId)) {
       return;
     }
     this.getFavorite();
   },
   getFavorite() {
-    let selectAlbum= this.data.selectAlbum;
-    let favoirteLoad = this.favoriteLoad[selectAlbum];
-
-    if (favoirteLoad.finished || favoirteLoad.loading) {
+    let selectAlbum = this.data.selectAlbum;
+    console.log(FavoritePagination);
+    if (
+      FavoritePagination.isFinished(selectAlbum) ||
+      FavoritePagination.isLoading(selectAlbum)
+    ) {
       return;
     }
-    // if(this.data.favorites[this.selectAlbum][favoirteLoad["count"]]&&this.data.favorites[this.selectAlbum][favoirteLoad["count"]].length>=5){
-    //   favoirteLoad['count']++;
-    // }
     wx.showLoading({
       title: "加载中",
     });
     Cloud.cfunction("User", "getFavorite", {
       albumid: selectAlbum,
-      page: favoirteLoad.page,
+      page: FavoritePagination.getPage(selectAlbum),
     }).then((res) => {
-      if(favoirteLoad["count"]==0&&res.length<12){
-        favoirteLoad['finished']=true;
-      }else if(res.length<5){
-        favoirteLoad['finished']=true;
+      wx.hideLoading();
+      if(res.length==0){
+        this.setData({
+          templateData: {
+            favorite: [],
+          },
+        });
       }else{
-        favoirteLoad['page']++;
-      }
-      let current=this.data.favorites[selectAlbum][favoirteLoad["count"]];
-      if(current==undefined){
-        current=res;
-      }else{
-        current.push(...res);
-      }
-
-      this.setData({
-        [`favorites.${selectAlbum}[${favoirteLoad["count"]}]`]:current
-      });
-
-      this.favoriteLoad[selectAlbum]=favoirteLoad;
-      this.setData({
-        templateData:{
-          favorite:this.data.favorites[`${selectAlbum}`]
+        if (FavoritePagination.getPage(selectAlbum)==0 && res.length < 12) {
+          FavoritePagination.setFinished(true, selectAlbum);
+        } else if (res.length < 5) {
+          FavoritePagination.setFinished(true, selectAlbum);
         }
-      });
+
+        this.setData({
+          templateData: {
+            favorite: this.data.favorites[`${selectAlbum}`],
+          },
+        });
+      }
+
     });
   },
 });

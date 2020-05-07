@@ -1,26 +1,26 @@
 <!-- miniprogram/pages/my/favorites/favorites.wxml -->
 <NavigationBar pageTitle="收藏" />
 <view class="favorite-list">
-  <block wx:for="{{ favoriteAlbums }}">
-    <view class="favorite-box-item" bindtap="showFavorites" data-albumid="{{ item._id }}">
-      <Icon class="favorite-box-item-icon" size="80rpx" icon="{{ item.cover }}" />
-      <view class="favorite-box-item-main">
-        <view class="favorite-box-item-name">{{ item.name }}</view>
-        <view class="favorite-box-item-bottom">
-          <text class="favorite-box-item-count">{{ item.count }}个</text>
-          <text class="favorite-box-item-created-date">{{ item.date }}</text>
+  <block wx:for="{{ albums }}" wx:for-index="albumArrayIndex" wx:for-item="albumArray" wx:key="albumArrayIndex">
+    <block wx:for="{{ albumArray }}" wx:key="index">
+      <view class="favorite-box-item" bindtap="showFavorites" data-albumid="{{ item._id }}">
+        <Icon class="favorite-box-item-icon" size="80rpx" icon="{{ item.cover }}" />
+        <view class="favorite-box-item-main">
+          <view class="favorite-box-item-name">{{ item.name }}</view>
+          <view class="favorite-box-item-bottom">
+            <text class="favorite-box-item-count">{{ item.count }}个</text>
+            <text class="favorite-box-item-created-date">{{ item.date }}</text>
+          </view>
         </view>
+        <Icon class="favorite-box-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
       </view>
-      <Icon class="favorite-box-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
-    </view>
+    </block>
   </block>
 </view>
 <!-- 添加收藏的按钮 -->
 <view class="create-favorite qcicon qcicon-add-select" bind:tap="showCreateFavoritePopup"></view>
-
 <import src="./template/create_favorite.wxml" />
 <import src="./template/favorite_list.wxml" />
-
 <Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="max-height:90%;">
   <template is="{{ popupTemplateName }}" data="{{ ...templateData }}"></template>
 </Popup>
