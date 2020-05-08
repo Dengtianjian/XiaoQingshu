@@ -11,9 +11,13 @@ const modules = {
 let AlbumPagination = null;
 let FavoritePagination = null;
 Page({
+  FavoritePagination: null,
+  AlbumPagination: null,
   onLoad() {
     FavoritePagination = new Pagination(this, "favorites", 0, true);
-    AlbumPagination = new Pagination(this, "albums", 5);
+    AlbumPagination = new Pagination(this, "albums", 1);
+    this.FavoritePagination = FavoritePagination;
+    this.AlbumPagination = AlbumPagination;
     this.getFavoriteAlbum();
   },
 
@@ -69,34 +73,37 @@ Page({
     this.setData({
       isHiddenPopup: true,
       popupTemplateName: "",
+      selectAlbum: null,
+      templateData: null,
+      cover: null,
     });
+    this.showAlbumPage = null;
+    this.currentShowAlbumIndex = null;
   },
-  selectAlbum: null,
+  showAlbumPage: null,
+  currentShowAlbumIndex: null,
   showFavorites({ currentTarget: { dataset } }) {
     let albumId = dataset.albumid;
+    let page = dataset.page;
+    let index = dataset.index;
+    this.showAlbumPage = page;
+    this.currentShowAlbumIndex = index;
     this.setData({
       isHiddenPopup: false,
-      popupTemplateName: "favorite_list",
+      popupTemplateName: "album",
       selectAlbum: albumId,
       templateData: {
         favorite: [],
+        album: this.data.albums[page][index],
       },
     });
 
     if (this.data.favorites[albumId]) {
       this.setData({
-        templateData: {
-          favorite: this.data.favorites[albumId],
-        },
+        [`templateData.favorite`]: this.data.favorites[albumId],
       });
       return;
     }
-
-    this.setData({
-      templateData: {
-        favorite: [],
-      },
-    });
 
     this.getFavorite();
   },
@@ -118,9 +125,7 @@ Page({
       wx.hideLoading();
       if (res.length == 0) {
         this.setData({
-          templateData: {
-            favorite: [],
-          },
+          [`templateData.favorite`]: [],
         });
       } else {
         FavoritePagination.insert(res, selectAlbum);
@@ -131,11 +136,52 @@ Page({
         }
 
         this.setData({
-          templateData: {
-            favorite: this.data.favorites[`${selectAlbum}`],
-          },
+          [`templateData.favorite`]: this.data.favorites[`${selectAlbum}`],
         });
       }
+    });
+  },
+  editAblum() {
+    this.setData({
+      popupTemplateName: "create_favorite",
+      cover: this.data.templateData.album.cover,
+    });
+  },
+  removeFavorite({
+    currentTarget: {
+      dataset: { page, index },
+    },
+  }) {
+    let selectFavorite = this.data.favorites[`${this.data.selectAlbum}`][page][
+      index
+    ];
+    Cloud.cfunction("User", "cancelFavorite", {
+      contentid: selectFavorite["_contentid"],
+      type: selectFavorite["type"],
+    }).then((res) => {
+      if (res) {
+        this.FavoritePagination.removeItem(index, page, this.data.selectAlbum);
+        this.setData({
+          [`templateData.favorite[${page}][${index}]`]: "deleted",
+        });
+        Prompt.toast("移除成功");
+      }
+    });
+  },
+  deleteAlbum() {
+    Cloud.cfunction("User", "deleteAlbum", {
+      albumid: this.data.selectAlbum,
+    }).then((res) => {
+      this.AlbumPagination.removeItem(
+        this.currentShowAlbumIndex,
+        this.showAlbumPage
+      );
+      if (this.data.favorites[`${this.data.selectAlbum}`]) {
+        this.FavoritePagination.removeKey(this.data.selectAlbum);
+      }
+      this.hiddenPopup();
+
+      Prompt.toast("删除成功");
     });
   },
 });

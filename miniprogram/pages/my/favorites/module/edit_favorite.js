@@ -1,11 +1,11 @@
 import Prompt from "../../../../source/js/prompt";
 import Cloud from "../../../../source/js/cloud";
 import Utils from "../../../../source/js/utils";
+const App = getApp();
 module.exports = {
   data: {
-    cover:
-      "http://t7.baidu.com/it/u=378254553,3884800361&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1589169855&t=3e37029d66bc7f846964fe3637d711a3",
-      favoriteAlbums:[]
+    cover: null,
+    favoriteAlbums: [],
   },
   saveFavoriteAlbum(e) {
     let formValue = e.detail.value;
@@ -14,17 +14,49 @@ module.exports = {
       Prompt.toast("请输入收藏夹名称");
       return;
     }
+    let albumid=null;
+    if(this.data.selectAlbum){
+      albumid=this.data.selectAlbum;
+    }
 
     wx.showLoading({
       title: "保存中",
     });
     Cloud.cfunction("User", "saveFavoriteAlbum", {
+      albumid,
       name,
       description,
       cover: this.data.cover,
     }).then((res) => {
       wx.hideLoading();
-      console.log(res);
+      if(albumid){
+        this.AlbumPagination.updateItem({
+          cover: this.data.cover,
+          name,
+          description
+        },this.currentShowAlbumIndex,this.showAlbumPage);
+        wx.showToast({
+          title: "保存成功",
+        });
+      }else{
+        this.AlbumPagination.insertNew({
+          _id: res._albumid,
+          _userid: App.userInfo._userid,
+          count: 0,
+          cover: this.data.cover,
+          date: Utils.formatDate(Date.now(), "y-m-d"),
+          name,
+          description,
+        });
+        wx.showToast({
+          title: "创建成功",
+        });
+      }
+
+
+      this.setData({
+        isHiddenPopup: true,
+      });
     });
   },
   uploadCover(e) {
@@ -36,7 +68,7 @@ module.exports = {
         wx.showLoading({
           title: "上传中 Up!",
         });
-        await Utils.uploadFile(cover, "favorite_album/").then((res) => {
+        await Cloud.uploadFile(cover, "favorite_album/").then((res) => {
           that.setData({
             cover: res,
             "templateData.cover": res,
@@ -47,4 +79,10 @@ module.exports = {
       },
     });
   },
+  previewCover(){
+    wx.previewImage({
+      current:this.data.cover,
+      urls:[this.data.cover]
+    })
+  }
 };

@@ -13,27 +13,45 @@ const FavoriteAlbum = DB.collection("user_favorite_album");
 let functions = {
   async saveFavoriteAlbum(event) {
     const wxContext = cloud.getWXContext();
-    let { name, description, cover } = event;
+    let { name, description, cover, albumid } = event;
 
     if (!name) {
       return Response.error(400, 400001, "请输入收藏集名称");
     }
 
-    let addResult = await FavoriteAlbum.add({
-      data: {
-        name,
-        description,
-        cover,
-        date: Date.now(),
-        count: 0,
-        _userid: wxContext.OPENID,
-      },
-    }).then((res) => res);
+    if (albumid) {
+      let updateResult = await FavoriteAlbum.doc(albumid)
+        .update({
+          data: {
+            name,
+            description,
+            cover,
+          },
+        })
+        .then((res) => res)
+        .catch((res) => res);
+      if (updateResult.errCode) {
+        return Response.error(updateResult);
+      }
 
-    if (addResult["errMsg"] == "collection.add:ok") {
-      return Response.result({
-        _albumid: addResult["_id"],
-      });
+      return Response.result(updateResult);
+    } else {
+      let addResult = await FavoriteAlbum.add({
+        data: {
+          name,
+          description,
+          cover,
+          date: Date.now(),
+          count: 0,
+          _userid: wxContext.OPENID,
+        },
+      }).then((res) => res);
+
+      if (addResult["errMsg"] == "collection.add:ok") {
+        return Response.result({
+          _albumid: addResult["_id"],
+        });
+      }
     }
   },
   async getFavoriteByTypeId(event) {
@@ -86,7 +104,7 @@ let functions = {
       .get()
       .then((res) => res["data"]);
     if (favorite.length == 0) {
-      return Response.result("取消收藏成功");
+      return Response.result(true);
     }
     favorite = favorite[0];
     await Favorite.where({
@@ -94,16 +112,12 @@ let functions = {
       type,
       _contentid,
     })
-      .remove()
-      .then((res) => {
-        if (res["stats"]["removed"]) {
-          FavoriteAlbum.doc(favorite["_album"]).update({
-            data: { count: _.inc(-1) },
-          });
-        }
+      .remove();
+      await FavoriteAlbum.doc(favorite["_album"]).update({
+        data: { count: _.inc(-1) },
       });
 
-    return Response.result("取消收藏成功");
+    return Response.result(true);
   },
   async addFavorite(event) {
     const wxContext = cloud.getWXContext();
@@ -138,7 +152,7 @@ let functions = {
       },
     }).then((res) => res);
     if (addResult["errMsg"] == "collection.add:ok" && addResult["_id"]) {
-      FavoriteAlbum.doc(_album).update({
+      await FavoriteAlbum.doc(_album).update({
         data: {
           count: _.inc(1),
         },
@@ -180,7 +194,7 @@ let functions = {
         return res["data"];
       });
     let postId = [];
-    if(favorites.length==0){
+    if (favorites.length == 0) {
       return Response.result([]);
     }
     favorites.forEach((item) => {
@@ -192,7 +206,7 @@ let functions = {
         name: "Post",
         data: {
           method: "getPost",
-          postid: postId
+          postid: postId,
         },
       })
       .then((res) => {
@@ -200,10 +214,26 @@ let functions = {
       });
     posts = Utils.arrayToObject(posts, "_id");
     favorites.forEach((item) => {
-      item['post']=posts[item['_contentid']];
+      item["post"] = posts[item["_contentid"]];
     });
 
     return favorites;
+  },
+  async deleteAlbum({ albumid }) {
+    const wxContext = cloud.getWXContext();
+    let album = await FavoriteAlbum.where({
+      _userid: wxContext.OPENID,
+      _id: albumid,
+    })
+      .get()
+      .then((res) => res["data"]);
+      if(album.length>0){
+        await FavoriteAlbum.doc(albumid).remove().catch(res=>console.log(res));
+      }
+    Favorite.where({
+      _album: albumid,
+    }).remove();
+    return Response.result(true);
   },
 };
 

@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/class/index/index",
     "pages/index/index",
     "pages/my/favorites/favorites",
+    "pages/class/index/index",
     "pages/school/index/index",
     "pages/post/view/view",
     "pages/post/publish/publish",

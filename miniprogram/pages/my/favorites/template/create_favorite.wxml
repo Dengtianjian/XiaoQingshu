@@ -5,19 +5,19 @@
       <view class="form-common-item-title">配图</view>
       <view class="form-common-item-el create-favorite-form-icon-upload" style="padding:0;border:none;">
         <view class="favorite-box-icon-upload qcicon qcicon-upload" bind:tap="uploadCover"></view>
-        <image class="favorite-box-icon-preview" src="{{ cover }}" hidden="{{ cover==null }}"></image>
+        <image class="favorite-box-icon-preview" src="{{ cover||album['cover'] }}" bind:tap="previewCover" />
       </view>
     </view>
     <view class="form-common-item">
       <view class="form-common-item-title">名称</view>
       <view class="form-common-item-el">
-        <input type="text" name="name" />
+        <input type="text" name="name" value="{{ album['name'] }}" />
       </view>
     </view>
     <view class="form-common-item">
       <view class="form-common-item-title">描述</view>
       <view class="form-common-item-el">
-        <input type="text" name="description" />
+        <textarea type="text" name="description" value="{{ album['description'] }}" ></textarea>
       </view>
     </view>
     <view class="favorite-box-form-operate">

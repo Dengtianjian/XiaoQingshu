@@ -1,0 +1,38 @@
+<!-- 收藏夹 详情 模板 -->
+<template name="album">
+  <view class="album">
+    <view class="album-info">
+      <view class="album-info-head">
+        <view class="album-info-head-left">
+          <view class="album-name">{{ album['name'] }}</view>
+          <view class="album-info-bottom">
+            <text class="album-info-bottom-item">{{ album['count'] }}个</text>
+            <text class="album-info-bottom-item">创建时间：{{ album['date'] }}</text>
+          </view>
+        </view>
+        <view class="album-operate">
+          <text class="album-operate-item qcicon qcicon-suggest" bind:tap='editAblum'></text>
+          <text class="album-operate-item qcicon qcicon-ashbin" bind:tap="deleteAlbum" ></text>
+        </view>
+      </view>
+      <scroll-view class="album-description" scroll-y="{{true}}">
+        {{ album['description'] }}
+      </scroll-view>
+    </view>
+    <image class="album-icon" src="{{ album['cover'] }}" mode="aspectFill"></image>
+  </view>
+  <scroll-view scroll-y class="favorite-box-list">
+    <block wx:for="{{ favorite }}" wx:for-item="favoriteArray" wx:for-index="favoriteArrayIndex" wx:key="favoriteArrayIndex">
+      <block wx:for="{{ favoriteArray }}" wx:key="index">
+        <view class="favorites-browse-item" hidden="{{ item=='deleted' }}">
+          <navigator class="favorites-browse-item-title" hover-class="none" open-type="navigate" url="/pages/post/view/view?postid={{ item._contentid }}">{{ item.post.title }}</navigator>
+          <text class="favorite-browse-item-remove qcicon qcicon-ashbin" bind:tap="removeFavorite" data-page="{{ favoriteArrayIndex }}" data-index="{{ index }}"></text>
+          <!-- <view class="author-and-time-display">
+            <text class="favorites-browse-item-author">{{ item.favoritesAuthor }}</text>
+            <text class="favorites-browse-item-time">{{ item.favoritesTime }}</text>
+          </view> -->
+        </view>
+      </block>
+    </block>
+  </scroll-view>
+</template>
