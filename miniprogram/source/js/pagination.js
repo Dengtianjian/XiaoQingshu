@@ -1,3 +1,4 @@
+import Utils from "./utils";
 class Pagination {
   key = null;
   data = null;
@@ -57,7 +58,7 @@ class Pagination {
           page: 0,
           headerIndex: this.startHeaderIndex,
         };
-        console.log(this.dataName, pageKey);
+
         this.pageThis.setData({
           [`${this.dataName}.${pageKey}`]: [data],
         });
@@ -123,6 +124,39 @@ class Pagination {
         });
       }
     }
+  }
+  updateItem(data,itemIndex,page,pageKey=null){
+    if(this.key){
+      if(Utils.getType(data)==="Object"){
+        if(Utils.getType(this.pageThis.data[`${this.dataName}`][`${pageKey}`][page][itemIndex])==="Object"){
+          data=Object.assign(this.pageThis.data[`${this.dataName}`][`${pageKey}`][page][itemIndex],data);
+        }
+      }
+      this.pageThis.setData({
+        [`${this.dataName}.${pageKey}[${page}][${itemIndex}]`]:data
+      })
+    }else{
+      if(Utils.getType(data)==="Object"){
+        if(Utils.getType(this.pageThis.data[`${this.dataName}`][page][itemIndex])==="Object"){
+          data=Object.assign(this.pageThis.data[`${this.dataName}`][page][itemIndex],data);
+          console.log(data);
+        }
+      }
+      this.pageThis.setData({
+        [`${this.dataName}[${page}][${itemIndex}]`]:data
+      })
+    }
+  }
+  removeItem(itemIndex,page,pageKey=null){
+    let path=null;
+    if(this.key){
+      path=`${this.dataName}.${pageKey}[${page}][${itemIndex}]`;
+    }else{
+      path=`${this.dataName}[${page}][${itemIndex}]`;
+    }
+    this.pageThis.setData({
+      [path]:"deleted"
+    });
   }
   remove(page, pageKey = null) {
     if (this.key) {
