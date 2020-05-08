@@ -7,22 +7,24 @@
     <view class="user-nickname">{{ userInfo['nickname'] }}</view>
     <view class="user-age" wx:if="{{ userInfo['birthday'] }}">{{ userInfo['age'] }}岁</view>
   </view>
-  <view class="user-attention-button" bind:tap="getUser" wx:if="{{ currentUser['isLogin']&&currentUser['_openid']!=userInfo['_openid'] }}">
+  <view class="user-attention-button" wx:if="{{ currentUser['isLogin']&&currentUser['_userid']!=userInfo['_userid'] }}">
     关注
   </view>
 </view>
 <view class="school-info">
   <block wx:if="{{ userInfo['_default_school'] }}">
     <view class="school-name">{{ userInfo['school']['name'] }}</view>
-    <view class="school-class">{{ userInfo['class']['grade'] }}级 {{ userInfo['class']['profession'] }}</view>
+    <view class="school-class">
+      {{ userInfo['class']['grade'] }}级 {{ userInfo['class']['profession'] }}
+    </view>
   </block>
-  <block wx:else>
-   TA 还未加入任何学校和班级呢
-  </block>
+  <block wx:else>TA 还未加入任何学校和班级呢</block>
   <view class="user-statement">{{ userInfo['statement']||'这个同学一点都不懒，只是不屑于写个人说明' }}</view>
 </view>
 <view class="post-wrap">
-  <blovk wx:for="{{ 5 }}">
-    <PostCoverItem class="post-item" />
+  <blovk wx:for="{{ posts }}" wx:for-item="postArray" wx:for-index="postArrayIndex">
+    <block wx:for="{{ postArray }}" wx:key="index">
+      <PostCoverItem class="post-item" post="{{ item }}" />
+    </block>
   </blovk>
 </view>

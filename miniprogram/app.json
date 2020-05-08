@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/my/space/space",
     "pages/index/index",
     "pages/my/favorites/favorites",
     "pages/class/index/index",
@@ -10,7 +11,6 @@
     "pages/my/index/index",
     "pages/school/select_school/select_school",
     "pages/my/edit_profile/edit_profile",
-    "pages/my/space/space",
     "pages/class/invite_join/invite_join",
     "pages/class/album/album",
     "pages/class/edit_info/edit_info",

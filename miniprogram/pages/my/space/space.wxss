@@ -22,7 +22,7 @@
 }
 .user-info {
   margin-left:32rpx;
-  text-shadow: 0 4rpx 6rpx rgba(30,30,30,0.8);
+  text-shadow: 0 4rpx 6rpx rgba(209, 169, 36, 0.8);
   color:#ffffff;
 }
 .user-nickname {
@@ -79,5 +79,7 @@
 }
 .post-wrap .post-item {
   display:block;
-  margin-bottom:20rpx;
+  padding-bottom:40rpx;
+  margin-bottom:40rpx;
+  border-bottom:1px solid var(--light-color);
 }
