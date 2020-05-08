@@ -109,7 +109,9 @@
 }
 /* 收藏夹列表 */
 .album-list {
+  height:100%;
   text-align: left;
+  overflow-y:scroll;
 }
 .album-item {
   display: flex;

@@ -10,7 +10,7 @@ const _ = DB.command;
 const User = DB.collection("user");
 const UserProfile = DB.collection("user_profile");
 
-const Favorite = require("./functions/favorite");
+const Favorite = require("./module/favorite");
 
 let injectKey = [].concat(Object.keys(Favorite));
 
@@ -100,7 +100,6 @@ let functions = {
   async getUser(event) {
     let _openids = [];
     let field = event.field || {};
-    console.log(field);
 
     if (typeof event._openid == "string") {
       _openids.push(event._openid);

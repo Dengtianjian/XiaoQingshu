@@ -43,8 +43,8 @@
       <text class="post-operate-item-icon qcicon qcicon-good" wx:else></text>
       <text class="post-operate-item-text">点赞 {{ post.likes||'' }}</text>
     </view>
-    <Dialog hidden="{{ favorite.popupIsHide }}" position="center" textAlign="center" title="请选择要存放到的收藏夹" height="40%" cancelButton="" bind:confirm="confirmFavorite">
-      <scroll-view scroll-y="{{true}}" class="album-list" slot="content">
+    <Dialog hidden="{{ favorite.popupIsHide }}" position="center" textAlign="center" title="请选择要存放到的收藏夹" height="60%" cancelButton="" bind:confirm="confirmFavorite">
+      <scroll-view scroll-y="{{true}}" class="album-list" slot="content" bind:scrolltolower="getFavoriteAblum">
         <block wx:for="{{ favorite.albums }}" wx:key="index">
           <view class="album-item" bind:tap="changeSelectAlbum" data-index="{{ index }}">
             <view class="album-item-left">
@@ -60,7 +60,7 @@
   <view class="post-publish-date">{{ post.date }}</view>
 </view>
 <view class="comment">
-  <view class="comment-title" bind:tap="getComment">评论</view>
+  <view class="comment-title">评论</view>
   <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
     <view class="comment-list">
       <block wx:for="{{ commentArray }}" wx:key="index">

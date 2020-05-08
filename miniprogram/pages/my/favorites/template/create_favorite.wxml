@@ -1,0 +1,30 @@
+<!-- 创建新的收藏夹弹窗模板 -->
+<template name="create_favorite">
+  <form class="create-favorite-form form-common" bindsubmit="saveFavoriteAlbum">
+    <view class="form-common-item">
+      <view class="form-common-item-title">配图</view>
+      <view class="form-common-item-el create-favorite-form-icon-upload" style="padding:0;border:none;">
+        <view class="favorite-box-icon-upload qcicon qcicon-upload" bind:tap="uploadCover"></view>
+        <image class="favorite-box-icon-preview" src="{{ cover||album['cover'] }}" bind:tap="previewCover" />
+      </view>
+    </view>
+    <view class="form-common-item">
+      <view class="form-common-item-title">名称</view>
+      <view class="form-common-item-el">
+        <input type="text" name="name" value="{{ album['name'] }}" />
+      </view>
+    </view>
+    <view class="form-common-item">
+      <view class="form-common-item-title">描述</view>
+      <view class="form-common-item-el">
+        <textarea type="text" name="description" value="{{ album['description'] }}" ></textarea>
+      </view>
+    </view>
+    <view class="favorite-box-form-operate">
+      <button class="favorite-box-form-operate-item" type="default" bindtap="hiddenPopup">
+        取消
+      </button>
+      <button class="favorite-box-form-operate-item" type="primary" form-type="submit" >保存</button>
+    </view>
+  </form>
+</template>

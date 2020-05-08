@@ -479,6 +479,7 @@ let functions = {
       .then((res) => {
         return res["data"];
       });
+      console.log(students);
     if (students.length == 0) {
       return [];
     }
@@ -492,12 +493,12 @@ let functions = {
       .aggregate()
       .lookup({
         from: "user_profile",
-        localField: "_openid",
+        localField: "_id",
         foreignField: "_userid",
         as: "profile",
       })
       .match({
-        _openid: _.in(userId),
+        _id: _.in(userId),
       })
       .end()
       .then((res) => {

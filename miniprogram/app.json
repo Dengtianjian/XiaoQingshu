@@ -1,11 +1,12 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/my/favorites/favorites",
+    "pages/class/index/index",
     "pages/school/index/index",
     "pages/post/view/view",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
-    "pages/class/index/index",
     "pages/my/index/index",
     "pages/school/select_school/select_school",
     "pages/my/edit_profile/edit_profile",
@@ -13,7 +14,6 @@
     "pages/class/invite_join/invite_join",
     "pages/class/album/album",
     "pages/class/edit_info/edit_info",
-    "pages/my/favorites/favorites",
     "pages/my/notification/notification",
     "pages/post/answer_question/answer_question",
     "pages/test/test",

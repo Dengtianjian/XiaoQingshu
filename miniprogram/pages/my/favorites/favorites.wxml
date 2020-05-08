@@ -1,89 +1,26 @@
 <!-- miniprogram/pages/my/favorites/favorites.wxml -->
 <NavigationBar pageTitle="收藏" />
 <view class="favorite-list">
-  <block wx:for="{{ 10 }}">
-    <view class="favorite-box-item" bindtap="showFavorites">
-      <Icon class="favorite-box-item-icon" size="80rpx" icon="https://template.canva.cn/EADcB-bO1Bg/1/0/283w-v9TOen-Arck.jpg" />
-      <view class="favorite-box-item-main">
-        <view class="favorite-box-item-name">小猪佩奇一家</view>
-        <view class="favorite-box-item-bottom">
-          <text class="favorite-box-item-count">4个</text>
-          <text class="favorite-box-item-created-date">2018-12-01</text>
+  <block wx:for="{{ albums }}" wx:for-index="albumArrayIndex" wx:for-item="albumArray" wx:key="albumArrayIndex">
+    <block wx:for="{{ albumArray }}" wx:key="index" >
+      <view class="favorite-box-item" bindtap="showFavorites" data-albumid="{{ item._id }}" data-page="{{ albumArrayIndex }}" data-index="{{ index }}" hidden="{{ item=='deleted' }}">
+        <Icon class="favorite-box-item-icon" size="80rpx" icon="{{ item.cover }}" />
+        <view class="favorite-box-item-main">
+          <view class="favorite-box-item-name">{{ item.name }}</view>
+          <view class="favorite-box-item-bottom">
+            <text class="favorite-box-item-count">{{ item.count }}个</text>
+            <text class="favorite-box-item-created-date">{{ item.date }}</text>
+          </view>
         </view>
+        <Icon class="favorite-box-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
       </view>
-      <Icon class="favorite-box-item-view-icon" icon="qcicon-arrow-right" size="26rpx" />
-    </view>
+    </block>
   </block>
 </view>
 <!-- 添加收藏的按钮 -->
-<view class="create-favorite qcicon qcicon-upload" bind:tap="showCreateFavoritePopup"></view>
-
-<!-- 创建新的收藏夹弹窗 -->
-<view class="create-favorite qcicon qcicon-upload" bind:tap="showCreateFavoritePopup"></view>
-<template name="create_favorite">
-  <form class="create-favorite-form form-common">
-    <view class="form-common-item">
-      <view class="form-common-item-title">配图</view>
-      <view class="form-common-item-el create-favorite-form-icon-upload" style="padding:0;border:none;">
-        <view class="favorite-box-icon-upload qcicon qcicon-upload"></view>
-        <image class="favorite-box-icon-preview" src="https://template.canva.cn/EADcCZHzjf4/1/0/400w-n1oCpYmVM2c.jpg"></image>
-      </view>
-    </view>
-    <view class="form-common-item">
-      <view class="form-common-item-title">名称</view>
-      <view class="form-common-item-el">
-        <input type="text" name="name" />
-      </view>
-    </view>
-    <view class="form-common-item">
-      <view class="form-common-item-title">描述</view>
-      <view class="form-common-item-el">
-        <input type="text" name="description" />
-      </view>
-    </view>
-    <view class="favorite-box-form-operate">
-      <button class="favorite-box-form-operate-item" type="default" style="width:45%;" bindtap="hiddenPopup">
-        取消
-      </button>
-      <button class="favorite-box-form-operate-item" type="primary" style="width:45%;">保存</button>
-    </view>
-  </form>
-</template>
-<!-- 收藏夹 详情 模板 -->
-<wxs module="favoritesBrowse">
-  module.exports={
-    favoritesNavigations:[
-      {
-        favoritesTitle:"Vue的计算属性真的会缓存吗？(保姆级学，原理深入揭秘)",
-        favoritesAuthor:"晨曦时梦见兮",
-        favoritesTime:"一个月前",
-        favoritesContentsUrl:""
-      }
-    ]
-  };
-</wxs>
-<template name="favorite_list">
-  <scroll-view scroll-y class="favorite-box-list">
-    <block wx:for="{{ 10 }}">
-      <block wx:for="{{ favoritesBrowse.favoritesNavigations }}">
-        <navigator class="favorites-browse-item" open-type="navigate" url="{{ item.favoritesContentsUrl }}">
-          <text class="favorites-browse-item-title">{{ item.favoritesTitle }}</text>
-          <view class="author-and-time-bottom">
-            <text class="favorites-browse-item-author">{{ item.favoritesAuthor }}</text>
-            <text class="favorites-browse-item-time">{{ item.favoritesTime }}</text>
-          </view>
-        </navigator>
-      </block>
-    </block>
-     <!-- 透明的view  -->
-    <view class="placeholder-view"></view>
-  </scroll-view>
-  <!-- 关闭按钮 -->
-  <button class="close-favorite-list-button" type="primary" style="width:92%;" bindtap="hiddenPopup"> 关闭 </button>
-</template>
-
-<!-- 展示某一个收藏夹里面的收藏列表 -->
-
-<Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="height:88%;">
-  <template is="{{ popupTemplateName }}"></template>
+<view class="create-favorite qcicon qcicon-add-select" bind:tap="showCreateFavoritePopup"></view>
+<import src="./template/create_favorite.wxml" />
+<import src="./template/album.wxml" />
+<Popup hidden="{{ isHiddenPopup }}" position="bottom" customStyle="min-height:65%;max-height:90%;" bind:hiddenPopup="hiddenPopup">
+  <template is="{{ popupTemplateName }}" data="{{ ...templateData }}"></template>
 </Popup>

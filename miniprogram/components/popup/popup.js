@@ -66,6 +66,7 @@ Component({
       this.setData({
         hidden: true,
       });
+      this.triggerEvent("hiddenPopup",{hidden:this.data.hidden});
     },
   },
 });

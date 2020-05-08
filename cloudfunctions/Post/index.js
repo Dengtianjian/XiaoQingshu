@@ -152,6 +152,7 @@ let functions = {
   },
   async getPost(event) {
     let _postids = event.postid;
+    let field = event.field;
     if (typeof _postids == "string") {
       _postids = [_postids];
     }
@@ -167,6 +168,7 @@ let functions = {
     if (posts.length > 0) {
       let schoolIds = [];
       let topicIds = [];
+      let userIds = [];
       posts.forEach((item) => {
         if (item["_school"]) {
           schoolIds.push(item["_school"]);
@@ -174,6 +176,7 @@ let functions = {
         if (item["topic"]) {
           topicIds.push(item["topic"]);
         }
+        // userIds.push(item["_authorid"]);
       });
 
       let schools = await cloud
@@ -181,7 +184,7 @@ let functions = {
           name: "School",
           data: {
             method: "getSchoolById",
-            schoolid: schoolIds,
+            schoolid: schoolIds
           },
         })
         .then((res) => res["result"]["data"]);
@@ -202,6 +205,7 @@ let functions = {
         if (item["topic"]) {
           item["topic"] = topics[item["topic"]];
         }
+        // item["author"] = users[item["_authorid"]];
       });
 
       if (typeof event.postid == "string") {
