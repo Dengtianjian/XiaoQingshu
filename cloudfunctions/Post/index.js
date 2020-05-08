@@ -169,6 +169,7 @@ let functions = {
       let schoolIds = [];
       let topicIds = [];
       let userIds = [];
+      let sortIdentifier=[];
       posts.forEach((item) => {
         if (item["_school"]) {
           schoolIds.push(item["_school"]);
@@ -176,6 +177,8 @@ let functions = {
         if (item["topic"]) {
           topicIds.push(item["topic"]);
         }
+        sortIdentifier.push(item['sort']);
+
         // userIds.push(item["_authorid"]);
       });
 
@@ -184,7 +187,7 @@ let functions = {
           name: "School",
           data: {
             method: "getSchoolById",
-            schoolid: schoolIds
+            schoolid: schoolIds,
           },
         })
         .then((res) => res["result"]["data"]);
@@ -198,6 +201,11 @@ let functions = {
         .then((res) => res["data"]);
       topics = arrayToObject(topics, "_id");
 
+      let sort=await DB.collection("post_sort").where({
+        identifier:_.in(sortIdentifier)
+      }).get().then(res=>res['data']);
+      sort=arrayToObject(sort,"identifier");
+
       posts.forEach((item) => {
         if (item["_school"]) {
           item["school"] = schools[item["_school"]];
@@ -205,6 +213,7 @@ let functions = {
         if (item["topic"]) {
           item["topic"] = topics[item["topic"]];
         }
+        item['sort']=sort[item['sort']];
         // item["author"] = users[item["_authorid"]];
       });
 
@@ -350,6 +359,28 @@ let functions = {
       return Response.result(null);
     }
   },
+  async getPostByUser(event) {
+    let userid = event.userid;
+    let page = event.page || 0;
+    let limit = event.limit || 5;
+    console.log(limit * page);
+    let posts = await Post.where({
+      _authorid: userid,
+    })
+      .field({
+        _id: true,
+      })
+      .limit(limit)
+      .skip(limit * page)
+      .get()
+      .then((res) => res["data"]);
+      let postid=[];
+      posts.forEach(item=>{
+        postid.push(item._id);
+      })
+      posts=await functions['getPost']({postid});
+    return Response.result(posts);
+  },
 };
 
 // 云函数入口函数
@@ -361,6 +392,7 @@ exports.main = async (event, context) => {
     "getPosts",
     "getSortByIdentifier",
     "getLikeByPostId",
+    "getPostByUser",
   ];
   let method = event.method;
   if (!methods.includes(method)) {
