@@ -261,7 +261,7 @@ exports.main = async (event, context) => {
   const methods = [
     ...injectKey,
     "login",
-    "getUserprofile",
+    "getUserProfile",
     "saveUserProfile",
     "getJoinedSchool",
     "saveUserInfo",
