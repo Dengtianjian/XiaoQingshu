@@ -161,15 +161,21 @@ class Pagination {
   remove(page, pageKey = null) {
     if (this.key) {
       delete this.data[pageKey][page];
-      this.setData({
+      this.pageThis.setData({
         [`${this.dataName}['${pageKey}'][${page}]`]: [],
       });
     } else {
       delete this.data[page];
-      this.setData({
+      this.pageThis.setData({
         [`${this.dataName}[${page}]`]: [],
       });
     }
+  }
+  removeKey(pageKey){
+    delete this.data[pageKey];
+    this.pageThis.setData({
+      [`${this.dataName}.${pageKey}`]: [],
+    });
   }
   setLoading(flag = true, pageKey = null) {
     if (this.key) {
