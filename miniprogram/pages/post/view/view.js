@@ -548,7 +548,7 @@ Page({
           },
           409: {
             409001: {
-              title: "宁已经收藏这个帖子了，请勿重复收藏",
+              title: "已经收藏这个帖子了，请勿重复收藏",
               success() {
                 that.setData({
                   [`post.isFavorite`]: true,

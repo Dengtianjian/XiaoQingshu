@@ -96,7 +96,7 @@
   </block>
   <block wx:if="{{ userIsLogin===false }}">
     <NavigationBar pageTitle="班级" />
-    <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="宁还未登录哦，登录后才可以查看自己所在的班级呢">
+    <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="还未登录哦，登录后才可以查看自己所在的班级呢">
       <view class="page-prompt-operate">
         <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
           登录
@@ -106,7 +106,7 @@
   </block>
   <block wx:if="{{ userIsLogin&&classInfo==null }}">
     <NavigationBar pageTitle="班级" />
-    <PagePrompt class="page-prompt" icon="/material/images/not_class.png" description="宁还未加入任何一个班级哦，请通过好友邀请或者输入班级ID申请加入吧">
+    <PagePrompt class="page-prompt" icon="/material/images/not_class.png" description="还未加入任何一个班级哦，请通过好友邀请或者输入班级ID申请加入吧">
       <form class="not-class-form page-prompt-operate" bindsubmit="searchClass">
         <input class="not-class-form-el" type="number" name="class_id" placeholder="班级ID" />
         <button class="not-class-form-submit button-common" type="primary" form-type="submit">

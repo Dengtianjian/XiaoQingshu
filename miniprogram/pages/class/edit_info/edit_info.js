@@ -29,13 +29,13 @@ Page({
         return res;
       });
     if (userInfo["isLogin"] == false) {
-      Prompt.toast("宁还未登录哦，请登录后再创建", {
+      Prompt.toast("还未登录哦，请登录后再创建", {
         switchTab: "/pages/class/index/index",
       });
       return;
     }
     if (!userInfo["_default_school"]) {
-      Prompt.toast("宁还未加入任何一所学校，请加入后再创建", {
+      Prompt.toast("还未加入任何一所学校，请加入后再创建", {
         switchTab: "/pages/school/index/index",
       });
       return;
