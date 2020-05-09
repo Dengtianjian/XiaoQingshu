@@ -35,7 +35,7 @@
 <view class="publish-type-select" hidden="{{ publish.hidden }}">
   <view class="publish-type-select-mask" bindtap="displayPublishPopup" data-mode="hidden"></view>
   <view class="publish-type-select-wrap">
-    <view class="publish-type-select-title">请选择要发布得帖子类型</view>
+    <view class="publish-type-select-title">请选择要发布的帖子类型</view>
     <view class="publish-type-select-list">
       <block wx:for="{{ publish.postType }}" wx:key="name">
         <navigator class="publish-type-select-item" open-type="navigate" url="/pages/post/publish/publish?identifier={{ item.identifier }}">

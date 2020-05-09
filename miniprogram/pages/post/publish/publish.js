@@ -99,7 +99,7 @@ Page({
           };
           files.push(filePaths[i]["url"]);
         }
-        Utils.uploadFile(files, "post/").then((res) => {
+        Cloud.uploadFile(files, "post/").then((res) => {
           images.unshift(...filePaths);
           this.setData({
             images: res,

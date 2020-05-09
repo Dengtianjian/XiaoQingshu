@@ -1,6 +1,8 @@
 <!-- pages/my/index/index.wxml -->
 <block wx:if="{{ userInfo['isLogin'] }}">
   <NavigationBar opacity="0.9" crititcal="50" pageScrollTop="{{ pageScrollTop }}" defaultColor="#ffffff" />
+  <!-- 背景图片 -->
+  <view bindtap="choose_change_bg_popup">
   <block wx:if="{{ userInfo['space_bg_image'] }}">
     <image class="page-background" src="{{ userInfo['space_bg_image'] }}" mode="aspectFill"></image>
   </block>
@@ -9,6 +11,17 @@
       <image class="page-default-background-image" lazy-load="{{true}}" src="/material/images/space_default_bg.jpg" mode="aspectFill"></image>
     </view>
   </block>
+  </view>
+  <!-- 点击背景后的弹窗 -->
+  <view class="choose-bg-popup-mask {{is_bg_popup_True?'is_bg_popup_show':'.is_bg_popup_hide'}}" bindtap="cancel_change_bg_popup">
+      <view class="choose-bg-popup-block">
+        <view class="choose-bg-popup-block-item" bindtap="change_bg_Image">更换主页背景</view>
+        <view class="cut-off-line"></view>
+        <view class="choose-bg-popup-block-item" bindtap="cancel_change_bg_popup">取消</view>
+      </view>
+  </view>
+  <!-- /点击背景后的弹窗 -->
+  <!-- /背景图片 -->
   <image class="avatar" src="{{ userInfo['avatar_url'] }}" mode="aspectFill"></image>
   <view class="nickname">{{ userInfo['nickname'] }}</view>
   <view class="statistics">
@@ -32,7 +45,7 @@
       </view>
     </view>
   </view>
-</view>
+</block>
 <wxs module="quickConfig">
   module.exports={
     size:"50rpx",
