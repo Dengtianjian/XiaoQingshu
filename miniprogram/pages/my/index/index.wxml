@@ -15,9 +15,9 @@
   <!-- 点击背景后的弹窗 -->
   <view class="choose-bg-popup-mask {{is_bg_popup_True?'is_bg_popup_show':'.is_bg_popup_hide'}}" bindtap="cancel_change_bg_popup">
       <view class="choose-bg-popup-block">
-        <view class="choose-bg-popup-block-item" bindtap="change_bg_Image">更换主页背景</view>
+        <view class="choose-bg-popup-block-item" bindtap="change_bg_Image" hover-class="choose-bg-popup-block-item-hover">更换主页背景</view>
         <view class="cut-off-line"></view>
-        <view class="choose-bg-popup-block-item" bindtap="cancel_change_bg_popup">取消</view>
+        <view class="choose-bg-popup-block-item" bindtap="cancel_change_bg_popup" hover-class="choose-bg-popup-block-item-hover">取消</view>
       </view>
   </view>
   <!-- /点击背景后的弹窗 -->

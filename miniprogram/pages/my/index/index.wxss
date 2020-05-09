@@ -136,3 +136,6 @@ page {
   border: 1px solid var(--light-color);
   background-color:var(--light-color);
 }
+.choose-bg-popup-block  .choose-bg-popup-block-item-hover{
+  background-color:var(--light-color);
+}
