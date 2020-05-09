@@ -32,23 +32,61 @@
       </view>
     </view>
   </view>
-  <view class="quick-navigation">
-    <block wx:for="{{ navigations }}" wx:key="index">
-      <navigator class="quick-navigation-item" open-type="navigate" url="{{ item.url }}">
-        <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ navigationIconSize }}"></Icon>
-        <text class="quick-navigation-item-title">{{ item.title }}</text>
-        <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
-      </navigator>
-    </block>
-  </view>
-</block>
-<block wx:else>
-  <NavigationBar opacity="0.9" crititcal="50" pageScrollTop="{{ pageScrollTop }}" defaultColor="#000000" />
-  <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="宁还未登录哦，登录后才可以查看自己呢">
-    <view class="page-prompt-operate">
-      <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
-        登录
-      </button>
-    </view>
-  </PagePrompt>
-</block>
+</view>
+<wxs module="quickConfig">
+  module.exports={
+    size:"50rpx",
+    navigations:[
+      {
+        icon:"/material/temp/1.png",
+        title:"主页",
+        url:"/pages/my/space/space"
+      },{
+        icon:"/material/temp/2.png",
+        title:"帖子",
+        url:""
+      },{
+        icon:"/material/temp/3.png",
+        title:"资料",
+        url:"/pages/my/edit_profile/edit_profile"
+      },{
+        icon:"/material/temp/4.png",
+        title:"消息",
+        url:"/pages/my/notification/notification"
+      },{
+        icon:"/material/temp/5.png",
+        title:"最近浏览",
+        url:""
+      },{
+        icon:"/material/temp/6.png",
+        title:"勋章",
+        url:""
+      },{
+        icon:"/material/temp/7.png",
+        title:"收藏",
+        url:"/pages/my/favorites/favorites"
+      },{
+        icon:"/material/temp/8.png",
+        title:"小黑屋",
+        url:""
+      },{
+        icon:"/material/temp/9.png",
+        title:"社区规范",
+        url:""
+      },{
+        icon:"/material/temp/10.png",
+        title:"设置",
+        url:""
+      }
+    ]
+  };
+</wxs>
+<navigator class="quick-navigation" hover-class="none">
+  <block wx:for="{{ quickConfig.navigations }}"  >
+    <navigator class="quick-navigation-item" open-type="navigate" url="{{ item.url }}"> 
+      <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ quickConfig.size }}"></Icon>
+      <text class="quick-navigation-item-title">{{ item.title }}</text>
+      <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
+    </navigator>
+  </block>
+</navigator>

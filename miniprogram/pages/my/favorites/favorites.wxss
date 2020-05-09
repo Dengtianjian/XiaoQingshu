@@ -92,7 +92,7 @@ page {
   font-size: 24rpx;
   color: var(--font-light-color);
 }
-.author-and-time-display {
+.author-and-time-bottom {
   margin-top:10rpx;
 }
 .favorite-browse-item-remove {
@@ -124,6 +124,7 @@ page {
   border-radius: var(--border-radius);
 }
 .favorite-box-icon-preview {
+  display: inline-block;
   margin-left: 20rpx;
   width: 100rpx;
   height: 100rpx;
