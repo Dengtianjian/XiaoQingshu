@@ -5,6 +5,7 @@
   "usingComponents": {
     "PostCoverItem":"/components/postCoverItem/postCoverItem",
     "NavigationBar":"/components/navigationBar/navigationBar",
-    "Tabs":"/components/tabs/tabs"
+    "Tabs":"/components/tabs/tabs",
+    "Loading":"/components/loading/loading"
   }
 }

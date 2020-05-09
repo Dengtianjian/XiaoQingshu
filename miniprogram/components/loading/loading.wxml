@@ -1,0 +1,7 @@
+<!--components/loading/loading.wxml-->
+<view class="loading">
+  <text class="loading-text" wx:if="{{ finished }}">{{ finishedText }}</text>
+  <text class="loading-text" wx:else>
+    {{ loading?loadingText:loadingPrompt }}
+  </text>
+</view>
