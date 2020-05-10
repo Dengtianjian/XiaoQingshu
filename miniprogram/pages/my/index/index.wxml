@@ -3,22 +3,26 @@
   <NavigationBar opacity="0.9" crititcal="50" pageScrollTop="{{ pageScrollTop }}" defaultColor="#ffffff" />
   <!-- 背景图片 -->
   <view bindtap="choose_change_bg_popup">
-  <block wx:if="{{ userInfo['space_bg_image'] }}">
-    <image class="page-background" src="{{ userInfo['space_bg_image'] }}" mode="aspectFill"></image>
-  </block>
-  <block wx:else>
-    <view class="page-background page-default-background">
-      <image class="page-default-background-image" lazy-load="{{true}}" src="/material/images/space_default_bg.jpg" mode="aspectFill"></image>
-    </view>
-  </block>
+    <block wx:if="{{ userInfo['space_bg_image'] }}">
+      <image class="page-background" src="{{ userInfo['space_bg_image'] }}" mode="aspectFill"></image>
+    </block>
+    <block wx:else>
+      <view class="page-background page-default-background">
+        <image class="page-default-background-image" lazy-load="{{true}}" src="/material/images/space_default_bg.jpg" mode="aspectFill"></image>
+      </view>
+    </block>
   </view>
   <!-- 点击背景后的弹窗 -->
   <view class="choose-bg-popup-mask {{is_bg_popup_True?'is_bg_popup_show':'.is_bg_popup_hide'}}" bindtap="cancel_change_bg_popup">
-      <view class="choose-bg-popup-block">
-        <view class="choose-bg-popup-block-item" bindtap="change_bg_Image" hover-class="choose-bg-popup-block-item-hover">更换主页背景</view>
-        <view class="cut-off-line"></view>
-        <view class="choose-bg-popup-block-item" bindtap="cancel_change_bg_popup" hover-class="choose-bg-popup-block-item-hover">取消</view>
+    <view class="choose-bg-popup-block">
+      <view class="choose-bg-popup-block-item" bindtap="change_bg_Image" hover-class="choose-bg-popup-block-item-hover">
+        更换主页背景
       </view>
+      <view class="cut-off-line"></view>
+      <view class="choose-bg-popup-block-item" bindtap="cancel_change_bg_popup" hover-class="choose-bg-popup-block-item-hover">
+        取消
+      </view>
+    </view>
   </view>
   <!-- /点击背景后的弹窗 -->
   <!-- /背景图片 -->
@@ -45,8 +49,7 @@
       </view>
     </view>
   </view>
-</block>
-<wxs module="quickConfig">
+  <wxs module="quickConfig">
   module.exports={
     size:"50rpx",
     navigations:[
@@ -94,12 +97,23 @@
     ]
   };
 </wxs>
-<navigator class="quick-navigation" hover-class="none">
-  <block wx:for="{{ quickConfig.navigations }}"  >
-    <navigator class="quick-navigation-item" open-type="navigate" url="{{ item.url }}">
-      <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ quickConfig.size }}"></Icon>
-      <text class="quick-navigation-item-title">{{ item.title }}</text>
-      <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
-    </navigator>
-  </block>
-</navigator>
+  <navigator class="quick-navigation" hover-class="none">
+    <block wx:for="{{ quickConfig.navigations }}">
+      <navigator class="quick-navigation-item" open-type="navigate" url="{{ item.url }}">
+        <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ quickConfig.size }}"></Icon>
+        <text class="quick-navigation-item-title">{{ item.title }}</text>
+        <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
+      </navigator>
+    </block>
+  </navigator>
+</block>
+<block wx:else>
+  <NavigationBar hiddenReturnPage="{{ true }}" />
+  <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="您还未登录哦，登录后解锁更多功能">
+    <view class="page-prompt-operate">
+      <button class="button-common" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
+        登录
+      </button>
+    </view>
+  </PagePrompt>
+</block>

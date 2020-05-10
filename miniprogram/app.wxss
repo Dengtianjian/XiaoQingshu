@@ -35,3 +35,10 @@ button,.button-common {
   color:white;
   background-color:var(--main-color);
 }
+
+/* 页面提示 */
+.page-prompt {
+  display:block;
+  margin:0 auto;
+  width:70%;
+}

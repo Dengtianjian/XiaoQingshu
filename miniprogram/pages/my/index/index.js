@@ -26,7 +26,6 @@ Page({
         userInfo,
       },
       () => {
-        console.log(userInfo);
         if (userInfo["isLogin"]) {
           this.updateNavigations();
         }
