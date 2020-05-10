@@ -1,8 +1,9 @@
 /* components/loading/loading.wxss */
 .loading {
+  display:flex;
+  justify-content: center;
+  align-items: center;
   height:70rpx;
-  line-height: 24rpx;
-  text-align: center;
   font-size:28rpx;
   color:var(--font-light-color);
 }
