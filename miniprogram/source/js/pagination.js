@@ -49,15 +49,20 @@ class Pagination {
       };
     }
   }
+  setKeyData(pageKey) {
+    if (this.data[pageKey] == undefined) {
+      this.data[pageKey] = {
+        finished: false,
+        loading: false,
+        page: 0,
+        headerIndex: this.startHeaderIndex,
+      };
+    }
+  }
   insert(data, pageKey = null) {
     if (this.key) {
       if (this.data[pageKey] == undefined) {
-        this.data[pageKey] = {
-          finished: false,
-          loading: false,
-          page: 0,
-          headerIndex: this.startHeaderIndex,
-        };
+        this.setKeyData(pageKey)
 
         this.pageThis.setData({
           [`${this.dataName}.${pageKey}`]: [data],
@@ -125,37 +130,55 @@ class Pagination {
       }
     }
   }
-  updateItem(data,itemIndex,page,pageKey=null){
-    if(this.key){
-      if(Utils.getType(data)==="Object"){
-        if(Utils.getType(this.pageThis.data[`${this.dataName}`][`${pageKey}`][page][itemIndex])==="Object"){
-          data=Object.assign(this.pageThis.data[`${this.dataName}`][`${pageKey}`][page][itemIndex],data);
+  updateItem(data, itemIndex, page, pageKey = null) {
+    if (this.key) {
+      if (Utils.getType(data) === "Object") {
+        if (
+          Utils.getType(
+            this.pageThis.data[`${this.dataName}`][`${pageKey}`][page][
+              itemIndex
+            ]
+          ) === "Object"
+        ) {
+          data = Object.assign(
+            this.pageThis.data[`${this.dataName}`][`${pageKey}`][page][
+              itemIndex
+            ],
+            data
+          );
         }
       }
       this.pageThis.setData({
-        [`${this.dataName}.${pageKey}[${page}][${itemIndex}]`]:data
-      })
-    }else{
-      if(Utils.getType(data)==="Object"){
-        if(Utils.getType(this.pageThis.data[`${this.dataName}`][page][itemIndex])==="Object"){
-          data=Object.assign(this.pageThis.data[`${this.dataName}`][page][itemIndex],data);
+        [`${this.dataName}.${pageKey}[${page}][${itemIndex}]`]: data,
+      });
+    } else {
+      if (Utils.getType(data) === "Object") {
+        if (
+          Utils.getType(
+            this.pageThis.data[`${this.dataName}`][page][itemIndex]
+          ) === "Object"
+        ) {
+          data = Object.assign(
+            this.pageThis.data[`${this.dataName}`][page][itemIndex],
+            data
+          );
           console.log(data);
         }
       }
       this.pageThis.setData({
-        [`${this.dataName}[${page}][${itemIndex}]`]:data
-      })
+        [`${this.dataName}[${page}][${itemIndex}]`]: data,
+      });
     }
   }
-  removeItem(itemIndex,page,pageKey=null){
-    let path=null;
-    if(this.key){
-      path=`${this.dataName}.${pageKey}[${page}][${itemIndex}]`;
-    }else{
-      path=`${this.dataName}[${page}][${itemIndex}]`;
+  removeItem(itemIndex, page, pageKey = null) {
+    let path = null;
+    if (this.key) {
+      path = `${this.dataName}.${pageKey}[${page}][${itemIndex}]`;
+    } else {
+      path = `${this.dataName}[${page}][${itemIndex}]`;
     }
     this.pageThis.setData({
-      [path]:"deleted"
+      [path]: "deleted",
     });
   }
   remove(page, pageKey = null) {
@@ -171,7 +194,7 @@ class Pagination {
       });
     }
   }
-  removeKey(pageKey){
+  removeKey(pageKey) {
     delete this.data[pageKey];
     this.pageThis.setData({
       [`${this.dataName}.${pageKey}`]: [],
@@ -180,7 +203,7 @@ class Pagination {
   setLoading(flag = true, pageKey = null) {
     if (this.key) {
       if (this.data[pageKey] == undefined) {
-        return;
+        this.setKeyData(pageKey);
       }
       this.data[pageKey]["loading"] = flag;
     } else {
@@ -190,7 +213,7 @@ class Pagination {
   setFinished(flag = true, pageKey = null) {
     if (this.key) {
       if (this.data[pageKey] == undefined) {
-        return;
+        this.setKeyData(pageKey)
       }
       this.data[pageKey]["finished"] = flag;
     } else {
@@ -200,7 +223,7 @@ class Pagination {
   isLoading(pageKey = null) {
     if (this.key) {
       if (this.data[pageKey] == undefined) {
-        return false;
+        this.setKeyData(pageKey)
       }
       return this.data[pageKey]["loading"];
     } else {
@@ -210,7 +233,7 @@ class Pagination {
   isFinished(pageKey = null) {
     if (this.key) {
       if (this.data[pageKey] == undefined) {
-        return false;
+        this.setKeyData(pageKey)
       }
       return this.data[pageKey]["finished"];
     } else {
@@ -220,7 +243,7 @@ class Pagination {
   getPage(pageKey = null) {
     if (this.key) {
       if (this.data[pageKey] == undefined) {
-        return 0;
+        this.setKeyData(pageKey)
       }
       return this.data[pageKey]["page"];
     } else {
