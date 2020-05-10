@@ -73,6 +73,8 @@ let functions = {
         location: "",
         realname: "",
         statement: "",
+        space_bg_image:null,
+        phone_number:null
       };
       DB.collection("user_profile").add({
         data: userProfile,
