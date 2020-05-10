@@ -1,59 +1,49 @@
 <!-- miniprogram/pages/my/notification/notification.wxml -->
 <NavigationBar pageTitle="消息列表" defaultColor="black" />
-<view class="notification-box" bind:tap="showNotificationPopup">
-  <Icon class="notification-box-icon" icon="/material/icon/system_notification_round.png" size="110rpx"></Icon>
-  <view class="notification-box-main">
-    <view class="notification-box-head">
-      <text class="notification-box-title">系统消息</text>
-      <text class="notification-box-time">8个小时前</text>
-    </view>
-    <view class="notification-box-summary">您的 问答帖子 已经审核通过了，感谢您为设区做出的贡献，社区奖励宁 2 颗糖</view>
-  </view>
-</view>
-<view class="notification-box">
-  <Icon class="notification-box-icon" icon="/material/icon/like_round.png" size="110rpx"></Icon>
-  <view class="notification-box-main">
-    <view class="notification-box-head">
-      <text class="notification-box-title">点赞 & 认同</text>
-      <text class="notification-box-time"></text>
-    </view>
-    <view class="notification-box-summary">暂时没人给宁点赞或认同，多点评论💬</view>
-  </view>
-</view>
-<view class="notification-box">
-  <Icon class="notification-box-icon" icon="/material/icon/comment_reply_round.png" size="110rpx"></Icon>
-  <view class="notification-box-main">
-    <view class="notification-box-head">
-      <text class="notification-box-title">评论 & 回复</text>
-      <text class="notification-box-time">5天前</text>
-    </view>
-    <view class="notification-box-summary">巴啦啦小魔仙 回复了 您的帖子 我的英语不是盖的</view>
-  </view>
-</view>
-<view class="notification-box">
-  <Icon class="notification-box-icon" icon="/material/icon/attention_round.png" size="110rpx"></Icon>
-  <view class="notification-box-main">
-    <view class="notification-box-head">
-      <text class="notification-box-title">关注</text>
-      <text class="notification-box-time"></text>
-    </view>
-    <view class="notification-box-summary">暂时没别的人关注宁，多点🚶逛社区</view>
-  </view>
-</view>
-<Popup hidden="{{ isHiddenNotificationListPopup }}" position="bottom" customStyle="height:90%;">
-  <scroll-view scroll-y class="notification-list">
-    <block wx:for="{{ 10 }}">
-      <view class="notification-item">
-        <Icon class="notification-item-icon" icon="/material/icon/system_notification_round.png" size="60rpx"></Icon>
-        <view class="notification-item-wrap">
-          <view class="notification-item-content">您的 问答帖子 已经通过了审核，非常感谢您遵守社区规范👍</view>
-          <view class="notification-item-date">8小时前</view>
-        </view>
+<block wx:for="{{ types }}" wx:key="_id">
+  <view class="notification-box" bind:tap="showNotificationPopup" data-category="{{ item['identifier'] }}">
+    <Icon class="notification-box-icon" icon="{{ item.icon }}" size="110rpx"></Icon>
+    <view class="notification-box-main">
+      <view class="notification-box-head">
+        <text class="notification-box-title">{{ item.name }}</text>
+        <text class="notification-box-time">{{ item['latest']?item['latest']['date']:'' }}</text>
       </view>
-    </block>
-  </scroll-view>
-  <view class="notification-operate">
-      <button class="notification-operate-item" type="default"  bindtap="cleanNotification">清除</button>
-      <button class="notification-operate-item" type="primary" bindtap="hiddenNotificationListPopup">关闭</button>
+      <view class="notification-box-summary">
+        {{ item['latest']?item['latest']['content']:item.summary }}
+      </view>
     </view>
+  </view>
+</block>
+<Popup hidden="{{ isHiddenNotificationListPopup }}" position="bottom" customStyle="height:90%;" bind:hiddenPopup="hiddenNotificationListPopup">
+  <block wx:if="{{ notification[showNotificationCategory] }}">
+    <scroll-view scroll-y class="notification-list" lower-threshold="300" bindscrolltolower="getNotification">
+      <block wx:for="{{ notification[showNotificationCategory] }}" wx:for-item="notificationArray" wx:for-index="notificationArrayIndex" wx:key="notificationArrayIndex">
+        <block wx:for="{{ notificationArray }}" wx:key="index">
+          <view class="notification-item">
+            <Icon class="notification-item-icon" icon="/material/icon/system_notification_round.png" size="60rpx"></Icon>
+            <view class="notification-item-wrap">
+              <view class="notification-item-content">{{ item.content }}</view>
+              <view class="notification-item-date">{{ item.date }}</view>
+            </view>
+          </view>
+        </block>
+      </block>
+      <Loading loading="{{ notificationLoading }}" finished="{{ notificationFinished }}" />
+    </scroll-view>
+    <view class="notification-operate">
+      <!-- <button class="notification-operate-item" type="default" bindtap="cleanNotification">
+        清除
+      </button> -->
+      <button class="notification-operate-item" type="primary" bindtap="hiddenNotificationListPopup">
+        关闭
+      </button>
+    </view>
+  </block>
+  <block wx:else>
+    <PagePrompt class="not-notification-prompt" icon="/material/images/not_notify.png" description="还没有新的通知哦">
+      <view class="page-prompt-operate" bindtap="hiddenNotificationListPopup">
+        <button class="button-common">关闭</button>
+      </view>
+    </PagePrompt>
+  </block>
 </Popup>
