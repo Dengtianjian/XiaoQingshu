@@ -92,3 +92,50 @@ page {
 .quick-navigation-item .quick-navigation-item-right-arrow {
   color: var(--font-light-color);
 }
+
+/* 选择主页背景 */
+.is_bg_popup_show{
+  display: block;
+}
+.is_bg_popup_hide{
+  display: none;
+}
+.choose-bg-popup-mask{
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color:rgba(0, 0, 0, 0.568);
+  z-index: 200;
+}
+.choose-bg-popup-block{
+  display:flex;
+  width: 100%;
+  height: 200rpx;
+  flex-direction: column;
+  background-color: rgb(255, 255, 255);
+  border-top-left-radius:20rpx;
+  border-top-right-radius:20rpx;
+  z-index: 800;
+  position:fixed;
+  bottom:0
+}
+.choose-bg-popup-block .choose-bg-popup-block-item{
+  width: 100%;
+  height: 90rpx;
+  line-height: 90rpx;
+  text-align: center;
+  font-size: 28rpx;
+}
+.choose-bg-popup-block .cut-off-line{
+  width: 100%;
+  height: 20rpx;
+  border: 1px solid var(--light-color);
+  background-color:var(--light-color);
+}
+.choose-bg-popup-block  .choose-bg-popup-block-item-hover{
+  background-color:var(--light-color);
+}

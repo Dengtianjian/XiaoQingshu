@@ -74,7 +74,7 @@ let functions = {
         realname: "",
         statement: "",
         space_bg_image:null,
-        phone_number:null
+        phone_number:null,
       };
       DB.collection("user_profile").add({
         data: userProfile,
@@ -256,6 +256,25 @@ let functions = {
       });
     }
   },
+
+  /* update主页背景进数据库 */
+  async updateUserBg(event){
+    const wxContext = cloud.getWXContext();
+    console.log(wxContext.OPENID);
+    let userProfile = await DB.collection("user_profile")
+    .where({
+      _userid:wxContext.OPENID,
+    }).update({
+      data: {
+        space_bg_image:event.fileId,
+      }
+    });
+    console.log(event);
+
+    return Response.result(userProfile);
+  },
+
+
 };
 
 // 云函数入口函数
@@ -270,6 +289,7 @@ exports.main = async (event, context) => {
     "quitSchool",
     "submitFeedback",
     "getUser",
+    "updateUserBg",
   ];
   let method = event.method;
   if (!methods.includes(method)) {

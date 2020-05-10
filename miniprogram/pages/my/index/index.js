@@ -1,4 +1,5 @@
 // pages/my/index/index.js
+import Cloud from "../../../source/js/cloud";
 const App = getApp();
 Page({
   /**
@@ -8,9 +9,11 @@ Page({
     pageScrollTop: 0,
     userInfo: {
       isLogin: false,
+      space_bg_image:null,
     },
     navigationIconSize: "50rpx",
     navigations: null,
+    is_bg_popup_True: false,
   },
 
   /**
@@ -111,4 +114,48 @@ Page({
       ],
     });
   },
+
+  // 更换主页背景
+  change_bg_Image(){
+		//系统API，让用户在相册中选择图片（或者拍照）
+		wx.chooseImage({
+      count: 1,
+			success : (res) => {
+        // 上传图片
+        let filePaths = res.tempFilePaths;
+        if (filePaths.length > 0) {
+          wx.showLoading({
+            title: "上传中",
+          });
+          Cloud.uploadFile(filePaths, "userBg/").then((res) => {
+            this.setData({
+              ['userInfo.space_bg_image']: res[0],
+            });
+            wx.hideLoading();
+            wx.cloud.callFunction({
+              // 要调用的云函数名称
+              name: 'User',
+              // 传递给云函数的参数
+              data: {
+                method:"updateUserBg",
+                fileId:res[0],
+              },
+            });
+          })
+        }
+      }
+    })
+},
+
+  choose_change_bg_popup: function () {
+    this.setData({
+        is_bg_popup_True: true,
+    })
+  },
+
+  cancel_change_bg_popup: function () {
+    this.setData({
+      is_bg_popup_True: false,
+    })
+},
 });
