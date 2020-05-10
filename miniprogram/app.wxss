@@ -26,12 +26,12 @@ form {
 
 /* 按钮样式重写 */
 button,.button-common {
-  padding:10rpx 16rpx;
+  padding:10rpx 16rpx!important;
   margin-left:unset!important;
   margin-right:unset!important;
   width:auto!important;
   font-weight:400!important;
-  font-size:28rpx;
+  font-size:28rpx!important;
   color:white;
   background-color:var(--main-color);
 }
