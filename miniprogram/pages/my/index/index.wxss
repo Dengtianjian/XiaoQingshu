@@ -23,6 +23,7 @@ page {
   width: 180rpx;
   height: 180rpx;
   border-radius: 50%;
+  border:6rpx solid rgba(255,255,255,0.4);
 }
 .nickname {
   margin-top: 20rpx;
@@ -94,12 +95,6 @@ page {
 }
 
 /* 选择主页背景 */
-.is_bg_popup_show{
-  display: block;
-}
-.is_bg_popup_hide{
-  display: none;
-}
 .choose-bg-popup-mask{
   height: 100%;
   width: 100%;
@@ -136,6 +131,6 @@ page {
   border: 1px solid var(--light-color);
   background-color:var(--light-color);
 }
-.choose-bg-popup-block  .choose-bg-popup-block-item-hover{
+.choose-bg-popup-block .choose-bg-popup-block-item-hover{
   background-color:var(--light-color);
 }
