@@ -86,7 +86,6 @@ Page({
     }).then((notifications) => {
       if (notifications.length < this.notificationPagincation.limit) {
         this.notificationPagincation.setFinished(true, currentShowCategory);
-        console.log(this.notificationPagincation);
         this.setData({
           notificationFinished: true,
         });
