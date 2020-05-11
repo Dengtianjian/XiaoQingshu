@@ -1,0 +1,5 @@
+<template name="likeFavorite">
+  <navigator class="like-favroite-post-title" hover-class="none" url="/pages/post/view/view?postid={{ post_id }}">
+    {{ post_title }}
+  </navigator>
+</template>

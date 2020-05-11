@@ -1,7 +1,9 @@
 <!-- miniprogram/pages/my/notification/notification.wxml -->
+<import src="./template/common.wxml" />
+<import src="./template/user.wxml" />
 <NavigationBar pageTitle="消息列表" defaultColor="black" />
 <block wx:for="{{ types }}" wx:key="_id">
-  <view class="notification-box" bind:tap="showNotificationPopup" data-category="{{ item['identifier'] }}">
+  <view class="notification-box" bind:tap="showNotificationPopup" data-category="{{ item['identifier'] }}" data-templateName="{{ item['templateName'] }}">
     <Icon class="notification-box-icon" icon="{{ item.icon }}" size="110rpx"></Icon>
     <view class="notification-box-main">
       <view class="notification-box-head">
@@ -19,13 +21,7 @@
     <scroll-view scroll-y class="notification-list" lower-threshold="300" bindscrolltolower="getNotification">
       <block wx:for="{{ notification[showNotificationCategory] }}" wx:for-item="notificationArray" wx:for-index="notificationArrayIndex" wx:key="notificationArrayIndex">
         <block wx:for="{{ notificationArray }}" wx:key="index">
-          <view class="notification-item">
-            <Icon class="notification-item-icon" icon="/material/icon/system_notification_round.png" size="60rpx"></Icon>
-            <view class="notification-item-wrap">
-              <view class="notification-item-content">{{ item.content }}</view>
-              <view class="notification-item-date">{{ item.date }}</view>
-            </view>
-          </view>
+          <template is="{{ templateName }}" data="{{ ...item }}"></template>
         </block>
       </block>
       <Loading loading="{{ notificationLoading }}" finished="{{ notificationFinished }}" />
@@ -47,3 +43,4 @@
     </PagePrompt>
   </block>
 </Popup>
+<button bind:tap="sendNotification">Send</button>

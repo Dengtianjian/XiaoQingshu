@@ -1,0 +1,25 @@
+.notification-common-item {
+  display: flex;
+  margin-bottom: 40rpx;
+}
+.notification-common-item .notification-item-wrap {
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20rpx;
+  margin-left: 20rpx;
+  width:100%;
+  min-height:170rpx;
+  border-radius: var(--border-radius);
+  background: var(--light-color);
+}
+.notification-common-item .notification-item-content {
+  font-size: 28rpx;
+  color: var(--font-color);
+}
+.notification-common-item .notification-item-date {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: var(--font-light-color);
+  text-align: right;
+}

@@ -2,6 +2,7 @@
 const cloud = require("wx-server-sdk");
 const Response = require("./response");
 const Utils = require("./Utils");
+const Types = require("./Types");
 
 cloud.init();
 
@@ -12,9 +13,33 @@ const NotificationType = DB.collection("notification_type");
 const NotificationCategory = DB.collection("notification_category");
 
 const MODULES = {
-  send(event) {
-    let content = event.content || "";
+  async send(event) {
     let type = event.type;
+    let category = event.category;
+    let receiver = event.receiver || null;
+    let sender = event.sender || null;
+    let typeTemplate=event.typeTemplate||null;
+    delete event.type;
+    let typeParameter = await Types.getParam(type, event);
+    if (typeParameter == null) {
+      return Response.error(400, 400001, "发送失败，信息类型不存在");
+    }
+
+    let addResult = await Notification.add({
+      data: {
+        _category: category,
+        _receiver: receiver,
+        _sender: sender,
+        date: Date.now(),
+        _type: type,
+        parameter: typeParameter["parameter"],
+        content: typeParameter["content"],
+        _type_template:typeTemplate
+      },
+    });
+    return Response.result({
+      notifyId: addResult["_id"],
+    });
   },
   async getAllCategory(event) {
     const wxContext = cloud.getWXContext();
@@ -23,7 +48,7 @@ const MODULES = {
     for (let i = 0; i < types.length; i++) {
       types[i]["latest"] = await MODULES["getNotification"]({
         category: types[i]["identifier"],
-        _receiver: [0, wxContext.OPENID],
+        _receiver: [0, null, wxContext.OPENID],
         page: 0,
         limit: 1,
       }).then((res) => {
@@ -88,17 +113,6 @@ const MODULES = {
 
     return Response.result(data);
   },
-  async readNotification({ id }) {
-    if (Utils.getType(id) == "String") {
-      id = [id];
-    }
-
-    await Notification.where({
-      _id: _.in(id),
-    }).update({
-      read: true,
-    });
-  },
 };
 
 // 云函数入口函数
@@ -109,6 +123,7 @@ exports.main = async (event, context) => {
     "getAllCategory",
     "getNotificationByCategory",
     "getNotification",
+    "send",
   ];
 
   let moduleName = event.module;

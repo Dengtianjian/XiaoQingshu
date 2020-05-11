@@ -1,0 +1,21 @@
+<import src="./type/commentPost.wxml" />
+<import src="./type/replyComment.wxml" />
+<import src="./type/replyReply.wxml" />
+<import src="./type/likeFavorite.wxml" />
+<template name="user">
+  <view class="notification-user-item">
+    <navigator class="notification-user-head" hover-class="none" url="/pages/my/space/space?userid={{ _sender }}">
+      <Icon class="notification-user-avatar" icon="{{ parameter['user_avatar'] }}" size="78rpx"></Icon>
+      <view class="notification-user-info">
+        <view class="notification-user-nickname">{{ parameter['user_nickname'] }}</view>
+        <view class="notification-user-bottom">
+          <text class="notification-user-bottom-item">{{ parameter['prompt'] }}</text>
+          <text class="notification-user-bottom-item">{{ date }}</text>
+        </view>
+      </view>
+    </navigator>
+    <block wx:if="{{ _type_template!=null }}">
+      <template is="{{ _type_template }}" data="{{ ...{ ...parameter,date,content } }}"></template>
+    </block>
+  </view>
+</template>

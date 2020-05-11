@@ -1,0 +1,63 @@
+.notification-user-item {
+  margin-bottom: 40rpx;
+}
+.notification-user-head {
+  display: grid;
+  grid-template-columns: 100rpx auto;
+}
+.notification-user-avatar {
+  height: 78rpx;
+  width: 78rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.notification-user-nickname {
+  font-size: 28rpx;
+  color: var(--font-color);
+}
+.notification-user-bottom {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: var(--font-light-color);
+}
+.notification-user-bottom-item {
+  margin-right: 10rpx;
+}
+
+/* 评论帖子 */
+.comment-post {
+  margin: 16rpx 0 0 100rpx;
+}
+.comment-title {
+  padding-left: 10rpx;
+  border-left: 4rpx solid var(--light-color);
+  color: var(--font-color2);
+  font-size: 24rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.comment-content {
+  display: -webkit-box;
+  margin-top: 8rpx;
+  max-height: 190rpx;
+  font-size: 28rpx;
+  color: var(--font-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+/* 点赞和收藏 */
+.like-favroite-post-title {
+  margin-top:20rpx;
+  padding-left: 10rpx;
+  border-left: 4rpx solid var(--light-color);
+  color: var(--font-color2);
+  font-size: 24rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

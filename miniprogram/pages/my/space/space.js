@@ -22,7 +22,6 @@ Page({
    */
   async onLoad (options) {
     let _userid = options.userid;
-    _userid="oKXC25L4s6Y8r97Jf54o37c6Xoc4";
     if(_userid==undefined){
       Prompt.toast("抱歉，该用户不存在",{
         switchTab:"/pages/my/index/index"
@@ -112,13 +111,6 @@ Page({
   onPageScroll(e) {
     this.setData({
       pageScrollTop: e.scrollTop,
-    });
-  },
-  getUser() {
-    Cloud.cfunction("User", "getUserProfile", {
-      _userid:"oKXC25L4s6Y8r97Jf54o37c6Xoc4",
-    }).then((res) => {
-      console.log(res);
     });
   },
   getUserPost(){

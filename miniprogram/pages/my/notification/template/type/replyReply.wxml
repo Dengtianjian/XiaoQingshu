@@ -1,0 +1,6 @@
+<template name="replyReply">
+  <view class="comment-post">
+    <navigator class="comment-title" hover-class="none" url="/pages/post/view/view?postid={{ post_id }}">{{ reply_replycontent }}</navigator>
+    <view class="comment-content">{{ reply_content }}</view>
+  </view>
+</template>

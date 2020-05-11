@@ -1,0 +1,9 @@
+<template name="common">
+  <view class="notification-common-item">
+    <Icon class="notification-item-icon" icon="/material/icon/system_notification_round.png" size="60rpx"></Icon>
+    <view class="notification-item-wrap">
+      <view class="notification-item-content">{{ content }}</view>
+      <view class="notification-item-date">{{ date }}</view>
+    </view>
+  </view>
+</template>

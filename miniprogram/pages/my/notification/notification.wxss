@@ -1,4 +1,6 @@
 /* miniprogram/pages/my/notification/notification.wxss */
+@import "./wxss/common.wxss";
+@import "./wxss/user.wxss";
 page {
   height: 100%;
 }
@@ -40,35 +42,11 @@ page {
 }
 .notification-list {
   position: relative;
-  padding:var(--container-padding);
+  padding: var(--container-padding);
   height: calc(100% - 40rpx);
   box-sizing: border-box;
 }
-.notification-list .notification-item {
-  display: flex;
-  margin-bottom: 40rpx;
-}
-.notification-list .notification-item-wrap {
-  display:flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20rpx;
-  margin-left: 20rpx;
-  width:100%;
-  min-height:170rpx;
-  border-radius: var(--border-radius);
-  background: var(--light-color);
-}
-.notification-list .notification-item-content {
-  font-size: 28rpx;
-  color: var(--font-color);
-}
-.notification-list .notification-item-date {
-  margin-top: 16rpx;
-  font-size: 24rpx;
-  color: var(--font-light-color);
-  text-align: right;
-}
+
 .notification-operate {
   display: flex;
   justify-content: space-between;
@@ -82,20 +60,20 @@ page {
   background: #ffffff;
 }
 .notification-operate .notification-operate-item {
-  flex-grow:1;
+  flex-grow: 1;
 }
-.notification-operate .notification-operate-item:nth-child(2){
-  margin-left:50rpx!important;
-  flex-grow:2;
+.notification-operate .notification-operate-item:nth-child(2) {
+  margin-left: 50rpx !important;
+  flex-grow: 2;
 }
 
 .not-notification-prompt {
-  position:absolute;
-  top:0;
-  right:0;
-  left:0;
-  bottom:0;
-  margin:auto;
-  width:70%;
-  height:556rpx;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  width: 70%;
+  height: 556rpx;
 }
