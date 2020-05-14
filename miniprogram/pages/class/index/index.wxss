@@ -4,13 +4,21 @@ page {
 }
 /* 学校信息 */
 .class-info {
+  padding: var(--container-padding);
+}
+.class-info-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--container-padding);
 }
 .class-info-left {
   flex-grow: 7;
+  display:flex;
+  align-items:center;
+}
+.class-quit {
+  margin-left:8rpx;
+  color:rgba(255,255,255,0.6);
 }
 .class-info-right {
   flex-grow: 3;
@@ -21,6 +29,9 @@ page {
 .class-info .class-name {
   color: #ffffff;
   font-size: 36rpx;
+}
+.class-info .class-quit {
+
 }
 .class-info .class-statistics {
   display: block;

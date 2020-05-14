@@ -680,6 +680,24 @@ let functions = {
       message: "加入成功",
     };
   },
+  /* 退出班级 */
+  async quitClass(event){
+    const wxContext=cloud.getWXContext();
+    let classId=event.classId;
+    await Class.where({
+      _id:classId
+    }).update({
+      data:{
+        students:_.inc(-1)
+      }
+    });
+    await DB.collection("user_joined_class").where({
+      _classid:classId,
+      _userid:wxContext.OPENID
+    }).remove();
+
+    return Response.result(true);
+  }
 };
 
 // 云函数入口函数
@@ -697,6 +715,7 @@ exports.main = async (event, context) => {
     "deleteAlbumContent",
     "inviteAgreeJoinClass",
     "getClassByClassId",
+    "quitClass"
   ];
   let method = event.method;
   if (!methods.includes(method)) {

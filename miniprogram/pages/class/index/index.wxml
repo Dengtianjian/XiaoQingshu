@@ -5,38 +5,43 @@
       <view class="grade">{{ classInfo['grade'] }}级</view>
     </NavigationBar>
     <view class="class-info">
-      <navigator class="class-info-left" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info?classid={{ classInfo['_id'] }}">
-        <view class="class-name">{{ classInfo['profession'] }}{{ classInfo['number']||'' }}班</view>
-        <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
-      </navigator>
-      <view class="class-info-right">
-        <block wx:if="{{ newClassmate.has }}">
-          <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
-          <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:88%;">
-            <view class="new-classmate-list">
-              <block wx:for="{{ newClassmate.list }}" wx:key="index">
-                <view class="new-classmate-item" wx:if="{{ item!='deleted' }}">
-                  <view class="new-classmate-item-info">
-                    <image class="new-classmate-item-avatar" src="{{ item['avatar_url'] }}"></image>
-                    <text class="new-classmate-item-nickname">{{ item['nickname'] }}</text>
+      <view class="class-info-head">
+        <navigator class="class-info-left" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info?classid={{ classInfo['_id'] }}">
+          <view class="class-name">
+            {{ classInfo['profession'] }}{{ classInfo['number']||'' }}班
+          </view>
+          <text class="class-quit qcicon qcicon-tuichu" catch:tap="quitClass"></text>
+        </navigator>
+        <view class="class-info-right">
+          <block wx:if="{{ newClassmate.has }}">
+            <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
+            <Popup hidden="{{ newClassmate.hiddenPopup }}" position="bottom" customStyle="height:88%;">
+              <view class="new-classmate-list">
+                <block wx:for="{{ newClassmate.list }}" wx:key="index">
+                  <view class="new-classmate-item" wx:if="{{ item!='deleted' }}">
+                    <view class="new-classmate-item-info">
+                      <image class="new-classmate-item-avatar" src="{{ item['avatar_url'] }}"></image>
+                      <text class="new-classmate-item-nickname">{{ item['nickname'] }}</text>
+                    </view>
+                    <view class="new-classmate-item-operate">
+                      <button class="new-classmate-item-operate-item" type="default" size="mini" bind:tap="rejectNewClassmateJoin" data-index="{{ index }}">
+                        拒绝
+                      </button>
+                      <button class="new-classmate-item-operate-item" type="primary" size="mini" bind:tap="agreeNewClassmateJoin" data-index="{{ index }}">
+                        同意
+                      </button>
+                    </view>
                   </view>
-                  <view class="new-classmate-item-operate">
-                    <button class="new-classmate-item-operate-item" type="default" size="mini" bind:tap="rejectNewClassmateJoin" data-index="{{ index }}">
-                      拒绝
-                    </button>
-                    <button class="new-classmate-item-operate-item" type="primary" size="mini" bind:tap="agreeNewClassmateJoin" data-index="{{ index }}">
-                      同意
-                    </button>
-                  </view>
-                </view>
-              </block>
-            </view>
-          </Popup>
-        </block>
-        <button class="invite-classmate-button" open-type="share">
-          <view class="invite-classmate qcicon qcicon-share"></view>
-        </button>
+                </block>
+              </view>
+            </Popup>
+          </block>
+          <button class="invite-classmate-button" open-type="share">
+            <view class="invite-classmate qcicon qcicon-share"></view>
+          </button>
+        </view>
       </view>
+      <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
     </view>
     <view class="head-background"></view>
     <view class="radius-container">
@@ -71,7 +76,7 @@
               {{ classmateInfo['info']['realname']||classmateInfo['info']['nickname'] }}
             </view>
             <view class="classmate-info-list">
-              <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['phone_number']!='' }}">
+              <view class="classmate-info-item" wx:if="{{ classmateInfo['info']['phone_number'] }}">
                 <view class="classmate-info-item-title">手机号码</view>
                 <view class="classmate-info-item-content">
                   {{ classmateInfo['info']['phone_number'] }}

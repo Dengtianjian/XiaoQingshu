@@ -126,14 +126,14 @@ Page({
   },
   onShow() {
     this.setData({
-      [`joinClass.searchResult`]:null
+      [`joinClass.searchResult`]: null,
     });
     if (this.data.userIsLogin == false && App.userInfo["isLogin"]) {
       this.setData({
         userIsLogin: true,
       });
     }
-    if (this.data.classInfo == null!=App.userInfo.class!=null) {
+    if (((this.data.classInfo == null) != App.userInfo.class) != null) {
       if (App.userInfo.class) {
         this.setData({
           classInfo: App.userInfo.class,
@@ -301,7 +301,7 @@ Page({
     });
     await Cloud.cfunction("Class", "getClassByNumberId", {
       _numberid: classNumberId,
-      _schoolid:App.userInfo['_default_school']
+      _schoolid: App.userInfo["_default_school"],
     })
       .then((res) => {
         wx.hideLoading();
@@ -439,6 +439,32 @@ Page({
           });
           that.getClassInfo();
         },
+      },
+    });
+  },
+  quitClass() {
+    if(this.data.classInfo._adminid==App.userInfo._userid){
+      Prompt.toast("抱歉，暂不支持班级管理员退出班级",{
+        duration:2500
+      });
+      return;
+    }
+    wx.showModal({
+      title: "Are you 确定?",
+      content: "退出班级😢",
+      cancelText: "按错了",
+      success:(result)=>{
+        if (result.confirm) {
+          Cloud.cfunction("Class", "quitClass", {
+            classId: this.data.classInfo._id,
+          }).then((res) => {
+            Prompt.toast("退出成功，同学们会想念你的");
+            App.userInfo["class"] = null;
+            this.setData({
+              classInfo: null,
+            });
+          });
+        }
       },
     });
   },
