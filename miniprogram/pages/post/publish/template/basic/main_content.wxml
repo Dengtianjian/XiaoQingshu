@@ -1,3 +1,3 @@
 <template name="main_content">
-  <textarea class="publish-post-form-item publish-post-content" name="content" placeholder="{{ placeholder||'请在这里输入正文' }}" value="{{ content }}"></textarea>
+  <textarea class="publish-post-form-item publish-post-content" name="content" placeholder="{{ placeholder||'请在这里输入正文' }}" value="{{ content }}" maxlength="-1"></textarea>
 </template>
