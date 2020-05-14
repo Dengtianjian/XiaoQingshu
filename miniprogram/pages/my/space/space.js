@@ -22,23 +22,37 @@ Page({
    */
   async onLoad (options) {
     let _userid = options.userid;
-    if(_userid==undefined){
-      Prompt.toast("抱歉，该用户不存在",{
-        switchTab:"/pages/my/index/index"
-      });
-      return;
-    }
     this.PostPagination=new Pagination(this,"posts");
 
     wx.showLoading({
       title:"加载中",
       mask:true
     });
+    if(_userid==undefined){
+      if(App.userInfo.isLogin){
+        let userInfo=App.userInfo;
+        if (userInfo["birthday"]) {
+          userInfo["age"] = Utils.computedAge(userInfo["birthday"]);
+        }
+        this.setData({
+          userInfo,
+          currentUser:userInfo
+        },()=>{
+          wx.hideLoading();
+        });
+        this.getUserPost();
+        return;
+      }else{
+        Prompt.toast("用户不存在",{
+          switchTab:"/pages/my/index/index"
+        });
+        return;
+      }
+    }
     await Cloud.cfunction("User", "getUserProfile", {
       _userid,
     })
       .then((res) => {
-        console.log(res);
         if (res["birthday"]) {
           res["age"] = Utils.computedAge(res["birthday"]);
           // if(res['gender']){
