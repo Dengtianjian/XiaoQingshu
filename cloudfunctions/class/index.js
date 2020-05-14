@@ -1,5 +1,5 @@
-const { joinClass } =require("./functions");
-const Response=require("./response");
+const { joinClass } = require("./functions");
+const Response = require("./response");
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 
@@ -7,6 +7,7 @@ cloud.init();
 
 const DB = cloud.database();
 const _ = DB.command;
+const Class = DB.collection("school_class");
 
 let functions = {
   async getClassByClassId(event) {
@@ -110,6 +111,19 @@ let functions = {
       };
     }
 
+    let classInfo = await Class.where({
+      _id: _classid,
+    })
+      .get()
+      .then((res) => res["data"]);
+      if(classInfo.length==0){
+        return Response.error(404,404001,"班级不存在");
+      }
+      classInfo=classInfo[0];
+      if(classInfo['allow_join']===false){
+        return Response.error(403,403001,"本班级仅允许邀请加入的呢，不开放申请加入，请联系班级管理员");
+      }
+
     let applyResult = await DB.collection("school_class_apply")
       .add({
         data: {
@@ -153,7 +167,7 @@ let functions = {
 
     let userInfo = await DB.collection("user")
       .where({
-        _openid: wxContext.OPENID,
+        _id: wxContext.OPENID,
       })
       .field({
         allow_create_class: true,
@@ -212,7 +226,7 @@ let functions = {
             _classid: addResult["_id"],
             _userid: wxContext.OPENID,
             _schoolid,
-            join_time:Date.now()
+            join_time: Date.now(),
           },
         });
         await DB.collection("school")
@@ -479,7 +493,7 @@ let functions = {
       .then((res) => {
         return res["data"];
       });
-      console.log(students);
+    console.log(students);
     if (students.length == 0) {
       return [];
     }
@@ -603,7 +617,7 @@ let functions = {
       .then((res) => {
         return res["data"];
       });
-    if (classInfo.length== 0) {
+    if (classInfo.length == 0) {
       return {
         error: 404,
         code: 404001,
@@ -612,7 +626,11 @@ let functions = {
     }
     classInfo = classInfo[0];
 
-    let joinClassResult = await joinClass(wxContext.OPENID, _schoolid, _classid);
+    let joinClassResult = await joinClass(
+      wxContext.OPENID,
+      _schoolid,
+      _classid
+    );
 
     if (joinClassResult.error) {
       return joinClassResult;
@@ -635,7 +653,7 @@ let functions = {
             _schoolid: classInfo["_schoolid"],
             join_time: Date.now(),
             admission_time: Date.now(),
-            _userid:wxContext.OPENID,
+            _userid: wxContext.OPENID,
           },
         })
         .then((res) => {
@@ -652,7 +670,7 @@ let functions = {
     }
 
     return {
-      message:"加入成功"
+      message: "加入成功",
     };
   },
 };

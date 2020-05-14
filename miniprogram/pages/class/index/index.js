@@ -331,6 +331,18 @@ Page({
       })
       .catch((res) => {
         Prompt.codeToast(res.error, res.code, {
+          403:{
+            403001:{
+              title:`🙅‍本班级仅允许邀请加入暂不开放申请加入。请📩联系班级管理员`,
+              duration:4000,
+              success:()=>{
+                this.hiddenJoinClassDialog();
+              }
+            }
+          },
+          404:{
+            404001:"(⊙o⊙)？班级不存在哦，请检查班级ID是否正确"
+          },
           409: {
             409001: "已经提交过申请，请勿重复提交",
             409002: "已是该班级的同学了，请勿重复加入",

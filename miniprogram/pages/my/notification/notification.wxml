@@ -43,4 +43,4 @@
     </PagePrompt>
   </block>
 </Popup>
-<button bind:tap="sendNotification">Send</button>
+<button bind:tap="sendNotification">Send test</button>
