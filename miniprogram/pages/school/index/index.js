@@ -1,6 +1,7 @@
 // pages/school.js
 import Cloud from "../../../source/js/cloud";
 import Prompt from "../../../source/js/prompt";
+import Utils from "../../../source/js/utils";
 const App = getApp();
 Page({
   /**
@@ -13,7 +14,7 @@ Page({
     currentSchool: null,
     schoolInfo: null,
     hideSwitchSchoolPopup: true,
-    joinedSchool: [],
+    joinedSchool: null,
     sorts: null,
     updateSwiperHeight: false,
     postTabs: {
@@ -73,7 +74,7 @@ Page({
       });
     }
   },
-  onReachBottom(){
+  onReachBottom() {
     this.getPost();
   },
   getUserInfo(e) {
@@ -86,17 +87,19 @@ Page({
     });
     App.getUserInfo(userInfo).then((userInfo) => {
       wx.hideLoading();
-      this.setData({
-        userIsLogin: userInfo.isLogin,
-        schoolInfo: userInfo["school"],
-        currentSchool: userInfo["school"] ? userInfo["school"]["_id"] : null,
-        pageLoadingCompleted: true,
-      },()=>{
-        if(userInfo['school']){
-          this.getPost();
+      this.setData(
+        {
+          userIsLogin: userInfo.isLogin,
+          schoolInfo: userInfo["school"],
+          currentSchool: userInfo["school"] ? userInfo["school"]["_id"] : null,
+          pageLoadingCompleted: true,
+        },
+        () => {
+          if (userInfo["school"]) {
+            this.getPost();
+          }
         }
-      });
-
+      );
     });
   },
   async getSchool() {
@@ -109,11 +112,13 @@ Page({
         if (res["data"].length == 0) {
           return;
         }
-        App.userInfo.school = res["data"][0];
-        this.setData({
-          schoolInfo: res["data"][0],
-          "userInfo._default_school": res["data"][0]["_id"],
-        });
+        let schoolInfo = res["data"][0];
+        App.userInfo.school = schoolInfo;
+        let setData = {
+          schoolInfo: schoolInfo,
+          "userInfo._default_school": schoolInfo["_id"],
+        };
+        this.setData(setData);
       });
   },
   async getClass() {
@@ -129,10 +134,17 @@ Page({
       });
   },
   async showSwitchSchoolPopup() {
+    if (this.data.joinedSchool != null) {
+      this.setData({
+        hideSwitchSchoolPopup: false,
+      });
+      return;
+    }
     wx.showLoading({
       title: "获取已加入学校列表",
     });
     await Cloud.cfunction("User", "getJoinedSchool").then((res) => {
+      res = Utils.arrayToObject(res, "_id");
       this.setData({
         joinedSchool: res,
         hideSwitchSchoolPopup: false,
@@ -148,6 +160,25 @@ Page({
   },
   async confirmSwitchSchool() {
     if (this.data.currentSchool == this.data.schoolInfo["_id"]) {
+      let setData = { hideSwitchSchoolPopup: true };
+      if (Utils.getType(this.data.joinedSchool) == "Object") {
+        if (
+          !this.data.joinedSchool.hasOwnProperty(this.data.schoolInfo["_id"]) ||
+          this.data.joinedSchool[this.data.schoolInfo["_id"]] == "deleted"
+        ) {
+          setData = Object.assign(
+            {
+              [`joinedSchool.${this.data.schoolInfo["_id"]}`]: {
+                _id: this.data.schoolInfo["_id"],
+                logo: this.data.schoolInfo["logo"],
+                name: this.data.schoolInfo["name"],
+              },
+            },
+            setData
+          );
+        }
+      }
+      this.setData(setData);
       return;
     }
     wx.showLoading({
@@ -159,10 +190,24 @@ Page({
     App.userInfo._default_school = this.data.currentSchool;
     await this.getSchool();
     this.getClass();
+    let postSortName = Object.keys(this.data.postTabs);
+    let posts = {};
+    let postLoad = {};
+    postSortName.forEach((item) => {
+      posts[item] = [];
+      postLoad[item] = {
+        count: 0,
+        page: 0,
+        finished: false,
+      };
+    });
     this.setData({
       hideSwitchSchoolPopup: true,
+      posts,
+      currentShowPostSort: "all",
     });
-
+    this.postLoad = postLoad;
+    this.getPost();
     wx.hideLoading();
   },
   cancelSwitchSchool() {
@@ -183,8 +228,7 @@ Page({
               currentSchool: _schoolid,
             },
             () => {
-              that.getSchool();
-              that.getClass();
+              that.confirmSwitchSchool();
             }
           );
         },
@@ -199,7 +243,7 @@ Page({
   quitSchool(e) {
     let that = this;
     let dataset = e.currentTarget.dataset;
-    let selectSchool = this.data.joinedSchool[dataset.index];
+    let selectSchool = this.data.joinedSchool[dataset.schoolid];
     wx.showModal({
       title: "退出学校",
       content: `确定要退出 ${selectSchool["name"]}`,
@@ -226,16 +270,7 @@ Page({
                 _default_school: "",
               });
             } else {
-              let loadIndex = dataset.index == 0 ? 1 : 0;
-              App.userInfo["_default_school"] =
-                that.data.joinedSchool[loadIndex];
-              App.userInfo["school"] = v.data.joinedSchool[loadIndex];
-              setData["schoolInfo"] = that.data.joinedSchool[loadIndex];
-              setData["currentSchool"] =
-                that.data.joinedSchool[loadIndex]["_id"];
-              let joinedSchool = that.data.joinedSchool;
-              joinedSchool.splice(dataset.index, 1);
-              setData["joinedSchool"] = joinedSchool;
+              setData[`joinedSchool.${selectSchool["_id"]}`] = "deleted";
             }
 
             that.setData(setData, () => {
@@ -278,7 +313,7 @@ Page({
     await Cloud.cfunction("Post", "getPosts", {
       page: currentPageLoad.page,
       sort: currentShowPostSort == "all" ? null : currentShowPostSort,
-      school:this.data.schoolInfo._id
+      school: this.data.schoolInfo._id,
     }).then((res) => {
       if (res.length < 5) {
         currentPageLoad.finished = true;

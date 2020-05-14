@@ -18,8 +18,8 @@
             <text class="joined-school-exit qcicon qcicon-arrow-right"></text>
           </view>
         </view>
-        <block wx:for="{{ joinedSchool }}">
-          <view class="joined-school-item" bind:tap="switchSchool" data-schoolid="{{ item._id }}">
+        <block wx:for="{{ joinedSchool }}" wx:key="index">
+          <view class="joined-school-item" bind:tap="switchSchool" data-schoolid="{{ item._id }}" wx:if="{{item!='deleted'}}">
             <view class="joined-school-info">
               <image class="joined-school-logo" src="{{ item.logo }}" mode="aspectFill"></image>
               <text class="joined-school-name">{{ item.name }}</text>
@@ -28,7 +28,7 @@
               <block wx:if="{{ item._id==currentSchool }}">
                 <text class="joined-school-current qcicon qcicon-seleted"></text>
               </block>
-              <text class="joined-school-exit qcicon qcicon-tuichu" catch:tap="quitSchool" data-index="{{ index }}"></text>
+              <text class="joined-school-exit qcicon qcicon-tuichu" catch:tap="quitSchool" data-schoolid="{{ item._id }}"></text>
             </view>
           </view>
         </block>
@@ -75,7 +75,6 @@
         </block>
       </Tabs>
     </view>
-
   </block>
   <block wx:elif="{{ userIsLogin&&schoolInfo==null }}">
     <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" />
