@@ -159,7 +159,7 @@ Page({
     });
   },
   async confirmSwitchSchool() {
-    if (this.data.currentSchool == this.data.schoolInfo["_id"]) {
+    if (this.data.schoolInfo!=null&&this.data.currentSchool == this.data.schoolInfo["_id"]) {
       let setData = { hideSwitchSchoolPopup: true };
       if (Utils.getType(this.data.joinedSchool) == "Object") {
         if (
@@ -260,7 +260,7 @@ Page({
             let setData = {
               hideSwitchSchoolPopup: true,
             };
-            if (that.data.joinedSchool.length == 1) {
+            if (Object.keys(that.data.joinedSchool).length == 1) {
               setData["schoolInfo"] = null;
               setData["currentSchool"] = null;
               setData["joinedSchool"] = [];
