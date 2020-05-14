@@ -45,7 +45,7 @@ let functions = {
    */
   async getClassByNumberId(event) {
     let schoolId=event._schoolid;
-    let numberId=event.numberId;
+    let numberId=event._numberid;
     let match={
       _numberid: parseInt(numberId),
     };
