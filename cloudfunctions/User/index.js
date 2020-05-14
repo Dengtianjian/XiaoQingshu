@@ -73,8 +73,8 @@ let functions = {
         location: "",
         realname: "",
         statement: "",
-        space_bg_image:null,
-        phone_number:null,
+        space_bg_image: null,
+        phone_number: null,
       };
       DB.collection("user_profile").add({
         data: userProfile,
@@ -189,6 +189,9 @@ let functions = {
     const wxContext = cloud.getWXContext();
     let userJoinedSchool = await DB.collection("user_joined_school")
       .aggregate()
+      .match({
+        _userid: wxContext.OPENID,
+      })
       .lookup({
         from: "school",
         localField: "_schoolid",
@@ -258,23 +261,22 @@ let functions = {
   },
 
   /* update主页背景进数据库 */
-  async updateUserBg(event){
+  async updateUserBg(event) {
     const wxContext = cloud.getWXContext();
     console.log(wxContext.OPENID);
     let userProfile = await DB.collection("user_profile")
-    .where({
-      _userid:wxContext.OPENID,
-    }).update({
-      data: {
-        space_bg_image:event.fileId,
-      }
-    });
+      .where({
+        _userid: wxContext.OPENID,
+      })
+      .update({
+        data: {
+          space_bg_image: event.fileId,
+        },
+      });
     console.log(event);
 
     return Response.result(userProfile);
   },
-
-
 };
 
 // 云函数入口函数
