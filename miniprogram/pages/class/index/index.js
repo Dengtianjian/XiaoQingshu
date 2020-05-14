@@ -125,6 +125,9 @@ Page({
     });
   },
   onShow() {
+    this.setData({
+      [`joinClass.searchResult`]:null
+    });
     if (this.data.userIsLogin == false && App.userInfo["isLogin"]) {
       this.setData({
         userIsLogin: true,
