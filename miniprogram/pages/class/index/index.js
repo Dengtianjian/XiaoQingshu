@@ -130,7 +130,7 @@ Page({
         userIsLogin: true,
       });
     }
-    if (this.data.classInfo == null) {
+    if (this.data.classInfo == null!=App.userInfo.class!=null) {
       if (App.userInfo.class) {
         this.setData({
           classInfo: App.userInfo.class,
