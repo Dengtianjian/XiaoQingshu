@@ -14,15 +14,18 @@ Page({
 
   async onLoad(options) {
     wx.showLoading({
-      title:"获取资料中"
+      title: "获取资料中",
     });
     App.getUserInfo().then((userInfo) => {
       userInfo["birthday"] = Utils.formatDate(userInfo["birthday"], "y-m-d");
-      this.setData({
-        userInfo,
-      },()=>{
-        wx.hideLoading();
-      });
+      this.setData(
+        {
+          userInfo,
+        },
+        () => {
+          wx.hideLoading();
+        }
+      );
     });
   },
 
@@ -88,24 +91,31 @@ Page({
       return;
     }
 
-    Cloud.cfunction("User", "saveUserProfile", {
+    let updateData= {
       birthday,
       education,
       email,
       phone_number,
       realname,
       statement,
-    }).then((res) => {
-      if(res['result']['errMsg']=="collection.update:ok"){
+    };
+    wx.showLoading({
+      title:"保存中"
+    });
+    Cloud.cfunction("User", "saveUserProfile",updateData)
+      .then((res) => {
+        wx.hideLoading();
         Prompt.toast("保存成功👌");
-      }
-    }).catch(res=>{
-      Prompt.codeToast(res.error,res.code,{
-        400:{
-          400001:"请输入正确的手机号码，仅限中国大陆的",
-          400002:"请输入正确的邮箱地址"
-        }
+        Object.assign(App.userInfo,updateData);
       })
-    })
+      .catch((res) => {
+        wx.hideLoading();
+        Prompt.codeToast(res.error, res.code, {
+          400: {
+            400001: "请输入正确的手机号码，仅限中国大陆的",
+            400002: "请输入正确的邮箱地址",
+          },
+        });
+      });
   },
 });

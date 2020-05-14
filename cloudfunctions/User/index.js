@@ -165,8 +165,7 @@ let functions = {
         message: "请输入正确的邮箱地址",
       };
     }
-
-    return await userProfile
+    await UserProfile
       .where({
         _userid: wxContext.OPENID,
       })
@@ -183,6 +182,8 @@ let functions = {
       .then((res) => {
         return res;
       });
+
+    return Response.result(true);
   },
   /* 获取用户加入的所有学校 */
   async getJoinedSchool() {
