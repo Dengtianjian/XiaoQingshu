@@ -5,7 +5,7 @@
   <input type="text" name="keyword" class="search-input" placeholder="请输入学校名称" bindinput="keywordInput" model:value="{{ keywords }}" />
 </view>
 <view class="search-result" hidden="{{ schools.length==0 }}">
-  <block wx:for="{{ schools }}">
+  <block wx:for="{{ schools }}" wx:key="index">
     <view class="search-result-item" bind:tap="selectSchool" data-index="{{ index }}">
       <image class="search-result-item-icon" src="{{ item.logo }}"></image>
       <text class="search-result-item-name">{{ item.name }}</text>
