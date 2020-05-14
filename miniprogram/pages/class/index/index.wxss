@@ -80,6 +80,9 @@ page {
     transform:rotate(0deg);
   }
 }
+.new-classmate-list {
+  padding:var(--container-padding);
+}
 .new-classmate-item {
   display:flex;
   justify-content: space-between;

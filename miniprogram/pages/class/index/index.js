@@ -188,7 +188,7 @@ Page({
     });
   },
   updateNewClassmateList() {
-    if (this.data.classInfo["_adminid"] == App.userInfo["_openid"]) {
+    if (this.data.classInfo["_adminid"] == App.userInfo["_userid"]) {
       Cloud.collection("school_class_apply")
         .where({
           _classid: this.data.classInfo["_id"],
@@ -393,12 +393,12 @@ Page({
     let selectUser = this.data.newClassmate.list[index];
     Cloud.cfunction("Class", "agreeNewClassmateJoin", {
       _classid: this.data.classInfo["_id"],
-      _userid: selectUser["_openid"],
+      _userid: selectUser["_userid"],
     }).then((res) => {
       this.setData({
         [`newClassmate.list[${index}]`]: "deleted",
-        "newClassmate.has": this.newClassmate.list.length != 0,
-        "newClassmate.hiddenPopup": this.newClassmate.list.length == 0,
+        "newClassmate.has": this.data.newClassmate.list.length != 0,
+        "newClassmate.hiddenPopup": this.data.newClassmate.list.length == 0,
       });
       Prompt.toast("🙆同意成功，我们已经发送了通知给新同学了！");
     });
