@@ -112,8 +112,24 @@ export default {
       return fileId;
     }
   },
+  /**
+   * 获取变量类型
+   * @param {Any} value 要获取类型的变量
+   */
   getType(value){
     let type=Object.prototype.toString.call(value);
     return type.slice(type.lastIndexOf(" ")+1,type.indexOf("]"));
+  },
+  /**
+   * 数组转对象
+   * @param {Array} arr 数组
+   * @param {String} key 数组内元素的属性名称
+   */
+  arrayToObject(arr,key){
+    let obj={};
+    arr.forEach(item=>{
+      obj[item[key]]=item;
+    });
+    return obj;
   }
 };
