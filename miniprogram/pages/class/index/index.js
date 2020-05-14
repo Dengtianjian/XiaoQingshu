@@ -130,20 +130,22 @@ Page({
         userIsLogin: true,
       });
     }
-    if (App.userInfo.class) {
-      this.setData({
-        classInfo: App.userInfo.class,
-      });
-      this.getClassInfo();
-    } else {
-      this.setData({
-        classInfo: null,
-        statistics: [],
-        newClassmate: { has: false, hiddenPopup: true, list: null },
-        classmates: [],
-        classmateInfo: { hiddenPopup: true, info: null },
-        photos: [],
-      });
+    if (this.data.classInfo == null) {
+      if (App.userInfo.class) {
+        this.setData({
+          classInfo: App.userInfo.class,
+        });
+        this.getClassInfo();
+      } else {
+        this.setData({
+          classInfo: null,
+          statistics: [],
+          newClassmate: { has: false, hiddenPopup: true, list: null },
+          classmates: [],
+          classmateInfo: { hiddenPopup: true, info: null },
+          photos: [],
+        });
+      }
     }
   },
   updateStatistics() {
@@ -163,7 +165,7 @@ Page({
     if (nowMonth - buildMonth) {
       lessString += `${nowMonth - buildMonth}个月`;
     }
-    lessString += `${nowDay-buildDay || 0}天`;
+    lessString += `${nowDay - buildDay || 0}天`;
     let statistics = [
       {
         title: "人数",
@@ -331,17 +333,17 @@ Page({
       })
       .catch((res) => {
         Prompt.codeToast(res.error, res.code, {
-          403:{
-            403001:{
-              title:`🙅‍本班级仅允许邀请加入暂不开放申请加入。请📩联系班级管理员`,
-              duration:4000,
-              success:()=>{
+          403: {
+            403001: {
+              title: `🙅‍本班级仅允许邀请加入暂不开放申请加入。请📩联系班级管理员`,
+              duration: 4000,
+              success: () => {
                 this.hiddenJoinClassDialog();
-              }
-            }
+              },
+            },
           },
-          404:{
-            404001:"(⊙o⊙)？班级不存在哦，请检查班级ID是否正确"
+          404: {
+            404001: "(⊙o⊙)？班级不存在哦，请检查班级ID是否正确",
           },
           409: {
             409001: "已经提交过申请，请勿重复提交",

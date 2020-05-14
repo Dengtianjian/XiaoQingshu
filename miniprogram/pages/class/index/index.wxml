@@ -1,7 +1,7 @@
 <!-- pages/class/class.wxml -->
 <block wx:if="{{ pageLoadingCompleted }}">
   <block wx:if="{{ classInfo!=null }}">
-    <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" defaultColor="#ffffff">
+    <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" defaultColor="#ffffff" hiddenReturnPage="{{ true }}">
       <view class="grade">{{ classInfo['grade'] }}级</view>
     </NavigationBar>
     <view class="class-info">
@@ -95,7 +95,7 @@
     </view>
   </block>
   <block wx:if="{{ userIsLogin===false }}">
-    <NavigationBar pageTitle="班级" />
+    <NavigationBar pageTitle="班级" hiddenReturnPage="{{ true }}" />
     <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="还未登录哦，登录后才可以查看自己所在的班级呢">
       <view class="page-prompt-operate">
         <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
@@ -105,7 +105,7 @@
     </PagePrompt>
   </block>
   <block wx:if="{{ userIsLogin&&classInfo==null }}">
-    <NavigationBar pageTitle="班级" />
+    <NavigationBar pageTitle="班级" hiddenReturnPage="{{ true }}" />
     <PagePrompt class="page-prompt" icon="/material/images/not_class.png" description="还未加入任何一个班级哦，请通过好友邀请或者输入班级ID申请加入吧">
       <form class="not-class-form page-prompt-operate" bindsubmit="searchClass">
         <input class="not-class-form-el" type="number" name="class_id" placeholder="班级ID" />
