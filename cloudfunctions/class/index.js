@@ -345,12 +345,12 @@ let functions = {
       .aggregate()
       .lookup({
         from: "user_profile",
-        localField: "_openid",
+        localField: "_id",
         foreignField: "_userid",
         as: "profile",
       })
       .match({
-        _openid: _.in(classmateUserId),
+        _id: _.in(classmateUserId),
       })
       .end()
       .then((res) => {
@@ -360,7 +360,7 @@ let functions = {
       userInfoItem = Object.assign(userInfoItem, userInfoItem["profile"][0]);
       delete userInfoItem["profile"];
       newClassmate.forEach((classmateItem) => {
-        if (userInfoItem["_openid"] == classmateItem["_userid"]) {
+        if (userInfoItem["_id"] == classmateItem["_userid"]) {
           userInfoItem["apply_date"] = classmateItem["date"];
         }
       });
@@ -409,7 +409,7 @@ let functions = {
     classInfo = classInfo[0];
 
     /* 加入班级 */
-    let joinClassResult = joinClass(_userid, classInfo["_schoolid"], _classid);
+    let joinClassResult =await joinClass(_userid, classInfo["_schoolid"], _classid);
     //已经加入了
     if (joinClassResult.error && joinClassResult.code == 409001) {
       /*更新班级同学数量*/
@@ -419,8 +419,8 @@ let functions = {
           _classid,
         })
         .count()
-        .then((res) => {
-          DB.collection("school_class")
+        .then(async (res) => {
+          await DB.collection("school_class")
             .where({
               _classid,
             })
@@ -439,7 +439,7 @@ let functions = {
         .remove();
 
       return {
-        message: "同意成功",
+        message: "同意成功409",
       };
     }
 
@@ -447,6 +447,7 @@ let functions = {
     let joinClassSchoolLog = await DB.collection("user_joined_school")
       .where({
         _schoolid: classInfo["_schoolid"],
+        _userid
       })
       .get()
       .then((res) => {
@@ -454,7 +455,7 @@ let functions = {
       });
     //没有加入该班级所在的学校
     if (joinClassSchoolLog.length == 0) {
-      DB.collection("user_joined_school")
+      await DB.collection("user_joined_school")
         .add({
           data: {
             _schoolid: classInfo["_schoolid"],
@@ -463,8 +464,8 @@ let functions = {
             _userid,
           },
         })
-        .then((res) => {
-          DB.collection("school")
+        .then(async (res) => {
+          await DB.collection("school")
             .where({
               _id: classInfo["_schoolid"],
             })
@@ -499,7 +500,7 @@ let functions = {
       .then((res) => {
         return res["data"];
       });
-    console.log(students);
+
     if (students.length == 0) {
       return [];
     }

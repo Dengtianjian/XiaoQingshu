@@ -270,7 +270,9 @@ let functions = {
       topics.push(item.topic);
     });
 
-    //帖子做作业
+    console.log(users);
+
+    //帖子作者
     users = await cloud
       .callFunction({
         name: "User",
@@ -363,7 +365,7 @@ let functions = {
     let userid = event.userid;
     let page = event.page || 0;
     let limit = event.limit || 5;
-    console.log(limit * page);
+
     let posts = await Post.where({
       _authorid: userid,
     })

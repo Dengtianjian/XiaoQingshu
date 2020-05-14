@@ -19,7 +19,7 @@ let functions = {
       return res['data'];
     });
     await DB.collection("user").where({
-      _openid:wxContext.OPENID
+      _id:wxContext.OPENID
     }).update({
       data:{
         _default_school:_schoolid

@@ -27,6 +27,7 @@ module.exports={
     .then((res) => {
       return res["data"];
     });
+
     if(userJoinClassLog.length>0){
       return {
         error:409,
@@ -59,7 +60,7 @@ module.exports={
       });
     DB.collection("user")
       .where({
-        _openid: _userid,
+        _id: _userid,
       })
       .update({
         data: {

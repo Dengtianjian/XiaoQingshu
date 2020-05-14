@@ -84,7 +84,7 @@ let functions = {
         name: "User",
         data: {
           method: "getUser",
-          _openid: authorid,
+          _id: authorid,
         },
       })
       .then((res) => {
@@ -249,7 +249,7 @@ let functions = {
         name: "User",
         data: {
           method: "getUser",
-          _openid: authors,
+          _id: authors,
           field: {
             nickname: true,
             avatar_url: true,
