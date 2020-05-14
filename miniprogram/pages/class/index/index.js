@@ -298,6 +298,7 @@ Page({
     });
     await Cloud.cfunction("Class", "getClassByNumberId", {
       _numberid: classNumberId,
+      _schoolid:App.userInfo['_default_school']
     })
       .then((res) => {
         wx.hideLoading();

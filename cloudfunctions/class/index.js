@@ -44,11 +44,17 @@ let functions = {
    * @return 班级和学校的数据
    */
   async getClassByNumberId(event) {
+    let schoolId=event._schoolid;
+    let numberId=event.numberId;
+    let match={
+      _numberid: parseInt(numberId),
+    };
+    if(schoolId){
+      match["_schoolid"]=schoolId;
+    }
     let result = await DB.collection("school_class")
       .aggregate()
-      .match({
-        _numberid: parseInt(event._numberid),
-      })
+      .match(match)
       .lookup({
         from: "school",
         localField: "_schoolid",
