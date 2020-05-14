@@ -4,6 +4,7 @@
 }
 .publish-post-form .publish-post-title {
   width:100%;
+  height:150rpx;
   font-size: 38rpx;
   color: var(--font-color);
 }

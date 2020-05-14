@@ -188,5 +188,5 @@ Page({
       }
       wx.stopPullDownRefresh();
     });
-  },
+  }
 });
