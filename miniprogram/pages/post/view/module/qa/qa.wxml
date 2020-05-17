@@ -1,0 +1,37 @@
+<import src="../../template/title.wxml" />
+<!-- <import src="../../template/attribute.wxml" /> -->
+<import src="../../template/operate.wxml" />
+<template name="qa">
+  <view class="post post-qa">
+    <template is="title" data="{{ ...{ title } }}" />
+    <view class="post-content {{ showAllContent?'':'post-content-hide' }}">{{ content }}</view>
+    <view class="post-show-content" bind:tap="displayAllContent" hidden="{{ showAllContent }}">
+      展开详情
+    </view>
+    <view class="post-images">
+      <block wx:for="{{ images }}" wx:key="index">
+        <image class="post-image-item" src="{{ item }}" mode="aspectFill" bind:tap="previewImage" data-index="{{ index }}"></image>
+      </block>
+    </view>
+    <!-- <template is="attribute" data="{{ ...{ sort,topic } }}" /> -->
+    <template is="operate" data="{{ ...{ isFavorite,isLike,likes } }}" />
+    <view class="post-publish-date">{{ date }}</view>
+  </view>
+  <view class="comment">
+    <view class="comment-title">回答</view>
+    <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
+      <view class="comment-list">
+        <block wx:for="{{ commentArray }}" wx:key="index">
+          <view class="comment-item">
+            <QAnswer answer="{{ item }}" />
+            <view class="comment-view-reply" bind:tap="showAllCommentReply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}">
+              查看详情
+            </view>
+          </view>
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class="comment-post-tips" bind:tap="showCommentPopup" data-type="postComment">回答问题</view>
+  <view class="comment-post-placeholder"></view>
+</template>

@@ -27,7 +27,6 @@
       </view>
     </block>
   </Tabs>
-  <Loading loading="{{ postLoading }}" finished="{{ postFinished }}" />
 </view>
 <!-- 发布内容入口 -->
 <view class="publish-entrance" bindtap="displayPublishPopup" data-mode="show">

@@ -2,13 +2,19 @@
 import Cloud from "../../../source/js/cloud";
 import Prompt from "../../../source/js/prompt";
 import Utils from "../../../source/js/utils";
+
+//模块
+import QA from "./module/qa/qa";
+
 const App = getApp();
 Page({
+  behaviors: [QA],
   /**
    * 页面的初始数据
    */
   data: {
     navigationBarHeight: 0,
+    pageLoaded: false,
     post: {
       title: "广东确定开学时间，“乐疯的”家长还需站好最后一岗",
       author: {
@@ -53,9 +59,12 @@ Page({
       currentSelect: 0,
       albums: [],
     },
+    templateName: "common",
+    templateData: {},
   },
   onLoad(options) {
     let _postid = options.postid;
+    _postid="fddd30c55eacdb9d003d1f3344fa65f3";
 
     this.setData(
       {
@@ -102,23 +111,18 @@ Page({
     });
     Cloud.cfunction("Post", "getPost", {
       postid: this.data.post._id,
-    }).then((post) => {
+    }).then(async (post) => {
       wx.hideLoading();
       wx.stopPullDownRefresh();
       post["date"] = Utils.formatDate(post["date"], "y年m月d");
-      Cloud.cfunction("User", "getUser", {
-        _openid: post["_authorid"],
-      }).then((res) => {
-        this.setData({
-          "post.author": res,
-        });
-      });
-      Cloud.cfunction("Post", "getSortByIdentifier", {
-        identifier: post["sort"],
+
+      await Cloud.cfunction("Post", "getSortByIdentifier", {
+        identifier: post["sort"]["identifier"],
       })
         .then((res) => {
           this.setData({
             [`post.sort`]: res,
+            templateName: res.template,
           });
         })
         .catch((res) => {
@@ -147,9 +151,26 @@ Page({
           });
         }
       });
-      this.setData({
-        post,
-      });
+
+      let setData = { post, pageLoaded: true };
+      if (post["_authorid"] == App.userInfo["_userid"]) {
+        setData['post']['author']={
+          nickname:App.userInfo['nickname'],
+          avatar_url:App.userInfo['avatar_url'],
+          _id:App.userInfo['_userid'],
+          school:App.userInfo['school']['name'],
+          _default_school:App.userInfo['_default_school'],
+          prefessional:App.userInfo['class']['profession']
+        }
+      } else {
+        await Cloud.cfunction("User", "getUser", {
+          _openid: post["_authorid"],
+        }).then((res) => {
+          setData['author']=res;
+        });
+      }
+      this.setData(setData);
+
       wx.hideLoading();
     });
   },
@@ -469,25 +490,25 @@ Page({
       ["favorite.currentSelect"]: e.currentTarget.dataset.index,
     });
   },
-  favoriteLoad:{
-    loading:false,
-    finished:false,
-    count:0,
-    page:0
+  favoriteLoad: {
+    loading: false,
+    finished: false,
+    count: 0,
+    page: 0,
   },
   async getFavoriteAblum() {
-    if(this.favoriteLoad.loading||this.favoriteLoad.finished){
+    if (this.favoriteLoad.loading || this.favoriteLoad.finished) {
       return;
     }
-    this.favoriteLoad.loading=true;
-    await Cloud.cfunction("User", "getAlbums",{
-      limit:12,
-      page:this.favoriteLoad.page
+    this.favoriteLoad.loading = true;
+    await Cloud.cfunction("User", "getAlbums", {
+      limit: 12,
+      page: this.favoriteLoad.page,
     }).then((res) => {
-      if(res.length<12){
-        this.favoriteLoad.finished=true;
+      if (res.length < 12) {
+        this.favoriteLoad.finished = true;
       }
-      if(res.length==12){
+      if (res.length == 12) {
         this.favoriteLoad.page++;
       }
       let albums = this.data.favorite.albums;
@@ -495,7 +516,7 @@ Page({
       this.setData({
         ["favorite.albums"]: albums,
       });
-      this.favoriteLoad.loading=false;
+      this.favoriteLoad.loading = false;
     });
   },
   showFavoriteAlbum() {

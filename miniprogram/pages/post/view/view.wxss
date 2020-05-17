@@ -242,3 +242,8 @@
   margin-right:20rpx;
   color:var(--font-light-color);
 }
+
+
+
+
+@import "./module/qa/qa.wxss";

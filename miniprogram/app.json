@@ -1,13 +1,13 @@
 {
   "pages": [
-    "pages/class/index/index",
+    "pages/post/view/view",
     "pages/index/index",
+    "pages/class/index/index",
     "pages/school/index/index",
     "pages/my/index/index",
     "pages/my/notification/notification",
     "pages/my/space/space",
     "pages/my/favorites/favorites",
-    "pages/post/view/view",
     "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
     "pages/school/select_school/select_school",

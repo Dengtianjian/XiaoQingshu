@@ -1,0 +1,18 @@
+<template name="author">
+  <view class="author">
+    <image class="author-avatar" src="{{ avatar_url }}"></image>
+    <view class="author-info">
+      <view class="author-nickname">{{ nickname }}</view>
+      <view class="author-school">
+        <block wx:if="{{ _default_school }}">
+          <text class="author-school-name">{{ school }}</text>
+          <text class="author-school-prefession">{{ prefessional }}</text>
+        </block>
+        <block wx:else>TA还未加入一家学校</block>
+      </view>
+    </view>
+    <view class="author-attention {{ isAttention?'author-attention-yes':'' }}">
+      {{ isAttention?'已关注':'关注' }}
+    </view>
+  </view>
+</template>
