@@ -17,3 +17,26 @@
   width:100rpx;
   height:100rpx;
 }
+
+.comment-item  {
+  margin-bottom:50rpx;
+}
+.comment-item-bottom {
+  margin:10rpx 0 0 80rpx;
+  display:flex;
+  justify-content: space-between;
+}
+.comment-vote {
+  display:flex;
+  font-size:24rpx;
+  color:var(--main-color);
+}
+.comment-vote-item {
+  margin-right:10rpx;
+  padding:4rpx 12rpx;
+  background:rgb(208, 255, 231);
+  border-radius:6rpx;
+}
+.comment .comment-view-reply {
+  margin-left:20rpx;
+}

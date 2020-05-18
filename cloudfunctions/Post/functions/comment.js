@@ -5,6 +5,7 @@ cloud.init();
 
 const DB = cloud.database();
 const _ = DB.command;
+const $ = _.aggregate;
 const Comment = DB.collection("post_comment");
 const CommentLike = DB.collection("post_comment_like");
 const CommentReply = DB.collection("post_comment_reply");
@@ -285,6 +286,107 @@ let functions = {
     });
 
     return replys;
+  },
+  async getQAnswer(event) {
+    let page = event.page || 0;
+    let limit = event.limit || 5;
+    let postid = event.postid;
+
+    let comments=await Comment.aggregate()
+      .match({
+        _post: postid,
+      })
+      .lookup({
+        from: "post_qa_comment",
+        localField: "_id",
+        foreignField: "_commentid",
+        as: "qa_comment",
+      })
+      .replaceRoot({
+        newRoot: $.mergeObjects([$.arrayElemAt(["$qa_comment", 0]), "$$ROOT"]),
+      })
+      .project({
+        qa_comment: 0,
+        _commentid:0,
+      })
+      .sort({
+        date: -1,
+      })
+      .skip(limit * page)
+      .limit(limit)
+      .end()
+      .then((res) => {
+        return res["list"];
+      });
+
+    let authorid = [];
+
+    comments.forEach((item) => {
+      authorid.push(item._author);
+    });
+
+    let author = await cloud
+      .callFunction({
+        name: "User",
+        data: {
+          method: "getUser",
+          _openid: authorid,
+        },
+      })
+      .then((res) => {
+        return res["result"];
+      });
+    let schoolIds = [];
+    author.forEach((item) => {
+      if (item._default_school) {
+        schoolIds.push(item._default_school);
+      }
+    });
+    let school = await DB.collection("school")
+      .where({
+        _id: _.in(schoolIds),
+      })
+      .field({
+        name: true,
+      })
+      .get()
+      .then((res) => res["data"]);
+    school = arrayToObject(school, "_id");
+    author.forEach((item) => {
+      if (item._default_school) {
+        item["school"] = school[item["_default_school"]];
+      }
+    });
+    author = arrayToObject(author, "_id");
+
+    comments.forEach((item) => {
+      item["author"] = author[item["_author"]];
+    });
+
+    return Response.result(comments);
+  },
+  async saveAnswer(event) {
+    let commentId = await functions["saveComment"](event);
+    let postId=event.postid;
+    if(commentId['error']!=200){
+      return commentId
+    }
+    commentId=commentId['data']['_id'];
+
+    let QAComment=await DB.collection("post_qa_comment").add({
+      data:{
+        _commentid:commentId,
+        _postid:postId,
+        agree:0,
+        disagree:0
+      }
+    }).then(res=>res);
+
+    return Response.result({
+      _commentid:commentId,
+      _qa_commentid:QAComment._id
+    });
+
   },
 };
 

@@ -1,9 +1,53 @@
 <!-- pages/post/view/view.wxml -->
-<import src="./module/qa/qa.wxml" />
-<import src="./module/common.wxml" />
+<import src="../template/attribute.wxml" />
+<import src="../template/operate.wxml" />
 <navigationBar opacity="0.8" backgroundColor="#ffffff" />
 <view wx:if="{{ pageLoaded }}">
-  <template is="{{ templateName }}" data="{{ ...{ ...templateData,...post,comments } }}" />
+  <view class="author">
+    <image class="author-avatar" src="{{ author.avatar_url }}"></image>
+    <view class="author-info">
+      <view class="author-nickname">{{ author.nickname }}</view>
+      <view class="author-school">
+        <block wx:if="{{ author._default_school }}">
+          <text class="author-school-name">{{ author.school }}</text>
+          <text class="author-school-prefession">{{ author.prefessional }}</text>
+        </block>
+        <block wx:else>TA还未加入一家学校</block>
+      </view>
+    </view>
+    <view class="author-attention {{ author.isAttention?'author-attention-yes':'' }}">
+      {{ author.isAttention?'已关注':'关注' }}
+    </view>
+  </view>
+  <view class="post">
+    <view class="post-title">{{ post.title }}</view>
+    <view class="post-content">{{ post.content }}</view>
+    <view class="post-images">
+      <block wx:for="{{ post.images }}" wx:key="index">
+        <image class="post-image-item" src="{{ item }}" mode="aspectFill" bind:tap="previewImage" data-index="{{ index }}"></image>
+      </block>
+    </view>
+    <template is="attribute" data="{{ ...{ sort:post.sort,topic:post.topic } }}" />
+    <template is="operate" data="{{ ...{ isFavorite:post.isFavorite,isLike:post.isLike,likes:post.likes } }}" />
+    <view class="post-publish-date">{{ post.date }}</view>
+  </view>
+  <view class="comment">
+    <view class="comment-title">评论</view>
+    <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
+      <view class="comment-list">
+        <block wx:for="{{ commentArray }}" wx:key="index">
+          <view class="comment-item">
+            <CommentItem comment="{{ item }}" />
+            <view class="comment-view-reply" bind:tap="showAllCommentReply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}">
+              查看回复
+            </view>
+          </view>
+        </block>
+      </view>
+    </block>
+  </view>
+  <view class="comment-post-tips" bind:tap="showCommentPopup" data-type="postComment">评论一个</view>
+  <view class="comment-post-placeholder"></view>
   <Dialog hidden="{{ favorite.popupIsHide }}" position="center" textAlign="center" title="请选择要存放到的收藏夹" height="60%" cancelButton="" bind:confirm="confirmFavorite">
     <scroll-view scroll-y="{{true}}" class="album-list" slot="content" bind:scrolltolower="getFavoriteAblum">
       <block wx:for="{{ favorite.albums }}" wx:key="index">

@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/post/view/view",
+    "pages/post/view/qa/qa",
     "pages/index/index",
+    "pages/post/view/common/common",
     "pages/class/index/index",
     "pages/school/index/index",
     "pages/my/index/index",
@@ -17,10 +18,11 @@
     "pages/class/edit_info/edit_info",
     "pages/post/answer_question/answer_question",
     "pages/test/test",
-    "pages/class/edit_my_info/edit_my_info"
+    "pages/class/edit_my_info/edit_my_info",
+    "pages/post/view/comment/comment"
   ],
   "window": {
-    "navigationStyle":"custom",
+    "navigationStyle": "custom",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",

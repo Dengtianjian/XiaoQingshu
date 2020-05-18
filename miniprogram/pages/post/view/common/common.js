@@ -1,14 +1,15 @@
 // pages/post/view/view.js
-import Cloud from "../../../source/js/cloud";
-import Prompt from "../../../source/js/prompt";
-import Utils from "../../../source/js/utils";
+import Cloud from "../../../../source/js/cloud";
+import Prompt from "../../../../source/js/prompt";
+import Utils from "../../../../source/js/utils";
 
 //模块
-import QA from "./module/qa/qa";
+import QA from "../module/qa/qa";
+import Common from "../module/common/common";
 
 const App = getApp();
 Page({
-  behaviors: [QA],
+  behaviors: [Common,QA],
   /**
    * 页面的初始数据
    */
@@ -64,7 +65,7 @@ Page({
   },
   onLoad(options) {
     let _postid = options.postid;
-    _postid="fddd30c55eacdb9d003d1f3344fa65f3";
+    _postid = "fddd30c55eacdb9d003d1f3344fa65f3";
 
     this.setData(
       {
@@ -74,7 +75,6 @@ Page({
       },
       () => {
         this.getPost();
-        this.getComment();
       }
     );
   },
@@ -85,11 +85,6 @@ Page({
     this.setData({
       navigationBarHeight: App.globalData.navigationBarHeight,
     });
-  },
-  onReachBottom() {
-    if (this.commentLoad.finished == false) {
-      this.getComment();
-    }
   },
   onShareAppMessage: function () {
     let post = this.data.post;
@@ -114,24 +109,7 @@ Page({
     }).then(async (post) => {
       wx.hideLoading();
       wx.stopPullDownRefresh();
-      post["date"] = Utils.formatDate(post["date"], "y年m月d");
 
-      await Cloud.cfunction("Post", "getSortByIdentifier", {
-        identifier: post["sort"]["identifier"],
-      })
-        .then((res) => {
-          this.setData({
-            [`post.sort`]: res,
-            templateName: res.template,
-          });
-        })
-        .catch((res) => {
-          if (res.error == 404) {
-            this.setData({
-              [`post.sort`]: null,
-            });
-          }
-        });
       Cloud.cfunction("Post", "getLikeByPostId", {
         postid: post["_id"],
       }).then((res) => {
@@ -153,23 +131,43 @@ Page({
       });
 
       let setData = { post, pageLoaded: true };
+      post["date"] = Utils.formatDate(post["date"], "y年m月d");
+
+      await Cloud.cfunction("Post", "getSortByIdentifier", {
+        identifier: post["sort"]["identifier"],
+      })
+        .then((res) => {
+          setData["post"]["sort"] = res;
+          setData["templateName"] = res.template;
+        })
+        .catch((res) => {
+          if (res.error == 404) {
+            setData["post"]["sort"] = null;
+          }
+        });
+
       if (post["_authorid"] == App.userInfo["_userid"]) {
-        setData['post']['author']={
-          nickname:App.userInfo['nickname'],
-          avatar_url:App.userInfo['avatar_url'],
-          _id:App.userInfo['_userid'],
-          school:App.userInfo['school']['name'],
-          _default_school:App.userInfo['_default_school'],
-          prefessional:App.userInfo['class']['profession']
-        }
+        setData["post"]["author"] = {
+          nickname: App.userInfo["nickname"],
+          avatar_url: App.userInfo["avatar_url"],
+          _id: App.userInfo["_userid"],
+          school: App.userInfo["school"]["name"],
+          _default_school: App.userInfo["_default_school"],
+          prefessional: App.userInfo["class"]["profession"],
+        };
       } else {
         await Cloud.cfunction("User", "getUser", {
           _openid: post["_authorid"],
         }).then((res) => {
-          setData['author']=res;
+          setData["author"] = res;
         });
       }
       this.setData(setData);
+      if (this.hasOwnProperty(`${post["sort"]["identifier"]}GetComment`)) {
+        this[`${post["sort"]["identifier"]}GetComment`]();
+      } else {
+        this.getComment();
+      }
 
       wx.hideLoading();
     });

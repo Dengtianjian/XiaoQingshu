@@ -8,7 +8,6 @@
     "Overlay":"/components/overlay/overlay",
     "Popup":"/components/popup/popup",
     "navigationBar":"/components/navigationBar/navigationBar",
-    "Dialog":"/components/dialog/dialog",
-    "QAnswer":"/components/QAnswer/QAnswer"
+    "Dialog":"/components/dialog/dialog"
   }
 }
