@@ -1,6 +1,6 @@
 <!--components/popup/popup.wxml-->
 <view class="popup" catch:touchmove hidden="{{ hidden }}">
-  <view class="popup-content" style="{{ positionStyle }}{{ customStyle }}">
+  <view class="popup-content" style="{{ style }}{{ customStyle }}">
     <slot></slot>
   </view>
   <view class="popup-overlay" catch:touchmove bind:tap="hiddenPopup" style="backround:{{ overlay?'rgba(0,0,0,0.2)':'transparent' }}"></view>
