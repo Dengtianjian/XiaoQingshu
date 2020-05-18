@@ -3,13 +3,9 @@ import Cloud from "../../../../source/js/cloud";
 import Prompt from "../../../../source/js/prompt";
 import Utils from "../../../../source/js/utils";
 
-//模块
-import QA from "../module/qa/qa";
-import Common from "../module/common/common";
 
 const App = getApp();
 Page({
-  behaviors: [Common,QA],
   /**
    * 页面的初始数据
    */
@@ -577,5 +573,5 @@ Page({
           },
         });
       });
-  },
+  }
 });

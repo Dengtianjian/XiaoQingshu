@@ -219,6 +219,26 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
 }
+.comment-reply-operate-item {
+  position:fixed;
+  bottom:20rpx;
+  width:80rpx;
+  height:80rpx;
+  line-height:80rpx;
+  text-align:center;
+  font-size:40rpx;
+  border-radius:50%;
+  background:#eee;
+}
+.comment-reply-close {
+  left:20rpx;
+}
+.comment-reply-button {
+  right:20rpx;
+  color:rgba(255,255,255,0.6);
+  background:var(--main-color);
+}
+
 .comment-reply-content {
   padding-bottom:70rpx;
   height: 100%;
@@ -281,6 +301,9 @@
   padding:4rpx 12rpx;
   background:rgb(208, 255, 231);
   border-radius:6rpx;
+}
+.comment-vote-is-selected {
+  padding:4rpx 48rpx;
 }
 .comment .comment-view-reply {
   margin-left:20rpx;

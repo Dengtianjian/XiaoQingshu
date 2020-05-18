@@ -24,8 +24,9 @@
           <CommentItem comment="{{ item }}" />
           <view class="comment-item-bottom">
             <view class="comment-vote">
-              <view class="comment-vote-item comment-vote-agree" bind:tap="agreeAnswer" data-page="{{ commentArrayIndex }}" data-index="{{ index }}" >赞同‍ {{ item.agree||'' }}</view>
-              <view class="comment-vote-item">👎</view>
+              <view class="comment-vote-item comment-vote-agree {{ item.isAgree?'comment-vote-is-selected':'' }}" bind:tap="agreeAnswer" data-page="{{ commentArrayIndex }}" data-index="{{ index }}" hidden="{{ item.isDisagree }}" >{{ item.isAgree?'已赞同':'赞同' }}</view>
+
+              <view class="comment-vote-item {{ item.isDisagree?'comment-vote-is-selected':'' }}" hidden="{{ item.isAgree }}" bind:tap="disagreeAnswer" data-page="{{ commentArrayIndex }}" data-index="{{ index }}">{{ item.isDisagree?'已反对':'👎' }}</view>
             </view>
             <view class="comment-view-reply" bind:tap="showAllCommentReply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}">
               查看详情 & 回复
@@ -60,7 +61,8 @@
   </form>
   <view class="comment-post-popup-mask" catch:touchmove bindtap="hiddenCommentPopup" hidden="{{ isHiddenCommentPopup }}"></view>
 </view>
-<Popup class="comment-reply" position="bottom" hidden="{{ isHiddenCommentReplyPopup }}" customStyle="height:90%;">
+<Popup class="comment-reply" position="bottom" hidden="{{ isHiddenCommentReplyPopup }}" round="{{ false }}" customStyle="height:100%">
+  <navigationBar opacity="0.8" backgroundColor="#ffffff" />
   <view class="comment-reply-content">
     <scroll-view class="comment-reply-scroll" lower-threshold="300" scroll-y bindscrolltolower="getCommentReply">
       <CommentItem class="comment-reply-current" comment="{{ currentShowComment }}" />
@@ -74,8 +76,7 @@
         </block>
       </view>
     </scroll-view>
-    <view class="comment-post-tips comment-reply-button" bind:tap="showCommentPopup" data-type="replyComment">
-      回复一个
-    </view>
+    <view class="comment-reply-operate-item comment-reply-close qcicon qcicon-close" bindtap="hideCommentReplyPopup"></view>
+    <view class="comment-reply-operate-item comment-reply-button qcicon qcicon-suggest" bind:tap="showCommentPopup" data-type="replyComment"></view>
   </view>
 </Popup>

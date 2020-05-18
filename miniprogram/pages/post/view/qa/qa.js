@@ -200,9 +200,9 @@ Page({
         replies: 0,
         _author: this.userInfo["_id"],
         author: this.userInfo,
-        agree:0,
-        disagree:0
-      }
+        agree: 0,
+        disagree: 0,
+      };
 
       this.CommentPagination.insertNew(comment);
       Prompt.toast("评论成功", {
@@ -527,8 +527,70 @@ Page({
       this.CommentPagination.setLoading(false);
     });
   },
-  agreeAnswer({ currentTarget:{ dataset:{ page,index } } }){
-    let selected=this.data.comments[page][index];
-    console.log(selected);
+  async agreeAnswer({
+    currentTarget: {
+      dataset: { page, index },
+    },
+  }) {
+    let selected = this.data.comments[page][index];
+    let updateData = {
+      isAgree: null,
+    };
+    let action=null;
+
+    if (selected.isAgree) {
+      updateData["isAgree"] = false;
+      updateData["agree"]=selected["agree"]-1;
+      action="cancelAgree";
+    } else {
+      updateData["isAgree"] = true;
+      updateData["agree"]=selected["agree"]+1;
+      action="agree";
+    }
+
+    await Cloud.cfunction("Post","agreeAnswer",{
+      postid:selected['_postid'],
+      commentid:selected['_id'],
+      action,
+    }).then(res=>{
+      Prompt.toast("投票成功");
+    })
+
+    this.CommentPagination.updateItem(updateData, index, page);
+  },
+  async disagreeAnswer({
+    currentTarget: {
+      dataset: { page, index },
+    },
+  }){
+    let selected = this.data.comments[page][index];
+    let updateData = {
+      isDisagree:false
+    };
+    let action=null;
+    if (selected.isDisagree) {
+      updateData["isDisagree"] = false;
+      updateData["disagree"] = selected['disagree']-1;
+      action="cancelDisagree";
+    } else {
+      updateData["isDisagree"] = true;
+      updateData["disagree"] = selected['disagree']+1;
+      action="disagree";
+    }
+
+    await Cloud.cfunction("Post","disagreeAnswer",{
+      postid:selected['_postid'],
+      commentid:selected['_id'],
+      action,
+    }).then(res=>{
+      Prompt.toast("投票成功");
+    })
+
+    this.CommentPagination.updateItem(updateData, index, page);
+  },
+  hideCommentReplyPopup(){
+    this.setData({
+      isHiddenCommentReplyPopup:true
+    })
   }
 });

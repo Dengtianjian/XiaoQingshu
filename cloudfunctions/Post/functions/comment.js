@@ -288,11 +288,12 @@ let functions = {
     return replys;
   },
   async getQAnswer(event) {
+    const wxContext = cloud.getWXContext();
     let page = event.page || 0;
     let limit = event.limit || 5;
     let postid = event.postid;
 
-    let comments=await Comment.aggregate()
+    let comments = await Comment.aggregate()
       .match({
         _post: postid,
       })
@@ -307,7 +308,7 @@ let functions = {
       })
       .project({
         qa_comment: 0,
-        _commentid:0,
+        _commentid: 0,
       })
       .sort({
         date: -1,
@@ -320,9 +321,11 @@ let functions = {
       });
 
     let authorid = [];
+    let commentId = [];
 
     comments.forEach((item) => {
       authorid.push(item._author);
+      commentId.push(item._id);
     });
 
     let author = await cloud
@@ -359,34 +362,176 @@ let functions = {
     });
     author = arrayToObject(author, "_id");
 
+    let commentVote = await DB.collection("post_qa_comment_vote")
+      .where({
+        _userid: wxContext.openid,
+        _commentid: _.in(commentId),
+      })
+      .get()
+      .then((res) => res["data"]);
+      commentVote=arrayToObject(commentVote,"_commentid");
+
     comments.forEach((item) => {
       item["author"] = author[item["_author"]];
+      if(commentVote[item['_id']]){
+        if(commentVote[item['_id']]['type']=="agree"){
+          item['isAgree']=true;
+        }else{
+          item['isDisagree']=true;
+        }
+      }
     });
 
     return Response.result(comments);
   },
   async saveAnswer(event) {
     let commentId = await functions["saveComment"](event);
-    let postId=event.postid;
-    if(commentId['error']!=200){
-      return commentId
+    let postId = event.postid;
+    if (commentId["error"] != 200) {
+      return commentId;
     }
-    commentId=commentId['data']['_id'];
+    commentId = commentId["data"]["_id"];
 
-    let QAComment=await DB.collection("post_qa_comment").add({
-      data:{
-        _commentid:commentId,
-        _postid:postId,
-        agree:0,
-        disagree:0
-      }
-    }).then(res=>res);
+    let QAComment = await DB.collection("post_qa_comment")
+      .add({
+        data: {
+          _commentid: commentId,
+          _postid: postId,
+          agree: 0,
+          disagree: 0,
+        },
+      })
+      .then((res) => res);
 
     return Response.result({
-      _commentid:commentId,
-      _qa_commentid:QAComment._id
+      _commentid: commentId,
+      _qa_commentid: QAComment._id,
     });
+  },
+  async agreeAnswer(event) {
+    const wxContext = cloud.getWXContext();
+    let commentId = event.commentid;
+    let postId = event.postid;
+    let action = event.action;
 
+    let commentVote = await DB.collection("post_qa_comment_vote")
+      .where({
+        _commentid: commentId,
+        _postid: postId,
+        _userid: wxContext.OPENID,
+      })
+      .get()
+      .then((res) => res["data"]);
+
+    let count = 0;
+    if (action == "cancelAgree") {
+      count = -1;
+      await DB.collection("post_qa_comment_vote")
+        .where({
+          _commentid: commentId,
+          _postid: postId,
+          _userid: wxContext.OPENID,
+        })
+        .remove();
+    } else {
+      count = 1;
+      if (commentVote.length == 0) {
+        await DB.collection("post_qa_comment_vote").add({
+          data: {
+            _commentid: commentId,
+            _postid: postId,
+            _userid: wxContext.OPENID,
+            date: Date.now(),
+            type: action,
+          },
+        });
+      } else {
+        commentVote = commentVote[0];
+        DB.collection("post_qa_comment_vote")
+          .doc(commentVote["_id"])
+          .update({
+            data: {
+              date: Date.now(),
+              type: action,
+            },
+          });
+      }
+    }
+
+    await DB.collection("post_qa_comment")
+      .where({
+        _commentid: commentId,
+        _postid: postId,
+      })
+      .update({
+        data: {
+          agree: _.inc(count),
+        },
+      });
+
+    return Response.result(true);
+  },
+  async disagreeAnswer(event) {
+    const wxContext = cloud.getWXContext();
+    let commentId = event.commentid;
+    let postId = event.postid;
+    let action = event.action;
+
+    let commentVote = await DB.collection("post_qa_comment_vote")
+      .where({
+        _commentid: commentId,
+        _postid: postId,
+        _userid: wxContext.OPENID,
+      })
+      .get()
+      .then((res) => res["data"]);
+
+    let count = 0;
+    if (action == "cancelDisagree") {
+      await DB.collection("post_qa_comment_vote")
+        .where({
+          _commentid: commentId,
+          _postid: postId,
+          _userid: wxContext.OPENID,
+        })
+        .remove();
+      count = -1;
+    } else {
+      count = 1;
+      if (commentVote.length == 0) {
+        await DB.collection("post_qa_comment_vote").add({
+          data: {
+            _commentid: commentId,
+            _postid: postId,
+            _userid: wxContext.OPENID,
+            date: Date.now(),
+            type: action,
+          },
+        });
+      } else {
+        commentVote = commentVote[0];
+        DB.collection("post_qa_comment_vote")
+          .doc(commentVote["_id"])
+          .update({
+            data: {
+              date: Date.now(),
+              type: action,
+            },
+          });
+      }
+    }
+    await DB.collection("post_qa_comment")
+      .where({
+        _commentid: commentId,
+        _postid: postId,
+      })
+      .update({
+        data: {
+          disagree: _.inc(count),
+        },
+      });
+
+    return Response.result(true);
   },
 };
 
