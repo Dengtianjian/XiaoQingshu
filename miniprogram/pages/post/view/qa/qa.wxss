@@ -178,6 +178,18 @@
   background: #ffffff;
 }
 /* 评论弹窗 */
+.navigation-close-button {
+  width:80rpx;
+  font-size:54rpx;
+  color:var(--font-light-color);
+}
+.navigation-question-title {
+  display:inline-block;
+  width:62%;
+  text-overflow:ellipsis;
+  overflow:hidden;
+  white-space: nowrap;
+}
 .comment-post-popup {
   position: fixed;
   z-index: 40;
@@ -189,7 +201,6 @@
 .comment-post-popup .comment-post-form {
   position: absolute;
   z-index: 42;
-  top: -100%;
   left: 0;
   right: 0;
   padding: var(--container-padding);

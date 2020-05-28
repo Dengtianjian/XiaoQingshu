@@ -31,5 +31,9 @@
       <label for="schoolOnly" class="post-option-item-content">仅限 {{ schoolInfo['name'] }} 的同学们可以看到</label>
     </view>
   </view>
+  <view class="content-check-prompt" hidden="{{ hideContentCheckPrompt }}">
+    发布失败，内容存在违规内容，请检查后修改，再重新提交
+    <view class="content-check-result-keyword">{{ evilKeywords }}</view>
+  </view>
   <button class="publish-form-submit" type="primary" form-type="submit">{{ post?'保存':'发布' }}</button>
 </form>

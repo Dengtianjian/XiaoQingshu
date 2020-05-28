@@ -15,6 +15,8 @@ Page({
     currentSort: "dynamic",
     schoolInfo: null,
     schoolEntry: false,
+    evilKeywords:"",
+    hideContentCheckPrompt:true
   },
 
   /**
@@ -87,6 +89,7 @@ Page({
     }).then((res) => {
       let filePaths = res.tempFilePaths;
       if (filePaths.length > 0) {
+        let isCheckFail=false;
         wx.showLoading({
           title: "上传中!Up up",
         });
@@ -101,8 +104,9 @@ Page({
         }
         Cloud.uploadFile(files, "post/").then((res) => {
           images.unshift(...filePaths);
+
           this.setData({
-            images: res,
+            images: [],
           });
           wx.hideLoading();
         });
@@ -139,7 +143,7 @@ Page({
       topic:null
     });
   },
-  savePost(option) {
+  async savePost(option) {
     let formValue = option.detail.value;
     let school = null;
     if (this.data.schoolInfo != null) {
@@ -160,6 +164,51 @@ Page({
     if (this.data.post) {
       _postid = this.data.post._id;
     }
+    //腾讯内容安全审核
+    let checkResult=null;
+    let contentArray=[];
+    if(formValue.content.length>1990){
+      let loopCount=Math.ceil(formValue.content.length/1990);
+      for(let i=1;i<=loopCount;i++){
+        contentArray.push(formValue.content.substr((i-1)*1990,i*1994));
+      }
+    }
+    for(let i=0;i<contentArray.length;i++){
+      checkResult=await wx.serviceMarket.invokeService({
+        service: 'wxee446d7507c68b11',
+        api: 'msgSecCheck',
+        data: {
+          "Action": "TextApproval",
+          "Text":contentArray[i]
+        },
+      }).then((res) => {
+        return res.data.Response.EvilTokens;
+      });
+      if(checkResult.length>0){
+        break;
+      }
+    }
+    if(checkResult.length>0){
+      let isFail=false;
+      for(let i=0;i<checkResult.length;i++){
+        if(checkResult[i]['EvilFlag']==1){
+          isFail=true;
+          break;
+        }
+      }
+      if(isFail){
+        Prompt.toast("发布失败，内容存在违规内容，请检查后修改，再重新提交");
+        let evilKeywords=[];
+        checkResult.forEach(item=>{
+          evilKeywords=evilKeywords.concat(item['EvilKeywords']);
+        })
+        this.setData({
+          evilKeywords:evilKeywords.join("、"),
+          hideContentCheckPrompt:false
+        });
+        return;
+      }
+    }
     Cloud.cfunction("Post", "savePost", {
       _postid,
       ...formValue,
@@ -167,6 +216,7 @@ Page({
       topic,
       images,
       sort: this.data.currentSort,
+      checkResult
     }).then((res) => {
       wx.hideLoading();
       if (_postid) {

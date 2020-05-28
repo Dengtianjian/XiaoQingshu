@@ -1,7 +1,9 @@
 {
   "pages": [
-    "pages/post/view/qa/qa",
+    "pages/post/publish/publish",
     "pages/index/index",
+    "pages/post/view/qa/answer/answer",
+    "pages/post/view/qa/qa",
     "pages/post/view/common/common",
     "pages/class/index/index",
     "pages/school/index/index",
@@ -9,7 +11,6 @@
     "pages/my/notification/notification",
     "pages/my/space/space",
     "pages/my/favorites/favorites",
-    "pages/post/publish/publish",
     "pages/post/select_topic/select_topic",
     "pages/school/select_school/select_school",
     "pages/my/edit_profile/edit_profile",

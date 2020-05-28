@@ -4,7 +4,8 @@ import Prompt from "../../source/js/prompt";
 import Uitils from "../../source/js/utils";
 Component({
   options:{
-    multipleSlots: true
+    multipleSlots: true,
+    styleIsolation:"apply-shared"
   },
   /**
    * 组件的属性列表

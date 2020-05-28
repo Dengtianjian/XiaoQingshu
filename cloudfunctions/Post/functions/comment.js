@@ -533,6 +533,27 @@ let functions = {
 
     return Response.result(true);
   },
+  async getComment({ commentid }){
+    let comment = await Comment.where({
+      _id:commentid
+    }).get().then(res=>res['data']);
+
+    if(comment.length==0){
+      return Response.error(404,404001,"评论不存在");
+    }
+
+    comment=comment[0];
+
+    comment['author']=await cloud.callFunction({
+      name:"User",
+      data:{
+        method:"getUser",
+        _openid:comment['_author']
+      }
+    }).then(res=>res['result']);
+
+    return Response.result(comment);
+  }
 };
 
 module.exports = functions;

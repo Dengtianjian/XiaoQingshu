@@ -72,3 +72,16 @@ button[type='primary'] {
   margin-top: 60rpx;
   width: 690rpx;
 }
+.publish-form-submit {
+  margin-top:20rpx;
+}
+
+/* 内容检查违规提示 */
+.content-check-prompt {
+  margin-top:30rpx;
+  font-size:28rpx;
+  color:var(--font-light-color);
+}
+.content-check-result-keyword {
+  color:red;
+}
