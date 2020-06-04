@@ -5,14 +5,13 @@
 </NavigationBar>
 <!-- 语录&签到 -->
 <view class="quote-signin">
-  <swiper class="quote-swiper" indicator-dots="{{false}}" autoplay="{{true}}" interval="{{5000}}" duration="{{500}}" vertical circular>
+  <swiper class="quote-swiper" indicator-dots="{{false}}" autoplay="{{true}}" interval="{{50000}}" duration="{{500}}" vertical circular>
     <block wx:for="{{quotes}}" wx:key="_id">
       <swiper-item>
         <view class="quote">{{ item.content }}</view>
       </swiper-item>
     </block>
   </swiper>
-  <view class="signin" bind:tap="getPost">SignIn</view>
 </view>
 <!-- 信息流 -->
 <view class="post">

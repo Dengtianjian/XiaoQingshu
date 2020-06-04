@@ -61,7 +61,7 @@ Page({
   },
   onLoad(options) {
     let _postid = options.postid;
-    _postid = "fddd30c55eacdb9d003d1f3344fa65f3";
+    // _postid = "fddd30c55eacdb9d003d1f3344fa65f3";
 
     this.setData(
       {

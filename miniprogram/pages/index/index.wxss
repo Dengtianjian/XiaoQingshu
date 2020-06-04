@@ -12,7 +12,8 @@
   margin: 20rpx var(--container-padding);
   padding: 10rpx 20rpx;
   height: 120rpx;
-  background: #EFEFEF;
+  text-align:center;
+  background: #F8F8F8;
   border-radius: 10rpx;
   box-sizing: border-box;
 }
@@ -23,7 +24,7 @@
 .quote-signin .quote {
   display: -webkit-box ;
   font-weight: bold;
-  font-size: 32rpx;
+  font-size: 28rpx;
   color: var(--font-color);
   text-overflow: ellipsis;
   overflow:hidden;
