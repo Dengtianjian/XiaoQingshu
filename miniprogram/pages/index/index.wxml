@@ -8,7 +8,7 @@
   <swiper class="quote-swiper" indicator-dots="{{false}}" autoplay="{{true}}" interval="{{50000}}" duration="{{500}}" vertical circular>
     <block wx:for="{{quotes}}" wx:key="_id">
       <swiper-item>
-        <view class="quote">{{ item.content }}</view>
+        <rich-text class="quote" nodes="{{ item.content }}"></rich-text>
       </swiper-item>
     </block>
   </swiper>
@@ -36,7 +36,7 @@
   <view class="publish-type-select-wrap">
     <view class="publish-type-select-title">请选择要发布的帖子类型</view>
     <view class="publish-type-select-list">
-      <block wx:for="{{ publish.postType }}" wx:key="name">
+      <block wx:for="{{ sorts }}" wx:key="name">
         <navigator class="publish-type-select-item" open-type="navigate" url="/pages/post/publish/publish?identifier={{ item.identifier }}">
           <image class="publish-type-select-item-icon" src="{{ item.icon }}"></image>
           <view class="publish-type-select-item-text">{{ item.name }}</view>

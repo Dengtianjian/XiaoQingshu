@@ -19,51 +19,39 @@ Page({
       all: [],
     },
     currentShowPostSort: "all",
-    quotes: [
-      {
-        content: "困难像弹簧，你弱它就强，你强它就弱。",
-        likes: 0,
-      },
-    ],
+    quotes: [],
   },
   onLoad() {
-    Cloud.collection("post_sort")
-      .get()
-      .then((res) => {
-        if (res["data"].length > 0) {
-          let sorts = res["data"];
-          let postTabs = this.data.postTabs;
-          let posts = this.data.posts;
-          let postLoad = this.postLoad;
-          sorts.forEach((item) => {
-            postTabs[item["identifier"]] = item["name"];
-            posts[item["identifier"]] = [];
-            postLoad[item["identifier"]] = {
-              count: 0,
-              page: 0,
-              finished: false,
-            };
-          });
-          this.postLoad = postLoad;
-          this.setData({
-            postTabs,
-            posts,
-          });
-        }
-      });
+    const _ = wx.cloud.database().command;
+    Cloud.cfunction("Post", "getSort").then((res) => {
+      if (res["data"].length > 0) {
+        let sorts = res["data"];
+        let postTabs = this.data.postTabs;
+        let posts = this.data.posts;
+        let postLoad = this.postLoad;
+
+        sorts.forEach((item) => {
+          postTabs[item["identifier"]] = item["name"];
+          posts[item["identifier"]] = [];
+          postLoad[item["identifier"]] = {
+            count: 0,
+            page: 0,
+            finished: false,
+          };
+        });
+        this.postLoad = postLoad;
+        this.setData({
+          postTabs,
+          posts,
+          sorts,
+        });
+      }
+    });
 
     this.getPost();
   },
   onReady() {
     this.getQuotes();
-
-    Cloud.collection("post_sort")
-      .get()
-      .then((res) => {
-        this.setData({
-          "publish.postType": res.data,
-        });
-      });
   },
   onPageScroll(e) {
     this.setData({
@@ -71,11 +59,11 @@ Page({
     });
   },
   onPullDownRefresh() {
-    let currentShowPostSort=this.data.currentShowPostSort;
+    let currentShowPostSort = this.data.currentShowPostSort;
     this.postLoad[currentShowPostSort] = { count: 0, page: 0, finished: false };
     this.setData(
       {
-        [`posts.${currentShowPostSort}`]:[],
+        [`posts.${currentShowPostSort}`]: [],
       },
       () => {
         this.getPost();
@@ -140,6 +128,7 @@ Page({
     await Cloud.cfunction("Post", "getPosts", {
       page: currentPageLoad.page,
       sort: currentShowPostSort == "all" ? null : currentShowPostSort,
+      status: "normal",
     }).then((res) => {
       if (res.length < 5) {
         currentPageLoad.finished = true;
@@ -188,5 +177,5 @@ Page({
       }
       wx.stopPullDownRefresh();
     });
-  }
+  },
 });
