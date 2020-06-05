@@ -172,7 +172,10 @@ Page({
       for(let i=1;i<=loopCount;i++){
         contentArray.push(formValue.content.substr((i-1)*1990,i*1994));
       }
+    }else{
+      contentArray=[formValue.content];
     }
+
     for(let i=0;i<contentArray.length;i++){
       checkResult=await wx.serviceMarket.invokeService({
         service: 'wxee446d7507c68b11',
@@ -224,9 +227,15 @@ Page({
           icon: "success",
         });
       }else{
+        let navigateTo="";
+        if(this.data.currentSort=="qa"){
+          navigateTo="/pages/post/view/qa/qa?postid="+res['_postid'];
+        }else{
+          navigateTo="/pages/post/view/common/common?postid="+res['_postid'];
+        }
         Prompt.toast("发布成功",{
           icon:"success",
-          navigateTo:"/pages/post/view/view?postid="+res['_postid']
+          navigateTo
         });
       }
     });

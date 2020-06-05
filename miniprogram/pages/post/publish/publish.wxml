@@ -2,6 +2,7 @@
 <import src="./template/dynamic.wxml" />
 <import src="./template/qa.wxml" />
 <import src="./template/note.wxml" />
+<import src="./template/news.wxml" />
 <NavigationBar />
 <form class="publish-post-form" bindsubmit="savePost">
   <template is="{{ currentSort }}" data="{{ ...post }}"></template>
