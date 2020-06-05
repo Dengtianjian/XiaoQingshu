@@ -50,6 +50,11 @@
   border-bottom: 2rpx solid var(--light-color);
   /* 帖子操作 */
 }
+/* 帖子状态 */
+.post-status {
+  display:block;
+  margin:20rpx var(--container-padding) 40rpx;
+}
 .post .post-title {
   font-size: 36rpx;
   font-weight: bold;

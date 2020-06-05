@@ -3,7 +3,6 @@ import Cloud from "../../../../source/js/cloud";
 import Prompt from "../../../../source/js/prompt";
 import Utils from "../../../../source/js/utils";
 
-
 const App = getApp();
 Page({
   /**
@@ -142,14 +141,26 @@ Page({
           }
         });
 
+      await App.getUserInfo();
       if (post["_authorid"] == App.userInfo["_userid"]) {
+        let school = {};
+        if (App.userInfo["_default_school"]) {
+          console.log(App.userInfo["_default_school"]);
+          school = {
+            name: App.userInfo["school"]["name"],
+          };
+        }
+        console.log(school);
         setData["post"]["author"] = {
           nickname: App.userInfo["nickname"],
           avatar_url: App.userInfo["avatar_url"],
           _id: App.userInfo["_userid"],
           school: App.userInfo["school"]["name"],
           _default_school: App.userInfo["_default_school"],
-          prefessional: App.userInfo["class"]["profession"],
+          class: {
+            prefessional: App.userInfo["class"]["profession"],
+          },
+          school,
         };
       } else {
         await Cloud.cfunction("User", "getUser", {
@@ -159,11 +170,7 @@ Page({
         });
       }
       this.setData(setData);
-      if (this.hasOwnProperty(`${post["sort"]["identifier"]}GetComment`)) {
-        this[`${post["sort"]["identifier"]}GetComment`]();
-      } else {
-        this.getComment();
-      }
+      this.getComment();
 
       wx.hideLoading();
     });
@@ -573,5 +580,5 @@ Page({
           },
         });
       });
-  }
+  },
 });
