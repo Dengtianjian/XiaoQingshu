@@ -1,9 +1,5 @@
 /* pages/school.wxss */
-page {
-  min-height:100%;
-}
 .switch-school {
-  color: #ffffff;
   font-size: 36rpx;
 }
 .navigator-bar-background {
@@ -11,9 +7,15 @@ page {
   z-index: -1;
   top: 0;
   left: 0;
-  height: 380rpx;
+  height: 30%;
   width: 100%;
   border-radius: 0 0 30rpx 30rpx;
+  background: var(--main-color);
+}
+.navigator-bar-background .navigator-bar-background-image {
+  margin: -10px;
+  width: 105%;
+  filter: blur(1px) brightness(90%);
 }
 /* 学校信息 */
 .school-info {
@@ -22,8 +24,11 @@ page {
   width: 100%;
   padding: var(--container-padding);
 }
-.school-info .school-info-left {
-  margin-top: 26rpx;
+.school-info .school-info-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 40rpx;
   width: 90%;
   color: #ffffff;
 }
@@ -31,12 +36,13 @@ page {
   font-size: 36rpx;
 }
 .school-info .school-info-statictics {
+  flex-grow: 2;
   display: flex;
-  margin-top: 24rpx;
 }
 .school-info .school-info-statictics .school-info-statictics-item {
   width: 33%;
   color: #ffffff;
+  text-align: center;
 }
 .school-info .school-info-statictics .school-info-statictics-item-title {
   font-size: 24rpx;
@@ -46,41 +52,22 @@ page {
 }
 .school-info .school-info-logo {
   flex-shrink: 0;
-  margin-top: 26rpx;
-  width: 140rpx;
-  height: 140rpx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-sizing: border-box;
 }
-/* 已加入的学校列表 */
-.joined-school-item {
-  display:grid;
-  grid-template-columns: auto 100rpx;
-  align-items: center;
-  justify-content: space-between;
-  height:100rpx;
+.school-info .school-share-button {
+  flex-grow: 1;
+  padding: 0!important;
+  margin: 0!important;
+  border: none!important;
+  background: none!important;
 }
-.joined-school-info {
-  display:flex;
-  align-items:center;
-}
-.joined-school-logo {
-  width:70rpx;
-  height:70rpx;
-  border-radius:50%;
-}
-.joined-school-name {
-  margin-left:10rpx;
-  font-size:32rpx;
-}
-.joined-school-exit {
-  color:var(--font-light-color);
-}
-.joined-school-current {
-  margin-right:16rpx;
-  color:var(--main-color);
-}
-.joined-school-operate {
-  text-align:right;
+.school-info .school-share-button .school-share-button-icon {
+  font-size: 60rpx;
+  color: rgba(255, 255, 255, 0.8);
 }
 /* 没有加入学校显示提示 */
 .not-join-school {
@@ -110,8 +97,10 @@ page {
   border-radius: 10rpx;
 }
 .container {
-  margin-top: 50rpx;
-  padding: 0 var(--container-padding);
+  padding: 10px 0 0 10px;
+  margin-top: 40rpx;
+  background: white;
+  border-radius: 40px  20px 0;
 }
 .pinche-entry {
   margin-bottom: 30rpx;
@@ -126,13 +115,38 @@ page {
 .post-list {
   display: block;
 }
-.post-item {
-  display:block;
-  padding-bottom:40rpx;
+.post-list .post-item {
+  display: block;
   margin-bottom: 40rpx;
-  border-bottom:2rpx solid #eee;
 }
-
-.page-prompt {
-  display:block;
+/* 已加入的学校列表 */
+.joined-school-item {
+  display: grid;
+  grid-template-columns: auto 100rpx;
+  align-items: center;
+  justify-content: space-between;
+  height: 100rpx;
+}
+.joined-school-info {
+  display: flex;
+  align-items: center;
+}
+.joined-school-logo {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+}
+.joined-school-name {
+  margin-left: 10rpx;
+  font-size: 32rpx;
+}
+.joined-school-exit {
+  color: var(--font-light-color);
+}
+.joined-school-current {
+  margin-right: 16rpx;
+  color: var(--main-color);
+}
+.joined-school-operate {
+  text-align: right;
 }

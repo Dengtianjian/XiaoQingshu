@@ -1,12 +1,12 @@
 {
   "pages": [
+    "pages/class/index/index",
+    "pages/school/index/index",
     "pages/index/index",
     "pages/post/publish/publish",
     "pages/post/view/qa/answer/answer",
     "pages/post/view/qa/qa",
     "pages/post/view/common/common",
-    "pages/class/index/index",
-    "pages/school/index/index",
     "pages/my/index/index",
     "pages/my/notification/notification",
     "pages/my/space/space",

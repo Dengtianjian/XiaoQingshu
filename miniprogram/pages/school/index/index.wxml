@@ -35,7 +35,8 @@
       </view>
     </Dialog>
     <view class="school-info">
-      <view class="school-info-left">
+      <image class="school-info-logo" src="{{ schoolInfo['logo'] }}"></image>
+      <view class="school-info-right">
         <!-- <view class="school-info-name" wx:if="{{ userInfo['class'] }}">
           {{ userInfo['class']['grade'] }}届 {{ userInfo['class']['profession'] }}
         </view> -->
@@ -53,27 +54,32 @@
             <view class="school-info-statictics-item-title">人数</view>
           </view> -->
         </view>
+        <button class="school-share-button" open-type="share">
+          <view class="school-share-button-icon qcicon qcicon-share"></view>
+        </button>
       </view>
-      <image class="school-info-logo" src="{{ schoolInfo['logo'] }}"></image>
     </view>
-    <image class="navigator-bar-background" src="/material/images/school_head_default_background.png"></image>
+    <view class="navigator-bar-background">
+      <image class="navigator-bar-background-image" src="/material/images/school_head_default_background.jpg"></image>
+    </view>
+    <!-- <image class="navigator-bar-background" src="/material/images/school_head_default_background.png"></image> -->
     <view class="container">
-      <navigator class="pinche-entry" open-type="navigate" url="" hover-class="">
+      <!-- <navigator class="pinche-entry" open-type="navigate" url="" hover-class="">
         <image class="pinche-entry-banner" src="/material/images/school_pinche_entry.png" mode="aspectFill"></image>
-      </navigator>
-    </view>
-    <view class="post">
-      <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" bind:change="postTabChange">
-        <block wx:for="{{ postTabs }}" wx:key="index">
-          <view slot="{{ index }}">
-            <block wx:for="{{ posts[index] }}" wx:for-item="postArray" wx:for-index="postArrayIndex" wx:key="postArrayIndex">
-              <block wx:for="{{ postArray }}" wx:key="index">
-                <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
+      </navigator> -->
+      <view class="post-list">
+        <Tabs tabs="{{ postTabs }}" current="all" updateSwiperHeight="{{ updateSwiperHeight }}" bind:change="postTabChange">
+          <block wx:for="{{ postTabs }}" wx:key="index">
+            <view slot="{{ index }}">
+              <block wx:for="{{ posts[index] }}" wx:for-item="postArray" wx:for-index="postArrayIndex" wx:key="postArrayIndex">
+                <block wx:for="{{ postArray }}" wx:key="index">
+                  <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
+                </block>
               </block>
-            </block>
-          </view>
-        </block>
-      </Tabs>
+            </view>
+          </block>
+        </Tabs>
+      </view>
     </view>
   </block>
   <block wx:elif="{{ userIsLogin&&schoolInfo==null }}">
