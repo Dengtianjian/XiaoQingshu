@@ -11,3 +11,4 @@
   </block>
 </view>
 <view class="comment-reply-operate-item comment-reply-button qcicon qcicon-suggest" bind:tap="showCommentPopup" data-type="replyComment"></view>
+<InputPopup hidden="{{ hiddenInputReplyPopup }}" bind:submit="replyComment" submitButtonText="发送" />

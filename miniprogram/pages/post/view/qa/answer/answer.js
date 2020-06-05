@@ -12,6 +12,7 @@ Page({
       _id: null,
     },
     replys: [],
+    hiddenInputReplyPopup:true
   },
 
   /**
@@ -98,5 +99,13 @@ Page({
     }).catch(res=>{
       console.log(res);
     })
+  },
+  showCommentPopup(){
+    this.setData({
+      hiddenInputReplyPopup:false
+    });
+  },
+  replyComment(e){
+    console.log(e);
   }
 });
