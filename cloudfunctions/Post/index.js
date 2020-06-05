@@ -12,10 +12,12 @@ const wxContext = cloud.getWXContext();
 
 const Like = require("./functions/like");
 const Comment = require("./functions/comment");
-const injectKey = [].concat(Object.keys(Like), Object.keys(Comment));
+const Sort = require("./functions/sort");
+const injectKey = [].concat(Object.keys(Like), Object.keys(Comment),Object.keys(Sort));
 const injectFunctions = {
   ...Like,
   ...Comment,
+  ...Sort
 };
 
 function arrayToObject(array, key) {
@@ -104,9 +106,16 @@ let functions = {
       data["replies"] = 1;
       data["hidden"] = false;
       data["closed"] = false;
-      data["status"] = "normal";
       data["likes"] = 0;
       data["_school"] = data["_school"] ? data["_school"] : "";
+
+      //检查 内容安全结果
+      if(event['checkResult'].length>0){
+        data['checkResult']=event['checkResult'];
+        data["status"]="reviewAgain";
+      }else {
+        data["status"] = "normal";
+      }
       let addResult = await Post.add({
         data,
       }).then((res) => {
@@ -231,6 +240,10 @@ let functions = {
     let page = event.page || 0;
     let sort = event.sort || null;
     let school = event.school || null;
+    let status=event.status||"normal";
+    if(status=="all"){
+      ststus=null;
+    }
 
     let postsQuery = cloud.database().collection("post");
     let whereQuery = {};
@@ -251,6 +264,9 @@ let functions = {
     }
     if (school) {
       whereQuery["_school"] = school;
+    }
+    if(status){
+      whereQuery['status']=status;
     }
     let posts = await postsQuery
       .where(whereQuery)
@@ -365,13 +381,22 @@ let functions = {
     let userid = event.userid;
     let page = event.page || 0;
     let limit = event.limit || 5;
+    let status=event.status||"normal";
+    if(status=="all"){
+      status=null;
+    }
 
-    let posts = await Post.where({
+    let whereQuery={
       _authorid: userid,
-    })
+    };
+    if(status){
+      whereQuery['status']=status;
+    }
+    let posts = await Post.where(whereQuery)
       .field({
         _id: true,
       })
+      .orderBy("date","desc")
       .limit(limit)
       .skip(limit * page)
       .get()
