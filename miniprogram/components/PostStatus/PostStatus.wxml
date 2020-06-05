@@ -1,0 +1,16 @@
+<!-- components/PostStatus/PostStatus.wxml -->
+<view class="post-status-wrap">
+  <view class="post-status post-status-primary" wx:if="{{ status=='underReview' }}" bind:tap="displayEvilKeywords">
+    可能存在违规内容，审核中
+  </view>
+  <view class="post-status post-status-warning" wx:elif="{{ status=='reviewAgain' }}" bind:tap="displayEvilKeywords">
+    可能存在违规内容，待人工复审
+  </view>
+  <view class="post-status" wx:elif="{{ status=='hidden' }}">已被隐藏</view>
+  <view class="post-evil-keywords" hidden="{{ hideEvilKeywords }}" wx:if="{{ checkResult.length>0 }}">
+    可能违规内容：
+    <block wx:for="{{ checkResult }}" wx:key="evilArrayIndex" wx:for-item="evilArray" wx:for-index="evilArrayIndex">
+      <block wx:for="{{ evilArray['EvilKeywords'] }}" wx:key="index">{{ item }}</block>
+    </block>
+  </view>
+</view>
