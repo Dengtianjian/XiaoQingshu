@@ -1,7 +1,7 @@
 <!-- pages/class/class.wxml -->
 <block wx:if="{{ pageLoadingCompleted }}">
   <block wx:if="{{ classInfo!=null }}">
-    <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" defaultColor="#ffffff" hiddenReturnPage="{{ true }}">
+    <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" interval="{{ 20000 }}" defaultColor="#ffffff" hiddenReturnPage="{{ true }}">
       <view class="grade">{{ classInfo['grade'] }}级</view>
     </NavigationBar>
     <view class="class-info">
@@ -43,17 +43,25 @@
       </view>
       <StatisticsGrid class="class-statistics" statistics="{{ statistics }}" textAlign="left" countFontSize="32rpx" titleFontSize="20rpx" />
     </view>
-    <view class="head-background"></view>
+    <view class="head-background">
+      <swiper class="album-swiper" indicator-dots="{{false}}" autoplay="{{true}}" circular >
+        <block wx:for="{{photos}}" wx:key="index">
+          <swiper-item>
+            <image class="album-swiper-item" src="{{ item._fileid }}" mode="aspectFill"></image>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
     <view class="radius-container">
       <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album?classid={{ classInfo['_id'] }}">
-        <view class="album-entry" wx:if="{{ photos.length==0 }}">
+        <view class="album-entry" >
           <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
         </view>
-        <view class="album-list" wx:else>
+        <!-- <view class="album-list" wx:else>
           <block wx:for="{{ photos }}" wx:key="index">
             <image class="album-item" src="{{ item._fileid }}" mode="aspectFill"></image>
           </block>
-        </view>
+        </view> -->
       </navigator>
       <view class="classmate">
         <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
