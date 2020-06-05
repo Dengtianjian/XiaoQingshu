@@ -291,7 +291,7 @@ let functions = {
     const wxContext = cloud.getWXContext();
     let page = event.page || 0;
     let limit = event.limit || 5;
-    let postid = event.postid;
+    let postid = event._postid;
 
     let comments = await Comment.aggregate()
       .match({
