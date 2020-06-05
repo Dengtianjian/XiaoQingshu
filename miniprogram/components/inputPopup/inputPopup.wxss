@@ -1,0 +1,8 @@
+/* components/inputPopup/inputPopup.wxss */
+.input-container {
+  padding:var(--container-padding);
+}
+
+.input-form-submit {
+  margin-top:40rpx;
+}

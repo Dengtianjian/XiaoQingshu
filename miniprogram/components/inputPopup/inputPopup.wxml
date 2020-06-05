@@ -1,0 +1,14 @@
+<!-- components/inputPopup/inputPopup.wxml -->
+<Popup hidden="{{ hidden }}" position="top">
+  <view class="input-container" style="margin-top:{{ navigatorHeight }}px;">
+    <slot name="header"></slot>
+    <form class="input-form" bindsubmit="submit">
+      <slot name="form_header"></slot>
+      <textarea class="input-form-content" name="content" placeholder="{{ contentPlaceholder }}" />
+      <slot name="form_middle"></slot>
+      <button class="input-form-submit" type="primary" form-type="submit">{{ submitButtonText }}</button>
+      <slot name="form_footer"></slot>
+    </form>
+    <slot name="footer"></slot>
+  </view>
+</Popup>
