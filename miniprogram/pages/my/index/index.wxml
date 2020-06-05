@@ -53,7 +53,7 @@
       },{
         icon:"/material/temp/2.png",
         title:"帖子",
-        url:""
+        url:"/pages/my/post/post"
       },{
         icon:"/material/temp/3.png",
         title:"资料",

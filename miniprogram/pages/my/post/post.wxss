@@ -1,0 +1,10 @@
+/* miniprogram/pages/my/post/post.wxss */
+
+/* 帖子列表 */
+.post-list {
+  margin:var(--container-padding);
+}
+.post-item {
+  display:block;
+  margin-bottom:80rpx;
+}

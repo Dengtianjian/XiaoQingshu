@@ -1,0 +1,9 @@
+<!-- miniprogram/pages/my/post/post.wxml -->
+<NavigationBar pageTitle="我的帖子" />
+<view class="post-list">
+  <blovk wx:for="{{ posts }}" wx:for-item="postArray" wx:for-index="postArrayIndex" wx:key="postArrayIndex">
+    <block wx:for="{{ postArray }}" wx:key="index">
+      <PostCoverItem class="post-item" post="{{ item }}" />
+    </block>
+  </blovk>
+</view>
