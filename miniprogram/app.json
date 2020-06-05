@@ -1,10 +1,11 @@
 {
   "pages": [
+    "pages/index/index",
+    "pages/my/post/post",
+    "pages/post/view/qa/answer/answer",
     "pages/class/index/index",
     "pages/school/index/index",
-    "pages/index/index",
     "pages/post/publish/publish",
-    "pages/post/view/qa/answer/answer",
     "pages/post/view/qa/qa",
     "pages/post/view/common/common",
     "pages/my/index/index",

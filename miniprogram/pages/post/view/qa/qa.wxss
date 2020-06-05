@@ -1,3 +1,4 @@
+
 /* 作者 */
 .author {
   display: grid;
@@ -50,6 +51,13 @@
   border-bottom: 2rpx solid var(--light-color);
   /* 帖子操作 */
 }
+
+/* 帖子状态 */
+.post .post-status {
+  display:block;
+  margin-bottom:20rpx;
+}
+
 .post .post-title {
   font-size: 36rpx;
   font-weight: bold;

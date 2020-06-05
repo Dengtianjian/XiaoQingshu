@@ -2,6 +2,7 @@
 <import src="../template/operate.wxml" />
 <navigationBar opacity="0.8" backgroundColor="#ffffff" />
 <view class="post post-qa">
+  <PostStatus class="post-status" status="{{ post['status'] }}" checkResult="{{ post['checkResult'] }}" />
   <template is="title" data="{{ ...{ title:post.title } }}" />
   <view class="post-content {{ showAllContent?'':'post-content-hide' }}">{{ post.content }}</view>
   <view class="post-show-content" bind:tap="displayAllContent" hidden="{{ showAllContent }}">
@@ -41,8 +42,6 @@
   </block>
 </view>
 <view class="comment-post-tips" bind:tap="showCommentPopup" data-type="postComment">回答问题</view>
-<view class="comment-post-placeholder"></view>
-<view class="comment-post-tips" bind:tap="showCommentPopup" data-type="postComment">评论一个</view>
 <view class="comment-post-placeholder"></view>
 <Dialog hidden="{{ favorite.popupIsHide }}" position="center" textAlign="center" title="请选择要存放到的收藏夹" height="60%" cancelButton="" bind:confirm="confirmFavorite">
   <scroll-view scroll-y="{{true}}" class="album-list" slot="content" bind:scrolltolower="getFavoriteAblum">

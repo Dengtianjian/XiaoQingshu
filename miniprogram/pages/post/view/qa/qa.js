@@ -24,10 +24,11 @@ Page({
       currentSelect: 0,
       albums: [],
     },
+    hideEvilKeywords:true
   },
   onLoad(options) {
     let _postid = options.postid;
-    _postid = "fddd30c55eacdb9d003d1f3344fa65f3";
+    // _postid = "fddd30c55eacdb9d003d1f3344fa65f3";
     this.CommentPagination = new Pagination(this, "comments", 1, false, 5);
 
     this.setData(
@@ -359,7 +360,6 @@ Page({
         replyid: replyReplyData["_id"],
         replyauthor: replyReplyData["author"]["nickname"],
       };
-      console.log(replyReply);
     }
 
     await Cloud.cfunction("Post", "replyComment", {
@@ -511,10 +511,12 @@ Page({
     ) {
       return;
     }
+    console.log(1);
     this.CommentPagination.setLoading(true);
     Cloud.cfunction("Post", "getQAnswer", {
       page: this.CommentPagination.getPage(),
       limit: this.CommentPagination.limit,
+      _postid:this.data.post._id
     }).then((comments) => {
       if (comments.length < this.CommentPagination.limit) {
         this.CommentPagination.setFinished(true);
@@ -591,6 +593,11 @@ Page({
   hideCommentReplyPopup(){
     this.setData({
       isHiddenCommentReplyPopup:true
+    })
+  },
+  displayEvilKeywords(){
+    this.setData({
+      hideEvilKeywords:!this.data.hideEvilKeywords
     })
   }
 });
