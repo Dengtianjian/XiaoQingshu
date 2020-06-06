@@ -18,9 +18,27 @@ Page({
    */
   async onLoad(options) {
     let _classid = options._classid;
+
     this.setData({
       classId:_classid
     });
+
+    let isJoined=await Cloud.cfunction("User","checkJoined",{
+      _classid
+    }).then(res=>{
+      if(res.length>0){
+        return true;
+      }else{
+        return false;
+      }
+    });
+
+    if(isJoined){
+      Prompt.toast("😀您已是该班级同学了",{
+        switchTab:"/pages/class/index/index"
+      })
+      return ;
+    }
 
     let userInfo = await App.getUserInfo().then((res) => {
       this.setData({

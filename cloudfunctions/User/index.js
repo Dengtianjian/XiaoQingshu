@@ -260,7 +260,19 @@ let functions = {
       });
     }
   },
+  async checkJoined(event){
+    const wxContext=cloud.getWXContext();
+    let _classid=event._classid;
 
+    let result=await DB.collection("user_joined_class").where({
+      _classid,
+      _userid:wxContext.OPENID
+    }).get().then(res=>{
+      return res['data'];
+    });
+
+    return result;
+  },
   /* update主页背景进数据库 */
   async updateUserBg(event) {
     const wxContext = cloud.getWXContext();
@@ -293,6 +305,7 @@ exports.main = async (event, context) => {
     "submitFeedback",
     "getUser",
     "updateUserBg",
+    "checkJoined"
   ];
   let method = event.method;
   if (!methods.includes(method)) {

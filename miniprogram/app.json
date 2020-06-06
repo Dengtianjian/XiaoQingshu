@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/class/invite_join/invite_join",
     "pages/index/index",
     "pages/my/post/post",
     "pages/post/view/qa/answer/answer",
@@ -15,7 +16,6 @@
     "pages/post/select_topic/select_topic",
     "pages/school/select_school/select_school",
     "pages/my/edit_profile/edit_profile",
-    "pages/class/invite_join/invite_join",
     "pages/class/album/album",
     "pages/class/edit_info/edit_info",
     "pages/post/answer_question/answer_question",
