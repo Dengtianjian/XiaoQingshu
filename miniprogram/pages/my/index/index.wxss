@@ -93,6 +93,10 @@ page {
 .quick-navigation-item .quick-navigation-item-right-arrow {
   color: var(--font-light-color);
 }
+.quick-navigation-item .quick-navigation-noopen-prompt {
+  font-size: 20rpx;
+  color: var(--font-light-color);
+}
 
 /* 选择主页背景 */
 .choose-bg-popup-mask{

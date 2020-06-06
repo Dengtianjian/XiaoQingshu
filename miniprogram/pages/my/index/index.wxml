@@ -94,7 +94,7 @@
     <block wx:for="{{ quickConfig.navigations }}">
       <navigator class="quick-navigation-item" open-type="navigate" url="{{ item.url }}">
         <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ quickConfig.size }}"></Icon>
-        <text class="quick-navigation-item-title">{{ item.title }}</text>
+        <text class="quick-navigation-item-title">{{ item.title }} <text class="quick-navigation-noopen-prompt" wx:if="{{ item['url']=='' }}">(功能未开放)</text></text>
         <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
       </navigator>
     </block>
