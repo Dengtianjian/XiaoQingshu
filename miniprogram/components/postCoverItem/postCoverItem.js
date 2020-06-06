@@ -1,29 +1,31 @@
 // components/postCoverItem/postCoverItem.js
 Component({
-  styleIsolation:"apply-shared",
+  options:{
+    styleIsolation: "apply-shared",
+  },
   /**
    * 组件的属性列表
    */
   properties: {
     type: {
       type: String,
-      value: "common"
+      value: "common",
     },
-    post:{
-      type:Object,
-      observe(value){
-        if(!value){
+    post: {
+      type: Object,
+      observe(value) {
+        if (!value) {
           console.error("帖子组件必须传入 data");
         }
-      }
-    }
+      },
+    },
   },
 
   ready() {
     let templateName = "dynamic-post";
     let postBodyClass = "";
-    let templateData={};
-    switch (this.data.post.sort['identifier']) {
+    let templateData = {};
+    switch (this.data.post.sort["identifier"]) {
       case "dynamic":
         templateName = "dynamic-post";
         postBodyClass = "post-body-dynamic";
@@ -31,13 +33,16 @@ Component({
       case "qa":
         templateName = "qa-post";
         postBodyClass = "post-body-qa";
-        templateData={};
+        templateData = {};
         break;
+      default:
+        templateName = "dynamic-post";
+        postBodyClass = "post-body-dynamic";
     }
 
     this.setData({
       templateName,
-      postBodyClass
+      postBodyClass,
     });
   },
 
@@ -47,13 +52,11 @@ Component({
   data: {
     templateName: "dynamic-post",
     postBodyClass: "post-body-dynamic",
-    templateData:null
+    templateData: null,
   },
 
   /**
    * 组件的方法列表
    */
-  methods: {
-
-  }
-})
+  methods: {},
+});
