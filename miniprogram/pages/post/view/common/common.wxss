@@ -61,6 +61,7 @@
   color: var(--font-color);
 }
 .post .post-content {
+  display:block;
   margin-top: 20rpx;
   line-height: 48rpx;
   font-size: 28rpx;

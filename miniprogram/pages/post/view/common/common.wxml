@@ -3,7 +3,7 @@
 <import src="../template/operate.wxml" />
 <navigationBar opacity="0.8" backgroundColor="#ffffff" />
 <view wx:if="{{ pageLoaded }}">
-  <PostStatus class="post-status" status="{{ post['status'] }}" checkResult="{{ post['checkResult'] }}" />
+  <PostStatus class="post-status" status="{{ post['status'] }}" checkResult="{{ post['checkResult'] }}" wx:if="{{ post['status']!='normal' }}" />
   <view class="author" >
     <image class="author-avatar" src="{{ post.author.avatar_url }}"></image>
     <navigator class="author-info" open-type="navigate" hover-class="none" url="/pages/my/space/space?userid={{ post.author._id }}">
@@ -22,7 +22,7 @@
   </view>
   <view class="post">
     <view class="post-title">{{ post.title }}</view>
-    <view class="post-content">{{ post.content }}</view>
+    <rich-text class="post-content" nodes="{{ post.content }}"></rich-text>
     <view class="post-images">
       <block wx:for="{{ post.images }}" wx:key="index">
         <image class="post-image-item" src="{{ item }}" mode="aspectFill" bind:tap="previewImage" data-index="{{ index }}"></image>
