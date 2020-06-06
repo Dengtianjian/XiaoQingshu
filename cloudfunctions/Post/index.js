@@ -42,6 +42,8 @@ let functions = {
       return Response.error(400, 400002, "请输入内容");
     }
     let data = event;
+    data['content']= data['content'].replace(/\r\n/g,"<br/>");
+    data['content']= data['content'].replace(/\n/g,"<br/>");
 
     if (postId) {
       delete event._postid;
@@ -108,6 +110,7 @@ let functions = {
       data["closed"] = false;
       data["likes"] = 0;
       data["_school"] = data["_school"] ? data["_school"] : "";
+      data["content"]=data["content"].replace("\r\n","<br/>");
 
       //检查 内容安全结果
       if(event['checkResult'].length>0){
@@ -284,9 +287,13 @@ let functions = {
       users.push(item._authorid);
       sorts.push(item.sort);
       topics.push(item.topic);
-    });
+      item['content']=item['content'].replace(/<br ?\/>/g," ");
+      if(item['content'].length>80){
+        item['content']=item['content'].slice(0,80);
+        item['content']+="...";
+      }
 
-    console.log(users);
+    });
 
     //帖子作者
     users = await cloud
