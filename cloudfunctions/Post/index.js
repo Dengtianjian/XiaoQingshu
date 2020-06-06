@@ -13,11 +13,15 @@ const wxContext = cloud.getWXContext();
 const Like = require("./functions/like");
 const Comment = require("./functions/comment");
 const Sort = require("./functions/sort");
-const injectKey = [].concat(Object.keys(Like), Object.keys(Comment),Object.keys(Sort));
+const injectKey = [].concat(
+  Object.keys(Like),
+  Object.keys(Comment),
+  Object.keys(Sort)
+);
 const injectFunctions = {
   ...Like,
   ...Comment,
-  ...Sort
+  ...Sort,
 };
 
 function arrayToObject(array, key) {
@@ -42,8 +46,8 @@ let functions = {
       return Response.error(400, 400002, "请输入内容");
     }
     let data = event;
-    data['content']= data['content'].replace(/\r\n/g,"<br/>");
-    data['content']= data['content'].replace(/\n/g,"<br/>");
+    data["content"] = data["content"].replace(/\r\n/g, "<br/>");
+    data["content"] = data["content"].replace(/\n/g, "<br/>");
 
     if (postId) {
       delete event._postid;
@@ -110,13 +114,13 @@ let functions = {
       data["closed"] = false;
       data["likes"] = 0;
       data["_school"] = data["_school"] ? data["_school"] : "";
-      data["content"]=data["content"].replace("\r\n","<br/>");
+      data["content"] = data["content"].replace("\r\n", "<br/>");
 
       //检查 内容安全结果
-      if(event['checkResult'].length>0){
-        data['checkResult']=event['checkResult'];
-        data["status"]="reviewAgain";
-      }else {
+      if (event["checkResult"].length > 0) {
+        data["checkResult"] = event["checkResult"];
+        data["status"] = "reviewAgain";
+      } else {
         data["status"] = "normal";
       }
       let addResult = await Post.add({
@@ -181,7 +185,7 @@ let functions = {
       let schoolIds = [];
       let topicIds = [];
       let userIds = [];
-      let sortIdentifier=[];
+      let sortIdentifier = [];
       posts.forEach((item) => {
         if (item["_school"]) {
           schoolIds.push(item["_school"]);
@@ -189,7 +193,7 @@ let functions = {
         if (item["topic"]) {
           topicIds.push(item["topic"]);
         }
-        sortIdentifier.push(item['sort']);
+        sortIdentifier.push(item["sort"]);
 
         // userIds.push(item["_authorid"]);
       });
@@ -213,10 +217,13 @@ let functions = {
         .then((res) => res["data"]);
       topics = arrayToObject(topics, "_id");
 
-      let sort=await DB.collection("post_sort").where({
-        identifier:_.in(sortIdentifier)
-      }).get().then(res=>res['data']);
-      sort=arrayToObject(sort,"identifier");
+      let sort = await DB.collection("post_sort")
+        .where({
+          identifier: _.in(sortIdentifier),
+        })
+        .get()
+        .then((res) => res["data"]);
+      sort = arrayToObject(sort, "identifier");
 
       posts.forEach((item) => {
         if (item["_school"]) {
@@ -225,7 +232,7 @@ let functions = {
         if (item["topic"]) {
           item["topic"] = topics[item["topic"]];
         }
-        item['sort']=sort[item['sort']];
+        item["sort"] = sort[item["sort"]];
         // item["author"] = users[item["_authorid"]];
       });
 
@@ -243,9 +250,9 @@ let functions = {
     let page = event.page || 0;
     let sort = event.sort || null;
     let school = event.school || null;
-    let status=event.status||"normal";
-    if(status=="all"){
-      ststus=null;
+    let status = event.status || "normal";
+    if (status == "all") {
+      ststus = null;
     }
 
     let postsQuery = cloud.database().collection("post");
@@ -268,8 +275,8 @@ let functions = {
     if (school) {
       whereQuery["_school"] = school;
     }
-    if(status){
-      whereQuery['status']=status;
+    if (status) {
+      whereQuery["status"] = status;
     }
     let posts = await postsQuery
       .where(whereQuery)
@@ -287,12 +294,11 @@ let functions = {
       users.push(item._authorid);
       sorts.push(item.sort);
       topics.push(item.topic);
-      item['content']=item['content'].replace(/<br ?\/>/g," ");
-      if(item['content'].length>80){
-        item['content']=item['content'].slice(0,80);
-        item['content']+="...";
+      item["content"] = item["content"].replace(/<br ?\/>/g, " ");
+      if (item["content"].length > 80) {
+        item["content"] = item["content"].slice(0, 80);
+        item["content"] += "...";
       }
-
     });
 
     //帖子作者
@@ -388,31 +394,38 @@ let functions = {
     let userid = event.userid;
     let page = event.page || 0;
     let limit = event.limit || 5;
-    let status=event.status||"normal";
-    if(status=="all"){
-      status=null;
+    let status = event.status || "normal";
+    if (status == "all") {
+      status = null;
     }
 
-    let whereQuery={
+    let whereQuery = {
       _authorid: userid,
     };
-    if(status){
-      whereQuery['status']=status;
+    if (status) {
+      whereQuery["status"] = status;
     }
     let posts = await Post.where(whereQuery)
       .field({
         _id: true,
       })
-      .orderBy("date","desc")
+      .orderBy("date", "desc")
       .limit(limit)
       .skip(limit * page)
       .get()
       .then((res) => res["data"]);
-      let postid=[];
-      posts.forEach(item=>{
-        postid.push(item._id);
-      })
-      posts=await functions['getPost']({postid});
+    let postid = [];
+    posts.forEach((item) => {
+      postid.push(item._id);
+    });
+    posts = await functions["getPost"]({ postid });
+    posts.forEach((item) => {
+      item["content"] = item["content"].replace(/<br ?\/>/g, " ");
+      if (item["content"].length > 80) {
+        item["content"] = item["content"].slice(0, 80);
+        item["content"] += "...";
+      }
+    });
     return Response.result(posts);
   },
 };

@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/my/post/post",
     "pages/class/invite_join/invite_join",
     "pages/index/index",
-    "pages/my/post/post",
     "pages/post/view/qa/answer/answer",
     "pages/class/index/index",
     "pages/school/index/index",
