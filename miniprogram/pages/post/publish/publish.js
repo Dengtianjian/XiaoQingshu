@@ -89,7 +89,6 @@ Page({
     }).then((res) => {
       let filePaths = res.tempFilePaths;
       if (filePaths.length > 0) {
-        let isCheckFail=false;
         wx.showLoading({
           title: "上传中!Up up",
         });
@@ -103,10 +102,10 @@ Page({
           files.push(filePaths[i]["url"]);
         }
         Cloud.uploadFile(files, "post/").then((res) => {
-          images.unshift(...filePaths);
+          images.unshift(...res);
 
           this.setData({
-            images: [],
+            images,
           });
           wx.hideLoading();
         });
@@ -115,14 +114,9 @@ Page({
   },
   previewImage(option) {
     let index = option.currentTarget.dataset.index;
-    let images = this.data.images;
-    let urls = [];
-    images.forEach((item) => {
-      urls.push(item.url);
-    });
     wx.previewImage({
-      urls,
-      current: images[index]["url"],
+      urls:this.data.images,
+      current: this.data.images[index],
     });
   },
   goToSelectTopic() {
