@@ -77,7 +77,7 @@ Page({
 
   uploadImage() {
     let currentCount = this.data.images.length;
-    if (currentCount >= 9) {
+    if (currentCount >= 12) {
       wx.showToast({
         icon: "none",
         title: "最多只允许上传9张图片",
@@ -85,7 +85,7 @@ Page({
       return;
     }
     wx.chooseImage({
-      count: 9 - currentCount,
+      count: 12 - currentCount,
     }).then((res) => {
       let filePaths = res.tempFilePaths;
       if (filePaths.length > 0) {
