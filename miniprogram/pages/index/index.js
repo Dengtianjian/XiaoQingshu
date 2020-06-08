@@ -1,8 +1,5 @@
 //index.js
-import Cloud from "../../source/js/cloud";
-//获取应用实例
-const App = getApp();
-
+import { Cloud,Prompt } from "../../Qing";
 Page({
   data: {
     pageLoaded:false,
@@ -183,4 +180,7 @@ Page({
       wx.stopPullDownRefresh();
     });
   },
+  goToSearch(){
+    Prompt.toast("🔍搜索功能还能未开放💓");
+  }
 });

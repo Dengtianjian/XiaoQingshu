@@ -4,7 +4,7 @@
 <block wx:elif="{{ pageLoaded }}">
   <!-- 顶部导航栏 -->
   <NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.95">
-    <view class="search-entry">搜索</view>
+    <view class="search-entry" bind:tap="goToSearch"><text class="qcicon qcicon-search" />搜索笔记 / 问题 / 同学</view>
   </NavigationBar>
   <!-- 语录&签到 -->
   <view class="quote-signin">
