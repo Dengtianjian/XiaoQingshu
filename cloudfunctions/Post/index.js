@@ -272,12 +272,15 @@ let functions = {
       sort = sort[0];
       whereQuery["sort"] = sort["identifier"];
     }
-    if (school) {
+    if(school){
       whereQuery["_school"] = school;
+    }else if(school===null){
+      whereQuery["_school"] ="";
     }
     if (status) {
       whereQuery["status"] = status;
     }
+    // return whereQuery;
     let posts = await postsQuery
       .where(whereQuery)
       .limit(limit)
@@ -290,6 +293,9 @@ let functions = {
     let users = [];
     let sorts = [];
     let topics = [];
+    if(posts.length==0){
+      return [];
+    }
     posts.forEach((item) => {
       users.push(item._authorid);
       sorts.push(item.sort);
@@ -381,7 +387,7 @@ let functions = {
       .get()
       .then((res) => res["data"]);
     if (likeLog.length > 0) {
-      if (typeof _postid == "string") {
+      if (typeof event.postid == "string") {
         return Response.result(likeLog[0]);
       } else {
         return Response.result(likeLog);
