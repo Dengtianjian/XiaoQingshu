@@ -1,3 +1,9 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "CommentItem":"/components/commentItem/commentItem",
+    "Popup":"/components/popup/popup",
+    "navigationBar":"/components/navigationBar/navigationBar",
+    "Dialog":"/components/dialog/dialog",
+    "InputPopup":"/components/inputPopup/inputPopup"
+  }
 }
