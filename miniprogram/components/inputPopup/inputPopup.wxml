@@ -4,7 +4,7 @@
     <slot name="header"></slot>
     <form class="input-form" bindsubmit="submit">
       <slot name="form_header"></slot>
-      <textarea class="input-form-content" name="content" placeholder="{{ contentPlaceholder }}" />
+      <textarea class="input-form-content" name="content" placeholder="{{ contentPlaceholder }}" value="{{ value }}" />
       <slot name="form_middle"></slot>
       <button class="input-form-submit" type="primary" form-type="submit">{{ submitButtonText }}</button>
       <slot name="form_footer"></slot>

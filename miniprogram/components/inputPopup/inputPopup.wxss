@@ -6,3 +6,11 @@
 .input-form-submit {
   margin-top:40rpx;
 }
+
+.input-form-content {
+  padding:10rpx;
+  width:100%;
+  background-color: var(--light-color);
+  border-radius:var(--border-radius);
+  box-sizing: border-box;
+}

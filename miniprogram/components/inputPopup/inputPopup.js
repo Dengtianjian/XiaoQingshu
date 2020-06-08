@@ -8,6 +8,10 @@ Component({
    * 组件的属性列表
    */
   properties: {
+    value:{
+      type:String,
+      value:""
+    },
     hidden: {
       type: Boolean,
       value: true,
