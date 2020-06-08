@@ -1,7 +1,7 @@
 <!-- components/postCoverItem/postCoverItem.wxml -->
 <import src="./template/dynamic.wxml" />
 <import src="./template/qa.wxml" />
-<navigator class="post" open-type="navigate" hover-class="none" url="/pages/post/view/{{ post['sort']['template'] }}/{{ post['sort']['template'] }}?postid={{ post['_id'] }}">
+<navigator class="post" open-type="navigate" hover-class="none" url="/pages/post/view/index/index?postid={{ post['_id'] }}">
   <view class="post-author" wx:if="{{ post.author }}">
     <image class="post-author-avatar" src="{{ post.author.avatar_url }}" lazy-load></image>
     <text class="post-author-nickname">{{ post.author.nickname }}</text>
