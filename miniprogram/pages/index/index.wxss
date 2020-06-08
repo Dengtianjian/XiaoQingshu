@@ -1,8 +1,13 @@
 /**index.wxss**/
+@import "index.skeleton.wxss";
 .search-entry {
+  padding:0 10rpx;
   width: 460rpx;
   height: 48rpx;
-  background: #F0F0F0;
+  line-height:48rpx;
+  font-size:28rpx;
+  color:var(--font-light-color);
+  background: #F8F8F8;
   border-radius: 10rpx;
 }
 .quote-signin {

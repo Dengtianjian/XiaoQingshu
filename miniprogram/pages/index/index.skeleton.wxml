@@ -1,0 +1,140 @@
+<!-- 此文件为开发者工具生成，生成时间: 2020/6/6 下午5:34:35
+使用方法：
+1. 在"pages\index\index.wxml"中使用`include`指令引入此模板，
+2. 在"pages\index\index.wxss"中使用`import`指令引入"pages\index\index.skeleton.wxss"
+3. 书写对应的逻辑，来控制骨架屏的显示与隐藏
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html -->
+<template name="skeleton">
+  <view class="sk-container">
+    <view is="components/navigationBar/navigationBar">
+      <view class="navigationBar--navigation-bar" style="height: 60px;">
+        <view style="height: 20px;"></view>
+        <view class="navigationBar--navigator-bar-safe-area" style="height:44px;color:#000000;">
+          <view class="search-entry"></view>
+        </view>
+        <view class="navigationBar--navigation-bar-background" style="height: 60px;background:#FFFFFF;opacity:0;"></view>
+      </view>
+      <view class="navigationBar--navigation-bar-placeholder" style="height: 60px;"></view>
+    </view>
+    <view class="quote-signin">
+      <swiper circular="true" vertical="true" autoplay="true" class="quote-swiper" duration="500" interval="50000">
+        <swiper-item style="position: absolute; width: 100%; height: 100%; transform: translate(0px, 0%) translateZ(0px);">
+          <rich-text class="quote sk-transparent sk-text-14-2857-554 sk-text" nodes="自律可以帮助你做你不想做但又必须做的事情。" style="background-size: 78.4% 1.225rem; background-position-x: 50%;">
+            自律可以帮助你做你不想做但又必须做的事情。
+          </rich-text>
+        </swiper-item>
+        <swiper-item style="position: absolute; width: 100%; height: 100%; transform: translate(0px, -200%) translateZ(0px);">
+          <rich-text class="quote sk-transparent sk-text-14-2857-536 sk-text" nodes="把你的全部思想用来做你想做的事，而不要留半点思维空间给那些胡思乱想的动机。" style="background-size: 100% 1.225rem; background-position-x: 50%;">
+            把你的全部思想用来做你想做的事，而不要留半点思维空间给那些胡思乱想的动机。
+          </rich-text>
+        </swiper-item>
+        <swiper-item style="position: absolute; width: 100%; height: 100%; transform: translate(0px, -100%) translateZ(0px);">
+          <rich-text class="quote sk-transparent sk-text-14-2857-810 sk-text" nodes="一切成就都缘于一个梦想和毫无根据的自信。" style="background-size: 74.6667% 1.225rem; background-position-x: 50%;">
+            一切成就都缘于一个梦想和毫无根据的自信。
+          </rich-text>
+        </swiper-item>
+      </swiper>
+    </view>
+    <view class="post">
+      <view is="components/tabs/tabs">
+        <view class="tabs--bar">
+          <view class="tabs--bar-item tabs--bar-item-active sk-transparent sk-text-27-1429-197 sk-text sk-pseudo sk-pseudo-circle" data-index="all" style="background-size: 100% 2.1875rem;">
+            全部
+          </view>
+          <view class="tabs--bar-item sk-transparent sk-text-27-1429-237 sk-text sk-pseudo sk-pseudo-circle" data-index="dynamic" style="background-size: 100% 2.1875rem;">
+            动态
+          </view>
+          <view class="tabs--bar-item sk-transparent sk-text-27-1429-966 sk-text sk-pseudo sk-pseudo-circle" data-index="qa" style="background-size: 100% 2.1875rem;">
+            问答
+          </view>
+          <view class="tabs--bar-item sk-transparent sk-text-27-1429-193 sk-text sk-pseudo sk-pseudo-circle" data-index="note" style="background-size: 100% 2.1875rem;">
+            笔记
+          </view>
+          <view class="tabs--bar-item sk-transparent sk-text-27-1429-758 sk-text sk-pseudo sk-pseudo-circle" data-index="news" style="background-size: 100% 2.1875rem;">
+            资讯
+          </view>
+        </view>
+        <swiper class="tabs--swiper" current="0" style="height:1064px">
+          <swiper-item class="tabs--swiper-item tabs--swiper-item-all" style="position: absolute; width: 100%; height: 100%; transform: translate(0%, 0px) translateZ(0px);">
+            <view>
+              <view is="components/postCoverItem/postCoverItem" class="post-item" style="border: none;">
+                <navigator class="post postCoverItem--post" hover-class="none" open-type="navigate">
+                  <view class="post-author postCoverItem--post-author">
+                    <image lazy-load="true" class="post-author-avatar postCoverItem--post-author-avatar sk-image"></image>
+                    <text class="post-author-nickname postCoverItem--post-author-nickname sk-transparent sk-opacity">
+                      A
+                    </text>
+                  </view>
+                  <view class="post-title postCoverItem--post-title sk-transparent sk-text-11-9048-650 sk-text">
+                    武汉科技大学“美丽乡村建设”社会实践团队：脚步丈量青春，实践筑就梦想
+                  </view>
+                  <view class="post-body postCoverItem--post-body post-body-dynamic postCoverItem--post-body-dynamic sk-transparent">
+                    2017年，实践团队荣获全国大中专学生“三下乡”社会实践“千校千项”最具影响好项目以及“镜头中的三下乡”优秀视频奖；2018年，实践团队再获“千校千项”最具影响...
+                    <view class="post-body-images postCoverItem--post-body-images post-body-images-multi postCoverItem--post-body-images-multi">
+                      <image lazy-load="true" class="post-body-image-item postCoverItem--post-body-image-item sk-image" mode="aspectFill"></image>
+                      <image lazy-load="true" class="post-body-image-item postCoverItem--post-body-image-item sk-image" mode="aspectFill"></image>
+                    </view>
+                  </view>
+                  <view class="post-footer postCoverItem--post-footer">
+                    <view class="post-attribute postCoverItem--post-attribute">
+                      <view class="post-attribute-item postCoverItem--post-attribute-item post-attribute-item-type postCoverItem--post-attribute-item-type">
+                        <text class="post-attribute-item-icon postCoverItem--post-attribute-item-icon qcicon postCoverItem--qcicon qcicon-news postCoverItem--qcicon-news sk-pseudo sk-pseudo-circle"></text>
+                        <text class="post-attribute-item-name postCoverItem--post-attribute-item-name sk-transparent sk-text-14-2857-769 sk-text" style="background-size: 100% 1.05rem;">
+                          资讯
+                        </text>
+                      </view>
+                    </view>
+                  </view>
+                </navigator>
+              </view>
+              <view is="components/postCoverItem/postCoverItem" class="post-item" style="border: none;">
+                <navigator class="post postCoverItem--post" hover-class="none" open-type="navigate">
+                  <view class="post-author postCoverItem--post-author">
+                    <image lazy-load="true" class="post-author-avatar postCoverItem--post-author-avatar sk-image"></image>
+                    <text class="post-author-nickname postCoverItem--post-author-nickname sk-transparent sk-opacity">
+                      A
+                    </text>
+                  </view>
+                  <view class="post-title postCoverItem--post-title sk-transparent sk-text-11-9048-817 sk-text" style="background-size: 53.7319% 1.3125rem;">
+                    教育部定向招5个专业学生
+                  </view>
+                  <view class="post-body postCoverItem--post-body post-body-dynamic postCoverItem--post-body-dynamic sk-transparent">
+                    6月3日，教育部网站发布《教育部办公厅关于做好2020年中央财政支持中西部农村订单定向免费本科医学生招生培养工作的通知》。 　　通知提到，2020年中央财...
+                  </view>
+                </navigator>
+              </view>
+            </view>
+          </swiper-item>
+        </swiper>
+      </view>
+    </view>
+    <view class="publish-entrance" data-mode="show">
+      <text class="publish-entrance-icon qcicon qcicon-editor sk-pseudo sk-pseudo-circle"></text>
+    </view>
+    <view class="publish-type-select" hidden="true">
+      <view class="publish-type-select-mask sk-image" data-mode="hidden"></view>
+      <view class="publish-type-select-wrap">
+        <view class="publish-type-select-title sk-transparent sk-opacity">请选择要发布的帖子类型</view>
+        <view class="publish-type-select-list">
+          <navigator class="publish-type-select-item" open-type="navigate">
+            <image class="publish-type-select-item-icon sk-image"></image>
+            <view class="publish-type-select-item-text sk-transparent sk-opacity">动态</view>
+          </navigator>
+          <navigator class="publish-type-select-item" open-type="navigate">
+            <image class="publish-type-select-item-icon sk-image"></image>
+            <view class="publish-type-select-item-text sk-transparent sk-opacity">问答</view>
+          </navigator>
+          <navigator class="publish-type-select-item" open-type="navigate">
+            <image class="publish-type-select-item-icon sk-image"></image>
+            <view class="publish-type-select-item-text sk-transparent sk-opacity">笔记</view>
+          </navigator>
+          <navigator class="publish-type-select-item" open-type="navigate">
+            <image class="publish-type-select-item-icon sk-image"></image>
+            <view class="publish-type-select-item-text sk-transparent sk-opacity">资讯</view>
+          </navigator>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

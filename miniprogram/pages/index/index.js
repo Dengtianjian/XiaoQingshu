@@ -5,6 +5,7 @@ const App = getApp();
 
 Page({
   data: {
+    pageLoaded:false,
     sorts: null,
     postTabs: {
       all: "全部",
@@ -52,6 +53,9 @@ Page({
   },
   onReady() {
     this.getQuotes();
+    this.setData({
+      pageLoaded:true
+    })
   },
   onPageScroll(e) {
     this.setData({
@@ -129,6 +133,7 @@ Page({
       page: currentPageLoad.page,
       sort: currentShowPostSort == "all" ? null : currentShowPostSort,
       status: "normal",
+      school:null
     }).then((res) => {
       if (res.length < 5) {
         currentPageLoad.finished = true;
