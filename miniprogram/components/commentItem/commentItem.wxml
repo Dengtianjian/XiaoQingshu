@@ -2,22 +2,22 @@
 <view class="comment-item">
   <view class="comment-author">
     <image class="comment-author-avatar" src="{{ comment['author']['avatar_url'] }}"></image>
-    <view class="comment-author-info">
+    <navigator class="comment-author-info" hover-class="none" url="/pages/my/space/space?userid={{ comment['author']['_id'] }}">
       <view class="comment-author-nickname">{{ comment['author']['nickname'] }}</view>
       <view class="comment-author-school">
         {{ comment['author']['school']?comment['author']['school']['name']:'TA还未加入一家学校' }}
       </view>
-    </view>
+    </navigator>
     <view class="comment-operate">
       <slot name="commentOperate"></slot>
     </view>
   </view>
-  <view class="comment-reply" wx:if="{{ comment['_reply_author'] }}">
-    回复 {{ comment['_reply_author'] }}
+  <view class="comment-reply-author" wx:if="{{ comment['_reply_author'] }}" wx:if="{{ comment['reply_author'] }}">
+    回复 <navigator class="comment-reply-author-link" hover-class="none" url="/pages/my/space/space?userid={{ comment['reply_author']['_id'] }}">{{ comment['reply_author']['nickname'] }}</navigator>
   </view>
   <view class="comment-content">
     <slot name="commentContent"></slot>
-    {{ comment['content'] }}
+    <rich-text class="commentContentEditor" read-only nodes="{{ comment['content'] }}" ></rich-text>
   </view>
   <view class="comment-bottom">
     <slot name="commentBottom-top"></slot>
@@ -27,7 +27,7 @@
     </view>
     <view class="comment-bottom-right">
       <slot name="commentBottom-right"></slot>
-      <text class="comment-like {{ comment['isLike']?'comment-like-yes':'' }}" bind:tap="like">
+      <text class="comment-like {{ comment['isLike']?'comment-like-yes':'' }}" bind:tap="like" wx:if="{{ showLike }}">
         <text class="comment-like-icon qcicon qcicon-{{ comment['isLike']?'good-fill':'good' }}"></text>
         <text class="comment-like-text">{{ comment['likes']||'' }}</text>
       </text>

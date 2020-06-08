@@ -3,16 +3,25 @@ import Cloud from "../../source/js/cloud";
 import Prompt from "../../source/js/prompt";
 import Uitils from "../../source/js/utils";
 Component({
-  options:{
+  options: {
     multipleSlots: true,
-    styleIsolation:"apply-shared"
+    styleIsolation: "apply-shared",
   },
   /**
    * 组件的属性列表
    */
   properties: {
     comment: {
-      type:Object
+      type: Object,
+    },
+    showLike: {
+      type: Boolean,
+      value: true,
+    },
+  },
+  lifetimes: {
+    attached() {
+
     },
   },
 
@@ -24,6 +33,7 @@ Component({
   /**
    * 组件的方法列表
    */
+  commentContentEditorContext: null,
   methods: {
     async like() {
       if (this.data.comment.isLike) {
@@ -36,7 +46,7 @@ Component({
           });
         });
       } else {
-        let that=this;
+        let that = this;
         await Cloud.cfunction("Post", "likeComment", {
           commentid: this.data.comment._id,
         })
@@ -51,11 +61,11 @@ Component({
               409: {
                 409001: {
                   title: "已经点赞过了",
-                  success(){
+                  success() {
                     that.setData({
-                      [`comment.isLike`]: true
+                      [`comment.isLike`]: true,
                     });
-                  }
+                  },
                 },
               },
             });
