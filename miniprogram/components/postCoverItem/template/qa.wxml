@@ -1,4 +1,4 @@
 <template name="qa-post">
-  {{ content }}
+  <view class="post-body-description">{{ content }}</view>
   <image class="post-body-image" src="{{ images[0] }}" hidden="{{ !images }}" lazy-load></image>
 </template>
