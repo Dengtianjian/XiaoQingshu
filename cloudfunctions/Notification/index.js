@@ -8,6 +8,7 @@ cloud.init();
 
 const DB = cloud.database();
 const _ = DB.command;
+const $ =DB.command.aggregate;
 const Notification = DB.collection("notification");
 const NotificationType = DB.collection("notification_type");
 const NotificationCategory = DB.collection("notification_category");
@@ -19,6 +20,7 @@ const MODULES = {
     let receiver = event.receiver || null;
     let sender = event.sender || null;
     let typeTemplate=event.typeTemplate||null;
+    let prompt =event.prompt||"有新的消息✉";
     delete event.type;
     let typeParameter = await Types.getParam(type, event);
     if (typeParameter == null) {
@@ -34,11 +36,18 @@ const MODULES = {
         _type: type,
         parameter: typeParameter["parameter"],
         content: typeParameter["content"],
-        _type_template:typeTemplate
+        _type_template:typeTemplate,
+        prompt
       },
     });
+
+    if(receiver){
+      await this.updateUserMessageCount({ type,count:1 });
+    }
+
+
     return Response.result({
-      notifyId: addResult["_id"],
+      notifyId: addResult["_id"]
     });
   },
   async getAllCategory(event) {
@@ -111,8 +120,68 @@ const MODULES = {
       .get()
       .then((res) => res["data"]);
 
+      if(updateRead){
+        await this.updateUserMessageCount({
+          _userid:receiver,
+          count:"-"+data.length,
+          category
+        });
+      }
+
     return Response.result(data);
   },
+  async updateUserMessageCount(event){
+    let _userid=event._userid||null;
+    if(!_userid){
+      const wxContext=cloud.getWXContext();
+      _userid=wxContext.OPENID;
+    }
+    let type=event.type;
+    let count=event.count||1;
+
+    count=Number(count);
+
+    let result=await DB.collection("user").doc(_userid).update({
+      data:{
+        message_news:{
+          [type]:_.inc(count)
+        }
+      }
+    }).then(res=>res);
+    await this.updateClacUserMessageCount();
+
+    return result;
+  },
+
+  async updateClacUserMessageCount(event={}){
+    let _userid=event._userid||null;
+    if(!_userid){
+      const wxContext=cloud.getWXContext();
+      _userid=wxContext.OPENID;
+    }
+
+    let user=await DB.collection("user").doc(_userid).field({
+      message_news:true
+    }).get().then(res=>res);
+    let userMessageNews=user['data']['message_news'];
+    let updateData={
+      total:0
+    };
+    delete userMessageNews['total'];
+    for(let key in userMessageNews){
+      if(userMessageNews[key]<0){
+        userMessageNews[key]=0;
+        updateData[key]=0;
+      }
+      updateData['total']+=userMessageNews[key];
+    }
+    await DB.collection("user").doc(_userid).update({data:{
+      "message_news":updateData
+    }});
+    userMessageNews=Object.assign(userMessageNews,updateData);
+
+    return userMessageNews;
+  }
 };
 
 // 云函数入口函数
@@ -124,6 +193,8 @@ exports.main = async (event, context) => {
     "getNotificationByCategory",
     "getNotification",
     "send",
+    "updateClacUserMessageCount",
+    "updateUserMessageCount"
   ];
 
   let moduleName = event.module;
