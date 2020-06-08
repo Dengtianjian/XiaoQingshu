@@ -184,8 +184,8 @@ Page({
     wx.showLoading({
       title: "获取学校资料中",
     });
-    Cloud.cfunction("User", "saveUserInfo", {
-      _default_school: this.data.currentSchool,
+    Cloud.cfunction("User", "switchSchool", {
+      _schoolid: this.data.currentSchool,
     });
     App.userInfo._default_school = this.data.currentSchool;
     await this.getSchool();

@@ -1,14 +1,14 @@
 {
   "pages": [
+    "pages/index/index",
+    "pages/post/view/answer_question/answer_question",
+    "pages/post/view/index/index",
+    "pages/post/view/comment/comment",
     "pages/my/post/post",
     "pages/class/invite_join/invite_join",
-    "pages/index/index",
-    "pages/post/view/qa/answer/answer",
     "pages/class/index/index",
     "pages/school/index/index",
     "pages/post/publish/publish",
-    "pages/post/view/qa/qa",
-    "pages/post/view/common/common",
     "pages/my/index/index",
     "pages/my/notification/notification",
     "pages/my/space/space",
@@ -18,10 +18,8 @@
     "pages/my/edit_profile/edit_profile",
     "pages/class/album/album",
     "pages/class/edit_info/edit_info",
-    "pages/post/answer_question/answer_question",
     "pages/test/test",
-    "pages/class/edit_my_info/edit_my_info",
-    "pages/post/view/comment/comment"
+    "pages/class/edit_my_info/edit_my_info"
   ],
   "window": {
     "navigationStyle": "custom",
