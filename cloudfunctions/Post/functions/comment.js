@@ -51,7 +51,7 @@ let functions = {
   },
   async getCommentByPostId(event) {
     const wxContext = cloud.getWXContext();
-    let _postid = event.postid;
+    let _postid = event._postid;
     let limit = event.limit || 5;
     let page = event.page || 0;
 
@@ -66,6 +66,9 @@ let functions = {
       .then((res) => res["data"]);
     let authorid = [];
     let commentId = [];
+    if(comments.length==0){
+      return [];
+    }
     comments.forEach((item) => {
       authorid.push(item["_author"]);
       commentId.push(item["_id"]);
@@ -92,6 +95,7 @@ let functions = {
         return res["result"];
       });
     let schoolIds = [];
+
     author.forEach((item) => {
       if (item._default_school) {
         schoolIds.push(item._default_school);
@@ -193,15 +197,15 @@ let functions = {
   },
   async replyComment(event) {
     const wxContext = cloud.getWXContext();
-    let _comment = event.commentid;
+    let _comment = event._commentid;
     let content = event.content;
-    let _post = event.post;
+    let _post = event._postid;
     let _replyid = null;
-    let _reply_author = null;
+    let reply_author = null;
 
-    if (event.replyid) {
-      _replyid = event.replyid;
-      _reply_author = event.replyauthor;
+    if (event._replyid) {
+      _replyid = event._replyid;
+      reply_author = event.reply_author;
     }
 
     let addResult = await CommentReply.add({
@@ -212,7 +216,7 @@ let functions = {
         _post,
         _replier: wxContext.OPENID,
         _replyid,
-        _reply_author,
+        reply_author,
       },
     }).then((res) => {
       return res;
@@ -239,6 +243,7 @@ let functions = {
     })
       .limit(limit)
       .skip(limit * page)
+      .orderBy("date","desc")
       .get()
       .then((res) => res["data"]);
     let authors = [];
