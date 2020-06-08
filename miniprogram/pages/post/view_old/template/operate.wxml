@@ -1,0 +1,18 @@
+<template name="operate">
+  <view class="post-operate">
+    <view class="post-operate-item">
+      <text class="post-operate-item-icon qcicon qcicon-share"></text>
+      <button class="post-operate-item-text post-operate-share-button" open-type="share">分享</button>
+    </view>
+    <view class="post-operate-item {{ isFavorite?'post-operate-highlight':'' }}" bind:tap="showFavoriteAlbum">
+      <text class="post-operate-item-icon qcicon qcicon-favorites-fill" wx:if="{{ isFavorite }}"></text>
+      <text class="post-operate-item-icon qcicon qcicon-favorites" wx:else></text>
+      <text class="post-operate-item-text">收藏</text>
+    </view>
+    <view class="post-operate-item {{ isLike?'post-operate-highlight':'' }}" bind:tap="likePost">
+      <text class="post-operate-item-icon qcicon qcicon-good-fill" wx:if="{{ isLike }}"></text>
+      <text class="post-operate-item-icon qcicon qcicon-good" wx:else></text>
+      <text class="post-operate-item-text">点赞 {{ likes||'' }}</text>
+    </view>
+  </view>
+</template>

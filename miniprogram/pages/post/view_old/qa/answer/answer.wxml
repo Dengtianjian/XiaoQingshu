@@ -1,0 +1,14 @@
+<!-- miniprogram/pages/post/view/qa/answer/answer.wxml -->
+<navigationBar opacity="0.8" backgroundColor="#ffffff" />
+<CommentItem class="comment" comment="{{ comment }}" />
+<view class="comment-reply">
+  <block wx:for="{{ replys }}" wx:key="index" wx:for-item="replyPage">
+    <block wx:for="{{ replyPage }}" >
+      <CommentItem class="comment-reply-item" comment="{{ item }}">
+        <text class="qcicon qcicon-comments comment-reply-reply" slot="commentBottom-right" bind:tap="showCommentPopup" data-type="replyReply" data-reply="{{ item }}" />
+      </CommentItem>
+    </block>
+  </block>
+</view>
+<view class="comment-reply-operate-item comment-reply-button qcicon qcicon-suggest" bind:tap="showCommentPopup" data-type="replyComment"></view>
+<InputPopup hidden="{{ hiddenInputReplyPopup }}" bind:submit="replyComment" submitButtonText="发送" />
