@@ -1,0 +1,27 @@
+<template name="qa_comment">
+  <view class="comment-title">评论</view>
+  <view class="comment-list">
+    <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
+      <block wx:for="{{ commentArray }}" wx:key="index">
+        <CommentItem class="comment-item" comment="{{ item }}" />
+        <view class="qa-comment-item-bottom">
+          <view class="comment-vote">
+            <view class="comment-vote-item comment-vote-agree {{ item.isAgree?'comment-vote-is-selected':'' }}" bind:tap="agreeAnswer" data-page="{{ commentArrayIndex }}" data-index="{{ index }}" hidden="{{ item.isDisagree }}">
+              {{ item.isAgree?'已赞同':'赞同' }}
+            </view>
+            <view class="comment-vote-item {{ item.isDisagree?'comment-vote-is-selected':'' }}" hidden="{{ item.isAgree }}" bind:tap="disagreeAnswer" data-page="{{ commentArrayIndex }}" data-index="{{ index }}">
+              {{ item.isDisagree?'已反对':'👎' }}
+            </view>
+          </view>
+          <navigator class="comment-item-view-reply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}" url="/pages/post/view/comment/comment?commentid={{ item._id }}&postid={{ item._postid }}">
+            查看详情 & 回复
+          </navigator>
+        </view>
+      </block>
+    </block>
+  </view>
+  <navigator class="comment-post-button" hover-class="none" url="/pages/post/view/answer_question/answer_question?postid={{ postid }}" >
+    回答问题
+  </navigator>
+  <InputPopup hidden="{{ hideCommentInputPopup }}" submitButtonText="发送" bind:submit="answerQuestion" value="{{ commentContent }}" />
+</template>

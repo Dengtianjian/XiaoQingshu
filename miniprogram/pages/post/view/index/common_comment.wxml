@@ -1,0 +1,14 @@
+<template name="common_comment">
+  <view class="comment-title">评论</view>
+  <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
+    <view class="comment-list">
+      <block wx:for="{{ commentArray }}" wx:key="index">
+        <CommentItem class="comment-item" comment="{{ item }}" />
+        <navigator class="comment-item-view-reply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}" url="/pages/post/view/comment/comment?commentid={{ item._id }}&postid={{ item._post }}">
+          查看回复
+        </navigator>
+      </block>
+    </view>
+  </block>
+  <InputPopup hidden="{{ hideCommentInputPopup }}" submitButtonText="发送" />
+</template>
