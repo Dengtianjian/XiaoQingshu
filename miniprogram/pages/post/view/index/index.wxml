@@ -1,0 +1,76 @@
+<!-- miniprogram/pages/post/view/index/index.wxml -->
+<navigationBar opacity="0.8" backgroundColor="#ffffff" />
+<view class="page-container">
+  <PostStatus class="post-status" status="{{ post.status }}" checkResult="{{ post.checkResult }}" />
+  <view class="author">
+    <image class="author-avatar" src="{{ post.author.avatar_url }}"></image>
+    <navigator class="author-info" open-type="navigate" hover-class="none" url="/pages/my/space/space?userid={{ post.author._id }}" wx:if="{{ post.author._id }}">
+      <view class="author-nickname">{{ post.author.nickname }}</view>
+      <view class="author-school">
+        <block wx:if="{{ post.author._default_school }}">
+          <text class="author-school-name">{{ post.author.school.name }}</text>
+          <text class="author-school-prefession">{{ post.author.class.prefessional }}</text>
+        </block>
+        <block wx:else>TA还未加入一家学校</block>
+      </view>
+    </navigator>
+    <view class="author-info" wx:else>
+      <view class="author-nickname">{{ post.author.nickname }}</view>
+    </view>
+    <view class="author-attention {{ post.author.isAttention?'author-attention-yes':'' }}" wx:if="{{ post.author._id }}">
+      {{ post.author.isAttention?'已关注':'关注' }}
+    </view>
+  </view>
+  <view class="post">
+    <view class="post-title">{{ post.title }}</view>
+    <rich-text class="post-content" nodes="{{ post.content }}"></rich-text>
+    <view class="post-images">
+      <block wx:for="{{ post.images }}" wx:key="index">
+        <image class="post-image-item" src="{{ item }}" mode="aspectFill" bind:tap="previewImage" data-index="{{ index }}"></image>
+      </block>
+    </view>
+    <view class="post-attribute">
+      <Badge class="post-attribute-item" icon="qcicon-{{ post.sort.identifier }}" text="{{ post.sort.name }}" color="var(--main-color)" background="rgba(25, 119, 202, 0.11)"></Badge>
+      <Badge class="post-attribute-item" icon="#" text="{{ post.topic.name }}" wx:if="{{ post.topic }}" />
+    </view>
+    <view class="post-operate">
+      <view class="post-operate-item">
+        <text class="post-operate-item-icon qcicon qcicon-share"></text>
+        <button class="post-operate-item-text post-operate-share-button" open-type="share">
+          分享
+        </button>
+      </view>
+      <view class="post-operate-item {{ post.isFavorite?'post-operate-highlight':'' }}" bind:tap="showFavoriteAlbum">
+        <text class="post-operate-item-icon qcicon qcicon-favorites-fill" wx:if="{{ post.isFavorite }}"></text>
+        <text class="post-operate-item-icon qcicon qcicon-favorites" wx:else></text>
+        <text class="post-operate-item-text">收藏</text>
+      </view>
+      <view class="post-operate-item {{ post.isLike?'post-operate-highlight':'' }}" bind:tap="likePost">
+        <text class="post-operate-item-icon qcicon qcicon-good-fill" wx:if="{{ post.isLike }}"></text>
+        <text class="post-operate-item-icon qcicon qcicon-good" wx:else></text>
+        <text class="post-operate-item-text">点赞 {{ post.likes||'' }}</text>
+      </view>
+    </view>
+    <view class="post-publish-date">{{ post.date }}</view>
+    <import src="common_comment.wxml" />
+    <import src="qa_comment.wxml" />
+    <view class="comment">
+      <template is="{{ commentTemplateName }}" data="{{ ...{postid:post._id,comments,hideCommentInputPopup,commentContent} }}" />
+    </view>
+  </view>
+</view>
+<Dialog hidden="{{ favorite.popupIsHide }}" position="center" textAlign="center" title="请选择要存放到的收藏夹" height="60%" cancelButton="" bind:confirm="confirmFavorite">
+  <scroll-view scroll-y="{{true}}" class="album-list" slot="content" bind:scrolltolower="getFavoriteAblum">
+    <block wx:for="{{ favorite.albums }}" wx:for-item="albumPage" wx:for-index="albumPageIndex" wx:key="albumPageIndex">
+      <block wx:for="{{ albumPage }}" wx:key="index">
+        <view class="album-item" bind:tap="changeSelectAlbum" data-index="{{ albumPageIndex+'-'+index }}">
+          <view class="album-item-left">
+            <text class="ablum-item-name">{{ item.name }}</text>
+            <text class="ablum-item-count">{{ item.count }}</text>
+          </view>
+          <text class="ablum-item-select qcicon {{ favorite.currentSelect==albumPageIndex+'-'+index?'qcicon-seleted':'' }}"></text>
+        </view>
+      </block>
+    </block>
+  </scroll-view>
+</Dialog>

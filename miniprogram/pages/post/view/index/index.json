@@ -1,0 +1,14 @@
+{
+  "enablePullDownRefresh":true,
+  "onReachBottomDistance":300,
+  "usingComponents": {
+    "Badge":"/components/badge/badge",
+    "CommentItem":"/components/commentItem/commentItem",
+    "Overlay":"/components/overlay/overlay",
+    "Popup":"/components/popup/popup",
+    "navigationBar":"/components/navigationBar/navigationBar",
+    "Dialog":"/components/dialog/dialog",
+    "PostStatus":"/components/PostStatus/PostStatus",
+    "InputPopup":"/components/inputPopup/inputPopup"
+  }
+}
