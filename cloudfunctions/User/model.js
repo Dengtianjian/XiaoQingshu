@@ -65,7 +65,7 @@ let functions = {
     } else {
       _openids = _openid;
     }
-    let userInfo = await User.aggregate()
+    let userInfoList = await User.aggregate()
       .match({
         _id: _.in(_openids),
       })
@@ -77,69 +77,80 @@ let functions = {
       })
       .end()
       .then((res) => {
-        return res;
+        return res['list'];
       });
-    if (userInfo["list"].length > 0) {
-      userInfo = Object.assign(
-        userInfo["list"][0],
-        userInfo["list"][0]["profile"][0]
-      );
-      delete userInfo["profile"];
-      userInfo["class"] = null;
-      userInfo["school"] = null;
-      if (userInfo["_default_school"]) {
-        userInfo["school"] = await functions["getUserDefaultSchool"](
-          userInfo['_userid'],
-          userInfo["_default_school"]
+    if (userInfoList.length > 0) {
+      userInfoList.forEach(async userInfo=>{
+        userInfo=Object.assign(
+          userInfo["profile"][0],
+          userInfo
         );
-        if (userInfo["school"] == null) {
-          let joinedSchool = await DB.collection("user_joined_school")
-            .where({
-              _userid: userInfo['_userid'],
-            })
-            .get()
-            .then((res) => {
-              return res["data"];
-            });
-          if (joinedSchool.length == 0) {
-            userInfo["_default_school"] = null;
-          } else {
-            userInfo["_default_school"] = joinedSchool[0]["_schoolid"];
+        delete userInfo["profile"];
+
+        if (!userInfo["school"] || userInfo["school"] == null) {
+          if (userInfo["_default_school"]) {
             userInfo["school"] = await functions["getUserDefaultSchool"](
-              userInfo['_userid'],
+              userInfo["_userid"],
               userInfo["_default_school"]
             );
+            if (userInfo["school"] == null) {
+              let joinedSchool = await DB.collection("user_joined_school")
+                .where({
+                  _userid: userInfo["_userid"],
+                })
+                .get()
+                .then((res) => {
+                  return res["data"];
+                });
+              if (joinedSchool.length == 0) {
+                userInfo["_default_school"] = null;
+              } else {
+                userInfo["_default_school"] = joinedSchool[0]["_schoolid"];
+                userInfo["school"] = await functions["getUserDefaultSchool"](
+                  userInfo["_userid"],
+                  userInfo["_default_school"]
+                );
+              }
+            }
+            userInfo["class"] = await functions["getUserDefaultClass"](
+              userInfo["_userid"],
+              userInfo["_default_school"]
+            );
+          } else {
+            let userJoinedSchool = await DB.collection("user_joined_school")
+              .where({
+                _userid: userInfo["_userid"],
+              })
+              .limit(1)
+              .get()
+              .then((res) => res["data"]);
+            if (userJoinedSchool.length > 0) {
+              userJoinedSchool = userJoinedSchool[0];
+              let joinedSchool = await DB.collection("school")
+                .where({
+                  _id: userJoinedSchool["_schoolid"],
+                })
+                .get()
+                .then((res) => {
+                  return res["data"];
+                });
+              if (joinedSchool.length > 0) {
+                userInfo["school"] = joinedSchool[0];
+                userInfo["_default_school"] = joinedSchool[0]["_id"];
+              }
+            }
           }
+          // return userInfo;
+          await User.doc(userInfo['_userid']).update({
+            data:{
+              "class":userInfo['class'],
+              school:userInfo['school']
+            }
+          });
         }
-        userInfo["class"] = await functions["getUserDefaultClass"](
-          userInfo['_userid'],
-          userInfo["_default_school"]
-        );
-      } else {
-        let userJoinedSchool = await DB.collection("user_joined_school")
-          .where({
-            _userid: userInfo["_userid"],
-          })
-          .limit(1)
-          .get()
-          .then((res) => res["data"]);
-        if (userJoinedSchool.length > 0) {
-          userJoinedSchool = userJoinedSchool[0];
-          let joinedSchool = await DB.collection("school")
-            .where({
-              _id: userJoinedSchool["_schoolid"],
-            })
-            .get()
-            .then((res) => {
-              return res["data"];
-            });
-          if (joinedSchool.length > 0) {
-            userInfo["school"] = joinedSchool[0];
-            userInfo["_default_school"] = joinedSchool[0]['_id'];
-          }
-        }
-      }
-      return userInfo;
+      });
+
+      return userInfoList;
     } else {
       return null;
     }

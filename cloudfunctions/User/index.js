@@ -49,6 +49,8 @@ let functions = {
         registation_date: Date.now(),
         report_weight: 100,
         status: "normal",
+        school: null,
+        class: null,
       };
       DB.collection("user").add({
         data: userInfo,
@@ -82,6 +84,9 @@ let functions = {
       userInfo = Object.assign(userProfile, userInfo);
     } else {
       userInfo = await getUserProfileByOpenId(_openid);
+      if(userInfo.length>0){
+        userInfo=userInfo[0];
+      }
     }
 
     return userInfo;
@@ -108,15 +113,12 @@ let functions = {
     } else {
       _openids = event._openid;
     }
-    let user = await User.where({
-      _id: _.in(_openids),
-    })
-      .field(field)
-      .get()
-      .then((res) => {
-        return res["data"];
-      });
+
+    let user = await getUserProfileByOpenId(_openids);
     if (typeof event._openid == "string") {
+      if(user===null){
+        return [];
+      }
       return user[0];
     }
     return user;
@@ -165,10 +167,9 @@ let functions = {
         message: "请输入正确的邮箱地址",
       };
     }
-    await UserProfile
-      .where({
-        _userid: wxContext.OPENID,
-      })
+    await UserProfile.where({
+      _userid: wxContext.OPENID,
+    })
       .update({
         data: {
           birthday: new Date(birthday).getTime(),
@@ -260,16 +261,19 @@ let functions = {
       });
     }
   },
-  async checkJoined(event){
-    const wxContext=cloud.getWXContext();
-    let _classid=event._classid;
+  async checkJoined(event) {
+    const wxContext = cloud.getWXContext();
+    let _classid = event._classid;
 
-    let result=await DB.collection("user_joined_class").where({
-      _classid,
-      _userid:wxContext.OPENID
-    }).get().then(res=>{
-      return res['data'];
-    });
+    let result = await DB.collection("user_joined_class")
+      .where({
+        _classid,
+        _userid: wxContext.OPENID,
+      })
+      .get()
+      .then((res) => {
+        return res["data"];
+      });
 
     return result;
   },
@@ -290,6 +294,55 @@ let functions = {
 
     return Response.result(userProfile);
   },
+  /* 切换默认学校 */
+  async switchSchool(event) {
+    const wxContext = cloud.getWXContext();
+    let _schoolid = event._schoolid;
+
+    let school = await DB.collection("school")
+      .where({
+        _id: _schoolid,
+      })
+      .get()
+      .then((res) => res["data"]);
+    if (school.length == 0) {
+      return Response.error(404, 404001, "学校不存在");
+    }
+
+    school = school[0];
+    let schoolClass = null;
+
+    let joinedClass = await DB.collection("user_joined_class")
+      .where({
+        _userid: wxContext.OPENID,
+        _schoolid: school["_id"],
+      })
+      .get()
+      .then((res) => res["data"]);
+
+    if (joinedClass.length > 0) {
+      joinedClass = joinedClass[0];
+      schoolClass = await DB.collection("school_class")
+        .where({
+          _id: joinedClass["_classid"],
+        })
+        .get()
+        .then((res) => res["data"]);
+      if (schoolClass.length > 0) {
+        schoolClass = schoolClass[0];
+      }
+    }
+
+    let result = User.doc(wxContext.OPENID).update({
+      data: {
+        _default_school:_schoolid,
+        class: _.set(schoolClass),
+        school: _.set(school),
+      },
+    });
+
+    return result;
+  },
 };
 
 // 云函数入口函数
@@ -305,7 +358,8 @@ exports.main = async (event, context) => {
     "submitFeedback",
     "getUser",
     "updateUserBg",
-    "checkJoined"
+    "checkJoined",
+    "switchSchool",
   ];
   let method = event.method;
   if (!methods.includes(method)) {
