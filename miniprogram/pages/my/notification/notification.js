@@ -1,7 +1,5 @@
 // miniprogram/pages/my/notification/notification.js
-import Cloud from "../../../source/js/cloud";
-import Pagination from "../../../source/js/pagination";
-import Utils from "../../../source/js/utils";
+import { Notification, Cloud, Pagination, Utils } from "../../../Qing";
 const App=getApp();
 Page({
   /**
@@ -115,19 +113,15 @@ Page({
     this.notificationPagincation.removeKey(this.data.showNotificationCategory);
   },
   sendNotification() {
-    Cloud.callFun("Notification", "send", {
-      type: "favoritePost",
+    Notification.send("favoritePost","likeFavorite",{
       post_id: "fddd30c55eacf20e003e17c7705d1583",
       user_nickname: App.userInfo['nickname'],
       user_avatar:App.userInfo['avatar_url'],
-      category:"likeAndAgree",
-      sender:App.userInfo['_userid'],
-      receiver:"oKXC25AAuW_-T7GFRm8g3k0AeAA0",
       post_type:"dynamic",
       post_type_name:"动态",
-      prompt:"收藏了你的动态",
-      typeTemplate:"likeFavorite",
       post_title:"第三章计算机📡网络技术基础"
-    }).then((res) => console.log(res));
+    },App.userInfo['_userid'],"oKXC25AAuW_-T7GFRm8g3k0AeAA0","likeAndAgree","收藏了你的动态").then(res=>{
+      console.log(res);
+    })
   },
 });
