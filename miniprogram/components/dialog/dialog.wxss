@@ -16,6 +16,7 @@
   color:var(--font-color);
   font-size:36rpx;
   overflow-y:scroll;
+  -webkit-overflow-scrolling: touch
 }
 .dialog-operate {
   display:flex;
