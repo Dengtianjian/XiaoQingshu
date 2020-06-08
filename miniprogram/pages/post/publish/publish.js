@@ -221,15 +221,13 @@ Page({
           icon: "success",
         });
       }else{
-        let navigateTo="";
-        if(this.data.currentSort=="qa"){
-          navigateTo="/pages/post/view/qa/qa?postid="+res['_postid'];
-        }else{
-          navigateTo="/pages/post/view/common/common?postid="+res['_postid'];
-        }
         Prompt.toast("发布成功",{
           icon:"success",
-          navigateTo
+          success(){
+            wx.redirectTo({
+              url:"/pages/post/view/index/index?postid="+res['_postid']
+            })
+          }
         });
       }
     });

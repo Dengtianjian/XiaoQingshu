@@ -18,7 +18,7 @@ Page({
    */
   onLoad: function (options) {
     let postid = options.postid;
-    postid = "4c5846c75eda27270049d7796d670afc";
+    // postid = "4c5846c75eda27270049d7796d670afc";
 
     let platform = wx.getSystemInfoSync().platform;
 
