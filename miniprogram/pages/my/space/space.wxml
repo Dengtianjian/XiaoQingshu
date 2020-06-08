@@ -7,7 +7,7 @@
     <view class="user-nickname">{{ userInfo['nickname'] }}</view>
     <view class="user-age" wx:if="{{ userInfo['birthday'] }}">{{ userInfo['age'] }}岁</view>
   </view>
-  <view class="user-attention-button" wx:if="{{ currentUser['isLogin']&&currentUser['_userid']!=userInfo['_userid'] }}">
+  <view class="user-attention-button" wx:if="{{ currentUser['isLogin']&&currentUser['_id']!=userInfo['_id'] }}">
     关注
   </view>
 </view>
