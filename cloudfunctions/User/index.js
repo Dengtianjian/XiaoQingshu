@@ -33,6 +33,13 @@ let functions = {
         return res["data"];
       });
     if (userInfo.length == 0) {
+      let notification=await DB.collection("notification_category").get().then(res=>res['data']);
+      let message_news={
+        total:0
+      };
+      for(let i=0;i<notification.length;i++){
+        message_news[notification[i]['identifier']]=0;
+      }
       userInfo = {
         _id: _openid,
         nickname: info.nickName,
@@ -51,6 +58,7 @@ let functions = {
         status: "normal",
         school: null,
         class: null,
+        message_news
       };
       DB.collection("user").add({
         data: userInfo,
@@ -102,7 +110,7 @@ let functions = {
       };
     }
 
-    return userProfile;
+    return userProfile[0];
   },
   async getUser(event) {
     let _openids = [];
