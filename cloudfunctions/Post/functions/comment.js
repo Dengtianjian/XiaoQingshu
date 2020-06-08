@@ -66,7 +66,7 @@ let functions = {
       .then((res) => res["data"]);
     let authorid = [];
     let commentId = [];
-    if(comments.length==0){
+    if (comments.length == 0) {
       return [];
     }
     comments.forEach((item) => {
@@ -243,13 +243,16 @@ let functions = {
     })
       .limit(limit)
       .skip(limit * page)
-      .orderBy("date","desc")
+      .orderBy("date", "desc")
       .get()
       .then((res) => res["data"]);
     let authors = [];
     replys.forEach((item) => {
       authors.push(item._replier);
     });
+    if(replys.length==0){
+      return [];
+    }
     authors = await cloud
       .callFunction({
         name: "User",
@@ -265,30 +268,33 @@ let functions = {
       })
       .then((res) => res["result"]);
     let authorSchool = [];
-    authors.forEach((item) => {
-      if (item._default_school) {
-        authorSchool.push(item._default_school);
-      }
-    });
-    authorSchool = await DB.collection("school")
-      .where({
-        _id: _.in(authorSchool),
-      })
-      .field({
-        name: true,
-      })
-      .get()
-      .then((res) => res["data"]);
-    authorSchool = arrayToObject(authorSchool, "_id");
-    authors.forEach((item) => {
-      if (item._default_school) {
-        item["school"] = authorSchool[item["_default_school"]];
-      }
-    });
-    authors = arrayToObject(authors, "_id");
-    replys.forEach((item) => {
-      item["author"] = authors[item["_replier"]];
-    });
+
+    if (authors&&authors.length > 0) {
+      authors.forEach((item) => {
+        if (item._default_school) {
+          authorSchool.push(item._default_school);
+        }
+      });
+      authorSchool = await DB.collection("school")
+        .where({
+          _id: _.in(authorSchool),
+        })
+        .field({
+          name: true,
+        })
+        .get()
+        .then((res) => res["data"]);
+      authorSchool = arrayToObject(authorSchool, "_id");
+      authors.forEach((item) => {
+        if (item._default_school) {
+          item["school"] = authorSchool[item["_default_school"]];
+        }
+      });
+      authors = arrayToObject(authors, "_id");
+      replys.forEach((item) => {
+        item["author"] = authors[item["_replier"]];
+      });
+    }
 
     return replys;
   },
@@ -374,15 +380,15 @@ let functions = {
       })
       .get()
       .then((res) => res["data"]);
-      commentVote=arrayToObject(commentVote,"_commentid");
+    commentVote = arrayToObject(commentVote, "_commentid");
 
     comments.forEach((item) => {
       item["author"] = author[item["_author"]];
-      if(commentVote[item['_id']]){
-        if(commentVote[item['_id']]['type']=="agree"){
-          item['isAgree']=true;
-        }else{
-          item['isDisagree']=true;
+      if (commentVote[item["_id"]]) {
+        if (commentVote[item["_id"]]["type"] == "agree") {
+          item["isAgree"] = true;
+        } else {
+          item["isDisagree"] = true;
         }
       }
     });
@@ -538,27 +544,31 @@ let functions = {
 
     return Response.result(true);
   },
-  async getComment({ commentid }){
+  async getComment({ commentid }) {
     let comment = await Comment.where({
-      _id:commentid
-    }).get().then(res=>res['data']);
+      _id: commentid,
+    })
+      .get()
+      .then((res) => res["data"]);
 
-    if(comment.length==0){
-      return Response.error(404,404001,"评论不存在");
+    if (comment.length == 0) {
+      return Response.error(404, 404001, "评论不存在");
     }
 
-    comment=comment[0];
+    comment = comment[0];
 
-    comment['author']=await cloud.callFunction({
-      name:"User",
-      data:{
-        method:"getUser",
-        _openid:comment['_author']
-      }
-    }).then(res=>res['result']);
+    comment["author"] = await cloud
+      .callFunction({
+        name: "User",
+        data: {
+          method: "getUser",
+          _openid: comment["_author"],
+        },
+      })
+      .then((res) => res["result"]);
 
     return Response.result(comment);
-  }
+  },
 };
 
 module.exports = functions;
