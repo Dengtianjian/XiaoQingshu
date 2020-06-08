@@ -32,7 +32,7 @@
 }
 .post-body.post-body-dynamic .post-body-images {
   display: grid;
-  grid-template-columns: repeat(3, 224rpx);
+  grid-template-columns: repeat(3, 216rpx);
   grid-row-gap: 10rpx;
   justify-content: space-between;
   margin-top:10rpx;
