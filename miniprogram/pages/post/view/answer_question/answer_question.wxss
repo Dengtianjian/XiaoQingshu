@@ -1,0 +1,61 @@
+/* miniprogram/pages/post/view/answer_question/answer_question.wxss */
+.page-container {
+  margin:var(--container-padding);
+}
+
+.ql-container {
+  margin-bottom:100rpx;
+  height:100%;
+}
+
+/* 工具栏 */
+.editor-tools {
+  position:fixed;
+  left:0;
+  bottom:0;
+  z-index:999;
+  width:100%;
+  height:100rpx;
+  background:#fff;
+  border-top:2rpx solid #ddd;
+}
+.editor-tool-list {
+  height:100rpx;
+  white-space: nowrap;
+}
+.editor-tool-item {
+  display:inline-block;
+  width:64rpx;
+  height:64rpx;
+  line-height:64rpx;
+  font-size:32rpx;
+  color:var(--font-color2);
+  text-align:center;
+  user-select:none;
+}
+.editor-tool-item-italic {
+  font-style:italic;
+}
+.editor-tool-item-hover {
+  background:#ddd;
+  color:var(--main-color);
+}
+.editor-tool-item-active {
+  font-weight:bold;
+  color:var(--main-color);
+}
+
+/* 保存按钮 */
+.editor-save-content {
+  position:fixed;
+  bottom:160rpx;
+  right:var(--container-padding);
+  width:80rpx;
+  height:80rpx;
+  line-height:80rpx;
+  text-align:center;
+  font-size:36rpx;
+  color:white;
+  border-radius:50%;
+  background:var(--main-color);
+}

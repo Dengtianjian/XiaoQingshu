@@ -1,0 +1,46 @@
+<!-- miniprogram/pages/post/view/answer_question/answer_question.wxml -->
+<navigationBar pageTitle="回答问题" />
+<view class="page-container">
+  <editor id="answerEditor" class="ql-container" placeholder="请在这里输入回答的内容" maxlength="-1" auto-focus bind:ready="answerEditorReady" bind:statuschange="answerEditorStatusChange" bind:blur="answerEditorBlur" show-img-size="{{ true }}" show-img-toolbar="{{ true }}" style="height:{{ editorHeight }}px;"></editor>
+</view>
+<view class="editor-save-content qcicon qcicon-fasong" bind:tap="sendAnswer"></view>
+<view class="editor-tools" style="bottom:{{ isIOS?keyboardHeight:0 }}px;">
+  <scroll-view class="editor-tool-list" scroll-x catchtouchend="format">
+    <view class="editor-tool-item {{ formats.bold?'editor-tool-item-active':'' }}" hover-class="editor-tool-item-hover" data-name="bold">
+      B
+    </view>
+    <view class="editor-tool-item editor-tool-item-italic {{ formats.italic?'editor-tool-item-active':'' }}" hover-class="editor-tool-item-hover" data-name="italic">
+      I
+    </view>
+    <view class="editor-tool-item {{ formats.underline?'editor-tool-item-active':'' }}" hover-class="editor-tool-item-hover" data-name="underline">
+      __
+    </view>
+    <view class="editor-tool-item {{ formats.header===1?'editor-tool-item-active':'' }}" hover-class="editor-tool-item-hover" data-name="header" data-value="{{ 1 }}">
+      H1
+    </view>
+    <view class="editor-tool-item {{ formats.header===2?'editor-tool-item-active':'' }}" hover-class="editor-tool-item-hover" data-name="header" data-value="{{ 2 }}">
+      H2
+    </view>
+    <view class="editor-tool-item {{ formats.header===3?'editor-tool-item-active':'' }}" hover-class="editor-tool-item-hover" data-name="header" data-value="{{ 3 }}">
+      H3
+    </view>
+    <view class="editor-tool-item qcicon qcicon-youxupailie" hover-class="editor-tool-item-hover" data-name="list" data-value="ordered">
+    </view>
+    <view class="editor-tool-item qcicon qcicon-wuxupailie" hover-class="editor-tool-item-hover" data-name="list" data-value="bullet">
+    </view>
+    <view class="editor-tool-item qcicon qcicon-check_inactive" hover-class="editor-tool-item-hover" data-name="list" data-value="check">
+    </view>
+    <view class="editor-tool-item" hover-class="editor-tool-item-hover" bind:tap="insertDivider">
+      ——
+    </view>
+    <view class="editor-tool-item" hover-class="editor-tool-item-hover" bind:tap="insertImage">
+      📷
+    </view>
+    <view class="editor-tool-item" hover-class="editor-tool-item-hover" bind:tap="editorUndo">
+      ←
+    </view>
+    <view class="editor-tool-item" hover-class="editor-tool-item-hover" bind:tap="editorRedo">
+      →
+    </view>
+  </scroll-view>
+</view>
