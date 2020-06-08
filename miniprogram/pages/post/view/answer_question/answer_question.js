@@ -131,12 +131,12 @@ Page({
         let files=content.match(/(?<=(src="))[^"]*?(?=")/ig);
         if(files&&files.length>0){
           let fileList=await Cloud.uploadFile(files).then(res=>res);
-          wx.cloud.getTempFileURL({
+          await wx.cloud.getTempFileURL({
             fileList
           }).then(res=>{
-            let files=res.fileList;
+            let tempFiles=res.fileList;
             files.forEach((item,index)=>{
-              content=content.replace(item,result[index]);
+              content=content.replace(item,tempFiles[index]['tempFileURL']);
             });
           });
         }
