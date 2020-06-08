@@ -148,6 +148,33 @@ export default Behavior({
         });
       });
     },
+    commentPost({detail:{ content }}){
+      wx.showLoading({
+        title: "发送中",
+      });
+      Cloud.cfunction("Post", "saveComment", {
+        content,
+        postid: this.data.post._id,
+      }).then((res) => {
+        wx.hideLoading();
+        let that = this;
+        this.CommentPagination.insertNew({
+          _id: res._id,
+          content,
+          date: Utils.formatDate(Date.now(), "y-m-d"),
+          _post: this.data.post._id,
+          likes: 0,
+          replies: 0,
+          _author: App.userInfo["_id"],
+          author: App.userInfo,
+        })
+        Prompt.toast("评论成功", {
+          success() {
+            that.hiddenCommentInputPopup();
+          },
+        });
+      });
+    }
 
   },
 });

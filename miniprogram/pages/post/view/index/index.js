@@ -20,7 +20,6 @@ Page({
    */
   onLoad: function (options) {
     let _postid = options.postid;
-    _postid="4c5846c75eda27270049d7796d670afc";
 
     this.setData(
       {
@@ -51,6 +50,7 @@ Page({
   onReachBotom(){
     this.getComment();
   },
+  templateName:["qa","common"],
   getPost(){
     wx.showLoading({
       title: "全速加载中",
@@ -70,7 +70,12 @@ Page({
       })
         .then((res) => {
           setData["post"]["sort"] = res;
-          setData["commentTemplateName"]=res['identifier']+"_comment";
+          if(this.templateName.includes(res['identifier'])){
+            setData["commentTemplateName"]=res['identifier']+"_comment";
+          }else{
+            setData["commentTemplateName"]="common_comment";
+          }
+
         })
         .catch((res) => {
           if (res.error == 404) {
