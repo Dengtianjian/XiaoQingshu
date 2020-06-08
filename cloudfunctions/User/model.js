@@ -77,14 +77,11 @@ let functions = {
       })
       .end()
       .then((res) => {
-        return res['list'];
+        return res["list"];
       });
     if (userInfoList.length > 0) {
-      userInfoList.forEach(async userInfo=>{
-        userInfo=Object.assign(
-          userInfo["profile"][0],
-          userInfo
-        );
+      for (let i = 0; i < userInfoList.length; i++) {
+        let userInfo = Object.assign(userInfoList[i]["profile"][0], userInfoList[i]);
         delete userInfo["profile"];
 
         if (!userInfo["school"] || userInfo["school"] == null) {
@@ -119,7 +116,7 @@ let functions = {
           } else {
             let userJoinedSchool = await DB.collection("user_joined_school")
               .where({
-                _userid: userInfo["_userid"],
+                _userid: userInfo["_id"],
               })
               .limit(1)
               .get()
@@ -138,18 +135,22 @@ let functions = {
                 userInfo["school"] = joinedSchool[0];
                 userInfo["_default_school"] = joinedSchool[0]["_id"];
               }
+              userInfo["class"] = await functions["getUserDefaultClass"](
+                userInfo["_id"],
+                userInfo["_default_school"]
+              );
             }
           }
-          // return userInfo;
-          await User.doc(userInfo['_userid']).update({
-            data:{
-              "class":userInfo['class'],
-              school:userInfo['school']
-            }
+
+          await User.doc(userInfo["_userid"]).update({
+            data: {
+              class: _.set(userInfo["class"]),
+              school: _.set(userInfo["school"]),
+            },
           });
         }
-      });
-
+        userInfoList[i]=userInfo;
+      }
       return userInfoList;
     } else {
       return null;
