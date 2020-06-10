@@ -1,6 +1,5 @@
 // miniprogram/pages/post/view/answer_question/answer_question.js
 import { Cloud,Prompt } from "../../../../Qing";
-const App=getApp();
 Page({
   /**
    * 页面的初始数据
@@ -18,7 +17,7 @@ Page({
    */
   onLoad: function (options) {
     let postid = options.postid;
-    // postid = "4c5846c75eda27270049d7796d670afc";
+    postid ="baada3ac5ee07048008d64d20578dec1";
 
     let platform = wx.getSystemInfoSync().platform;
 
@@ -128,7 +127,18 @@ Page({
     this.answerEditorContext.getContents({
       async success(res){
         let content=res.html;
-        let files=content.match(/(?<=(src="))[^"]*?(?=")/ig);
+        // let files=content.match(/(?<=(src="))[^"]*?(?=")/ig);
+        let files=[];
+        let imgReg=/<img.*?(?:>|\/>)/gi;
+        let imgs=content.match(imgReg);
+        if(imgs){
+          let srcReg=/src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+          for(let i=0;i<imgs.length;i++){
+            let src=imgs[i].match(srcReg);
+
+            files.push(src[1]);
+          }
+        }
         if(files&&files.length>0){
           let fileList=await Cloud.uploadFile(files).then(res=>res);
           await wx.cloud.getTempFileURL({

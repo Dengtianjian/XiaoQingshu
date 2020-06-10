@@ -334,6 +334,10 @@ let functions = {
     let authorid = [];
     let commentId = [];
 
+    if(comments.length==0){
+      return [];
+    }
+
     comments.forEach((item) => {
       authorid.push(item._author);
       commentId.push(item._id);

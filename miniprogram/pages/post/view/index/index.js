@@ -88,15 +88,18 @@ Page({
             name: App.userInfo["school"]["name"],
           };
         }
+        let schoolClass=App.userInfo["class"]?{}:null;
+        if(schoolClass){
+          schoolClass={
+            prefessional: App.userInfo["class"]["profession"]
+          }
+        }
         setData["post"]["author"] = {
           nickname: App.userInfo["nickname"],
           avatar_url: App.userInfo["avatar_url"],
           _id: App.userInfo["_userid"],
-          school: App.userInfo["school"]["name"],
           _default_school: App.userInfo["_default_school"],
-          class: {
-            prefessional: App.userInfo["class"]["profession"],
-          },
+          class: schoolClass,
           school,
         };
       } else {
