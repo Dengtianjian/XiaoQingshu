@@ -4,7 +4,9 @@ const Response = require("./response");
 const Utils = require("./Utils");
 const Types = require("./Types");
 
-cloud.init();
+cloud.init({
+  env:"release-6zszw"
+});
 
 const DB = cloud.database();
 const _ = DB.command;
@@ -71,13 +73,14 @@ const MODULES = {
     return Response.result(types);
   },
   async getNotification(event) {
+    const wxContext=cloud.getWXContext();
     let category = event.category;
     let page = event.page || 0;
     let limit = event.limit || 6;
     let read = event.read || 0;
     let updateRead = event.updateRead || false;
     let sender = event.sender || null;
-    let receiver = event.receiver || null;
+    let receiver = event.receiver || wxContext.OPENID;
     let type = event.type || null;
     let where = {};
 
@@ -130,7 +133,7 @@ const MODULES = {
 
     return Response.result(data);
   },
-  async updateUserMessageCount(event){
+  async updateUserMessageCount(event={}){
     let _userid=event._userid||null;
     if(!_userid){
       const wxContext=cloud.getWXContext();

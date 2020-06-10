@@ -47,22 +47,6 @@
     size:"50rpx",
     navigations:[
       {
-        icon:"/material/temp/1.png",
-        title:"主页",
-        url:"/pages/my/space/space"
-      },{
-        icon:"/material/temp/2.png",
-        title:"帖子",
-        url:"/pages/my/post/post"
-      },{
-        icon:"/material/temp/3.png",
-        title:"资料",
-        url:"/pages/my/edit_profile/edit_profile"
-      },{
-        icon:"/material/temp/4.png",
-        title:"消息",
-        url:"/pages/my/notification/notification"
-      },{
         icon:"/material/temp/5.png",
         title:"最近浏览",
         url:""
@@ -70,10 +54,6 @@
         icon:"/material/temp/6.png",
         title:"勋章",
         url:""
-      },{
-        icon:"/material/temp/7.png",
-        title:"收藏",
-        url:"/pages/my/favorites/favorites"
       },{
         icon:"/material/temp/8.png",
         title:"小黑屋",
@@ -90,15 +70,46 @@
     ]
   };
 </wxs>
-  <navigator class="quick-navigation" hover-class="none">
+  <view class="quick-navigation">
+    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/space/space" hover-class="quick-navigation-item-hover">
+      <Icon class="quick-navigation-item-icon" icon="/material/temp/1.png" size="50rpx"></Icon>
+      <text class="quick-navigation-item-title">主页</text>
+      <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
+    </navigator>
+    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/post/post" hover-class="quick-navigation-item-hover">
+      <Icon class="quick-navigation-item-icon" icon="/material/temp/2.png" size="50rpx"></Icon>
+      <text class="quick-navigation-item-title">帖子</text>
+      <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
+    </navigator>
+    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/edit_profile/edit_profile" hover-class="quick-navigation-item-hover">
+      <Icon class="quick-navigation-item-icon" icon="/material/temp/3.png" size="50rpx"></Icon>
+      <text class="quick-navigation-item-title">资料</text>
+      <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
+    </navigator>
+    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/notification/notification" hover-class="quick-navigation-item-hover">
+      <Icon class="quick-navigation-item-icon" icon="/material/temp/4.png" size="50rpx"></Icon>
+      <view class="quick-navigation-item-title">
+        消息
+        <text class="quick-navigation-item-message-count">({{ userInfo['message_news']['total'] }})</text>
+      </view>
+      <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
+    </navigator>
+    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/favorites/favorites" hover-class="quick-navigation-item-hover">
+      <Icon class="quick-navigation-item-icon" icon="/material/temp/7.png" size="50rpx"></Icon>
+      <text class="quick-navigation-item-title">收藏</text>
+      <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
+    </navigator>
     <block wx:for="{{ quickConfig.navigations }}">
-      <navigator class="quick-navigation-item" open-type="navigate" url="{{ item.url }}">
-        <Icon class="quick-navigation-item-icon" icon="{{ item.icon }}" size="{{ quickConfig.size }}"></Icon>
-        <text class="quick-navigation-item-title">{{ item.title }} <text class="quick-navigation-noopen-prompt" wx:if="{{ item['url']=='' }}">(功能未开放)</text></text>
+      <navigator class="quick-navigation-item" open-type="navigate" hover-class="quick-navigation-item-hover">
+        <Icon class="quick-navigation-item-icon" icon="{{ item['icon'] }}" size="50rpx"></Icon>
+        <view class="quick-navigation-item-title">
+          {{ item['title'] }}
+          <text class="quick-navigation-noopen-prompt">(功能未开放)</text>
+        </view>
         <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
       </navigator>
     </block>
-  </navigator>
+  </view>
 </block>
 <block wx:else>
   <NavigationBar hiddenReturnPage="{{ true }}" />

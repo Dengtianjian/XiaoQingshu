@@ -1,6 +1,6 @@
 <template name="commentPost">
   <view class="comment-post">
-    <navigator class="comment-title" hover-class="none" url="/pages/post/view/view?postid={{ post_id }}">{{ post_title }}</navigator>
+    <navigator class="comment-title" hover-class="none" url="/pages/post/view/index/index?postid={{ post_id }}">{{ post_title }}</navigator>
     <view class="comment-content">{{ comment_content }}</view>
   </view>
 </template>

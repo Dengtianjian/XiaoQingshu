@@ -52,6 +52,7 @@
 }
 .post-option-item {
   display: flex;
+  align-items:center;
   width: 100%;
   height: 80rpx;
   line-height: 80rpx;

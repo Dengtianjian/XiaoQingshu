@@ -2,6 +2,7 @@
 <import src="./type/replyComment.wxml" />
 <import src="./type/replyReply.wxml" />
 <import src="./type/likeFavorite.wxml" />
+<import src="./type/likePost.wxml" />
 <template name="user">
   <view class="notification-user-item">
     <navigator class="notification-user-head" hover-class="none" url="/pages/my/space/space?userid={{ _sender }}">

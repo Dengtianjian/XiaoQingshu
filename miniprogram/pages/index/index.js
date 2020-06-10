@@ -19,15 +19,17 @@ Page({
     currentShowPostSort: "all",
     quotes: [],
   },
-  onLoad() {
-    const _ = wx.cloud.database().command;
-    Cloud.cfunction("Post", "getSort").then((res) => {
-      if (res["data"].length > 0) {
+  async onLoad() {
+    await Cloud.cfunction("Post", "getSort").then((res) => {
+      if (res['errMsg'] =="collection.get:ok") {
         let sorts = res["data"];
+        if(sorts.length==0){
+          return;
+        }
+
         let postTabs = this.data.postTabs;
         let posts = this.data.posts;
         let postLoad = this.postLoad;
-
         sorts.forEach((item) => {
           postTabs[item["identifier"]] = item["name"];
           posts[item["identifier"]] = [];
@@ -42,6 +44,7 @@ Page({
           postTabs,
           posts,
           sorts,
+          pageLoaded:true
         });
       }
     });
@@ -50,9 +53,6 @@ Page({
   },
   onReady() {
     this.getQuotes();
-    this.setData({
-      pageLoaded:true
-    })
   },
   onPageScroll(e) {
     this.setData({

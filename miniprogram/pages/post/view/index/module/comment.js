@@ -1,4 +1,4 @@
-import { Pagination, Cloud, Utils, Prompt } from "../../../../../Qing";
+import { Pagination, Cloud, Utils, Prompt,Notification } from "../../../../../Qing";
 const App=getApp();
 export default Behavior({
   CommentPagination: null,
@@ -167,7 +167,26 @@ export default Behavior({
           replies: 0,
           _author: App.userInfo["_id"],
           author: App.userInfo,
-        })
+        });
+
+        if (App.userInfo["_id"] != this.data.post._authorid) {
+            Notification.send(
+              "commentPost",
+              "commentPost",
+              {
+                post_title:this.data.post.title || "评论了你的" + this.data.post.sort.name,
+                user_nickname: App.userInfo["nickname"],
+                comment_content:content.length>110?content.substr(0,110)+"...":content,
+                post_id: this.data.post._id,
+                user_avatar: App.userInfo["avatar_url"],
+              },
+              App.userInfo["_id"],
+              this.data.post._authorid,
+              "commentAndReply",
+              "评论了你的 " + this.data.post.sort.name
+            );
+        }
+
         Prompt.toast("评论成功", {
           success() {
             that.hiddenCommentInputPopup();

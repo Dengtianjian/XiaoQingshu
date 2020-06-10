@@ -1,18 +1,16 @@
 // miniprogram/pages/post/view/index/index.js
-import Cloud from "../../../../source/js/cloud";
-import Prompt from "../../../../source/js/prompt";
-import Utils from "../../../../source/js/utils";
 import Favorite from "./module/favorite";
 import Comment from "./module/comment";
+import { Notification, Cloud, Prompt, Utils } from "../../../../Qing";
 
 const App = getApp();
 Page({
-  behaviors:[Favorite,Comment],
+  behaviors: [Favorite, Comment],
   /**
    * 页面的初始数据
    */
   data: {
-    post:{},
+    post: {},
   },
 
   /**
@@ -37,7 +35,7 @@ Page({
     let post = this.data.post;
     let config = {
       title: post.title,
-      path: "/pages/post/view/view?postid=" + post["_id"],
+      path: "/pages/post/view/index/index?postid=" + post["_id"],
     };
     if (post.images.length > 0) {
       config["imageUrl"] = post["images"][0];
@@ -47,11 +45,11 @@ Page({
   onPullDownRefresh() {
     this.getPost();
   },
-  onReachBotom(){
+  onReachBotom() {
     this.getComment();
   },
-  templateName:["qa","common"],
-  getPost(){
+  templateName: ["qa", "common"],
+  getPost() {
     wx.showLoading({
       title: "全速加载中",
     });
@@ -70,12 +68,11 @@ Page({
       })
         .then((res) => {
           setData["post"]["sort"] = res;
-          if(this.templateName.includes(res['identifier'])){
-            setData["commentTemplateName"]=res['identifier']+"_comment";
-          }else{
-            setData["commentTemplateName"]="common_comment";
+          if (this.templateName.includes(res["identifier"])) {
+            setData["commentTemplateName"] = res["identifier"] + "_comment";
+          } else {
+            setData["commentTemplateName"] = "common_comment";
           }
-
         })
         .catch((res) => {
           if (res.error == 404) {
@@ -106,14 +103,14 @@ Page({
         await Cloud.cfunction("User", "getUser", {
           _openid: post["_authorid"],
         }).then((user) => {
-          if(user.length==0){
-            setData['post']["author"] ={
-              _id:null,
-              nickname:"同学被隐藏了",
-              avatar_url:"/material/images/anonymous_user.png"
+          if (user.length == 0) {
+            setData["post"]["author"] = {
+              _id: null,
+              nickname: "同学被隐藏了",
+              avatar_url: "/material/images/anonymous_user.png",
             };
-          }else{
-            setData['post']["author"] = user;
+          } else {
+            setData["post"]["author"] = user;
           }
         });
       }
@@ -163,6 +160,25 @@ Page({
             [`post.isLike`]: true,
             [`post.likes`]: this.data.post.likes + 1,
           });
+          if (App.userInfo["_id"] != this.data.post._authorid) {
+            Notification.send(
+              "likePost",
+              "likePost",
+              {
+                user_nickname: App.userInfo["nickname"],
+                post_id: this.data.post._id,
+                user_avatar: App.userInfo["avatar_url"],
+                post_type: this.data.post.sort.identifier,
+                post_type_name: this.data.post.sort.name,
+                post_title:
+                  this.data.post.title || "赞了你的" + this.data.post.sort.name,
+              },
+              App.userInfo["_id"],
+              this.data.post._authorid,
+              "likeAndAgree",
+              "赞了你的 " + this.data.post.sort.name
+            );
+          }
         })
         .catch((res) => {
           let that = this;
@@ -171,7 +187,6 @@ Page({
               409001: {
                 title: "已经点赞过了",
                 success() {
-                  console.log(1);
                   that.setData({
                     [`post.isLike`]: true,
                     [`post.likes`]: that.data.post.likes + 1,
@@ -189,5 +204,5 @@ Page({
       current: this.data.post.images[index],
       urls: this.data.post.images,
     });
-  }
-})
+  },
+});

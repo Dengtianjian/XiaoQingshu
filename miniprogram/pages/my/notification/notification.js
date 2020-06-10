@@ -23,7 +23,7 @@ Page({
       "notification",
       0,
       true,
-      6
+      10
     );
   },
 
@@ -44,6 +44,7 @@ Page({
     let dataset=event.currentTarget.dataset;
     let category=dataset.category;
     let templateName=dataset.templatename||"common";
+
     this.setData({
       isHiddenNotificationListPopup: false,
       showNotificationCategory: category,

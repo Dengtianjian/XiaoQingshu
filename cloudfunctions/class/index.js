@@ -3,7 +3,9 @@ const Response = require("./response");
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 
-cloud.init();
+cloud.init({
+  env:"release-6zszw"
+});
 
 const DB = cloud.database();
 const _ = DB.command;

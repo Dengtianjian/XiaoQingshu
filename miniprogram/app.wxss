@@ -9,6 +9,7 @@ page {
   --container-padding:30rpx;
   --container-width:calc( 100% - (var(--container-padding) * 2) );
   --main-color:#07C160;
+  --red:#F4B0AE;
   --font-color:#333333;
   --font-color2:#666666;
   --font-light-color:#999999;

@@ -2,7 +2,10 @@
 const cloud = require("wx-server-sdk");
 const Response = require("./response");
 
-cloud.init();
+cloud.init({
+  env:"release-6zszw"
+});
+
 const DB = cloud.database();
 const _ =DB.command;
 const School = DB.collection("school");

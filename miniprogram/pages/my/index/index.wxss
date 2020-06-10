@@ -82,7 +82,15 @@ page {
   align-items: center;
   height: 86rpx;
 }
+.quick-navigation-item-message-count {
+  display:inline-block;
+  padding-left:10rpx;
+  font: size 24rpx;
+  color:var(--red);
+}
 .quick-navigation-item .quick-navigation-item-title {
+  display:flex;
+  align-items:center;
   margin-left: 26rpx;
   font-size: 30rpx;
   color: var(--font-color);
@@ -94,6 +102,7 @@ page {
   color: var(--font-light-color);
 }
 .quick-navigation-item .quick-navigation-noopen-prompt {
+  display:inline-block;
   font-size: 20rpx;
   color: var(--font-light-color);
 }

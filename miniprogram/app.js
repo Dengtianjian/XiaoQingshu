@@ -1,7 +1,7 @@
 //app.js
 import Cloud from "./source/js/cloud";
 wx.cloud.init({
-  env: "develogment-env",
+  env: "release-6zszw",
 });
 
 App({

@@ -3,7 +3,10 @@ const Response = require("./response");
 // 云函数入口文件
 const cloud = require("wx-server-sdk");
 
-cloud.init();
+cloud.init({
+  env:"release-6zszw"
+});
+
 
 const DB = cloud.database();
 const _ = DB.command;
@@ -51,7 +54,7 @@ let functions = {
         credits: 0,
         expreience: 100,
         fans: 0,
-        group: "d77a8c995e9d1f9e00625cd43b0aba8f", //!待修改
+        group: "f149f6775e9d1ff0007f1f350cf4f400", //!默认为普通用户组
         posts: 0,
         registation_date: Date.now(),
         report_weight: 100,

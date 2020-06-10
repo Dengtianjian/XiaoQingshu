@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/test/test",
     "pages/index/index",
     "pages/post/view/answer_question/answer_question",
     "pages/post/view/index/index",
@@ -18,7 +19,6 @@
     "pages/my/edit_profile/edit_profile",
     "pages/class/album/album",
     "pages/class/edit_info/edit_info",
-    "pages/test/test",
     "pages/class/edit_my_info/edit_my_info"
   ],
   "window": {

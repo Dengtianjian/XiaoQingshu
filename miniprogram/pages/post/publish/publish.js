@@ -15,8 +15,10 @@ Page({
     currentSort: "dynamic",
     schoolInfo: null,
     schoolEntry: false,
-    evilKeywords:"",
-    hideContentCheckPrompt:true
+    evilKeywords: "",
+    hideContentCheckPrompt: true,
+    sortField:null,
+    sortOption:[]
   },
 
   /**
@@ -27,6 +29,25 @@ Page({
       currentSort: options.identifier,
       schoolEntry: options.school,
     };
+    wx.showLoading({
+      title:"加载中..."
+    });
+    await Cloud.cfunction("Post", "getSortField", {
+      sort_identifier: options.identifier,
+    }).then((res) => {
+      if(res.length>0){
+        let sortOption=[];
+        res.forEach(item=>{
+          if(item['isOption']){
+            sortOption.push(item);
+          }
+        });
+        this.setData({
+          sortField:res,
+          sortOption
+        });
+      }
+    });
     if (options.postid) {
       let _postid = options.postid;
       await Cloud.cfunction("Post", "getPost", {
@@ -60,6 +81,8 @@ Page({
     }
 
     this.setData(setData);
+
+    wx.hideLoading();
   },
 
   /**
@@ -115,7 +138,7 @@ Page({
   previewImage(option) {
     let index = option.currentTarget.dataset.index;
     wx.previewImage({
-      urls:this.data.images,
+      urls: this.data.images,
       current: this.data.images[index],
     });
   },
@@ -132,9 +155,9 @@ Page({
       },
     });
   },
-  removeTopic(){
+  removeTopic() {
     this.setData({
-      topic:null
+      topic: null,
     });
   },
   async savePost(option) {
@@ -147,8 +170,8 @@ Page({
     }
     delete formValue["school_only"];
     let topic = this.data.topic;
-    if(topic!=null){
-      topic=topic['_id'];
+    if (topic != null) {
+      topic = topic["_id"];
     }
     let images = this.data.images;
     wx.showLoading({
@@ -159,49 +182,51 @@ Page({
       _postid = this.data.post._id;
     }
     //腾讯内容安全审核
-    let checkResult=null;
-    let contentArray=[];
-    if(formValue.content.length>1990){
-      let loopCount=Math.ceil(formValue.content.length/1990);
-      for(let i=1;i<=loopCount;i++){
-        contentArray.push(formValue.content.substr((i-1)*1990,i*1994));
+    let checkResult = null;
+    let contentArray = [];
+    if (formValue.content.length > 1990) {
+      let loopCount = Math.ceil(formValue.content.length / 1990);
+      for (let i = 1; i <= loopCount; i++) {
+        contentArray.push(formValue.content.substr((i - 1) * 1990, i * 1994));
       }
-    }else{
-      contentArray=[formValue.content];
+    } else {
+      contentArray = [formValue.content];
     }
 
-    for(let i=0;i<contentArray.length;i++){
-      checkResult=await wx.serviceMarket.invokeService({
-        service: 'wxee446d7507c68b11',
-        api: 'msgSecCheck',
-        data: {
-          "Action": "TextApproval",
-          "Text":contentArray[i]
-        },
-      }).then((res) => {
-        return res.data.Response.EvilTokens;
-      });
-      if(checkResult.length>0){
+    for (let i = 0; i < contentArray.length; i++) {
+      checkResult = await wx.serviceMarket
+        .invokeService({
+          service: "wxee446d7507c68b11",
+          api: "msgSecCheck",
+          data: {
+            Action: "TextApproval",
+            Text: contentArray[i],
+          },
+        })
+        .then((res) => {
+          return res.data.Response.EvilTokens;
+        });
+      if (checkResult.length > 0) {
         break;
       }
     }
-    if(checkResult.length>0){
-      let isFail=false;
-      for(let i=0;i<checkResult.length;i++){
-        if(checkResult[i]['EvilFlag']==1){
-          isFail=true;
+    if (checkResult.length > 0) {
+      let isFail = false;
+      for (let i = 0; i < checkResult.length; i++) {
+        if (checkResult[i]["EvilFlag"] == 1) {
+          isFail = true;
           break;
         }
       }
-      if(isFail){
+      if (isFail) {
         Prompt.toast("发布失败，内容存在违规内容，请检查后修改，再重新提交");
-        let evilKeywords=[];
-        checkResult.forEach(item=>{
-          evilKeywords=evilKeywords.concat(item['EvilKeywords']);
-        })
+        let evilKeywords = [];
+        checkResult.forEach((item) => {
+          evilKeywords = evilKeywords.concat(item["EvilKeywords"]);
+        });
         this.setData({
-          evilKeywords:evilKeywords.join("、"),
-          hideContentCheckPrompt:false
+          evilKeywords: evilKeywords.join("、"),
+          hideContentCheckPrompt: false,
         });
         return;
       }
@@ -213,21 +238,21 @@ Page({
       topic,
       images,
       sort: this.data.currentSort,
-      checkResult
+      checkResult,
     }).then((res) => {
       wx.hideLoading();
       if (_postid) {
         Prompt.toast("保存成功", {
           icon: "success",
         });
-      }else{
-        Prompt.toast("发布成功",{
-          icon:"success",
-          success(){
+      } else {
+        Prompt.toast("发布成功", {
+          icon: "success",
+          success() {
             wx.redirectTo({
-              url:"/pages/post/view/index/index?postid="+res['_postid']
-            })
-          }
+              url: "/pages/post/view/index/index?postid=" + res["_postid"],
+            });
+          },
         });
       }
     });

@@ -29,12 +29,24 @@
       <view class="post-option-item-title">
         <switch id="schoolOnly" type="checkbox" checked="{{ schoolOnly||schoolInfo!=null&&schoolEntry }}" name="school_only" />
       </view>
-      <label for="schoolOnly" class="post-option-item-content">仅限 {{ schoolInfo['name'] }} 的同学们可以看到</label>
+      <label for="schoolOnly" class="post-option-item-content">
+        仅限 {{ schoolInfo['name'] }} 的同学们可以看到
+      </label>
     </view>
+    <block wx:for="{{ sortOption }}" wx:key="identifier">
+      <view class="post-option-item">
+        <view class="post-option-item-title">{{ item['name'] }}</view>
+        <block wx:if="{{ item['type']=='text' }}">
+          <input class="post-option-item-content" name="{{ item['identifier'] }}" placeholder="{{ item['placeholder'] }}" />
+        </block>
+      </view>
+    </block>
   </view>
   <view class="content-check-prompt" hidden="{{ hideContentCheckPrompt }}">
     发布失败，内容存在违规内容，请检查后修改，再重新提交
     <view class="content-check-result-keyword">{{ evilKeywords }}</view>
   </view>
-  <button class="publish-form-submit" type="primary" form-type="submit">{{ post?'保存':'发布' }}</button>
+  <button class="publish-form-submit" type="primary" form-type="submit">
+    {{ post?'保存':'发布' }}
+  </button>
 </form>

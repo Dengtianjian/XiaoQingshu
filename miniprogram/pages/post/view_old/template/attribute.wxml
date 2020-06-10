@@ -1,6 +1,0 @@
-<template name="attribute">
-  <view class="post-attribute">
-    <Badge class="post-attribute-item" icon="qcicon-{{ sort.identifier }}" text="{{ sort.name }}" color="var(--main-color)" background="rgba(25, 119, 202, 0.11)"></Badge>
-    <Badge class="post-attribute-item" icon="#" text="{{ topic.name }}" wx:if="{{ topic }}" />
-  </view>
-</template>
