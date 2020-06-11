@@ -1,8 +1,9 @@
 //index.js
-import { Cloud,Prompt } from "../../Qing";
+import { Cloud, Prompt } from "../../Qing";
+const App = getApp();
 Page({
   data: {
-    pageLoaded:false,
+    pageLoaded: false,
     sorts: null,
     postTabs: {
       all: "全部",
@@ -20,35 +21,34 @@ Page({
     quotes: [],
   },
   async onLoad() {
+    let setData = {
+      pageLoaded: true,
+    };
+    await App.getUserInfo();
     await Cloud.cfunction("Post", "getSort").then((res) => {
-      if (res['errMsg'] =="collection.get:ok") {
+      if (res["errMsg"] == "collection.get:ok") {
         let sorts = res["data"];
-        if(sorts.length==0){
-          return;
+        if (sorts.length > 0) {
+          let postTabs = this.data.postTabs;
+          let posts = this.data.posts;
+          let postLoad = this.postLoad;
+          sorts.forEach((item) => {
+            postTabs[item["identifier"]] = item["name"];
+            posts[item["identifier"]] = [];
+            postLoad[item["identifier"]] = {
+              count: 0,
+              page: 0,
+              finished: false,
+            };
+          });
+          this.postLoad = postLoad;
+          setData["postTabs"] = postTabs;
+          setData["posts"] = posts;
         }
-
-        let postTabs = this.data.postTabs;
-        let posts = this.data.posts;
-        let postLoad = this.postLoad;
-        sorts.forEach((item) => {
-          postTabs[item["identifier"]] = item["name"];
-          posts[item["identifier"]] = [];
-          postLoad[item["identifier"]] = {
-            count: 0,
-            page: 0,
-            finished: false,
-          };
-        });
-        this.postLoad = postLoad;
-        this.setData({
-          postTabs,
-          posts,
-          sorts,
-          pageLoaded:true
-        });
       }
     });
 
+    this.setData(setData);
     this.getPost();
   },
   onReady() {
@@ -83,19 +83,13 @@ Page({
     });
   },
   getQuotes() {
-    Cloud.collection("quote")
-      .aggregate()
-      .sample({
-        size: 5,
-      })
-      .end()
-      .then((res) => {
-        let quotes = this.data.quotes;
-        quotes.push(...res["list"]);
-        this.setData({
-          quotes,
-        });
+    Cloud.callFun("Extensions", "getQuotes", {
+      limit: 5,
+    }).then((quotes) => {
+      this.setData({
+        quotes,
       });
+    });
   },
   postLoad: {
     all: { count: 0, page: 0, finished: false },
@@ -130,7 +124,7 @@ Page({
       page: currentPageLoad.page,
       sort: currentShowPostSort == "all" ? null : currentShowPostSort,
       status: "normal",
-      school:null
+      school: null,
     }).then((res) => {
       if (res.length < 5) {
         currentPageLoad.finished = true;
@@ -180,7 +174,7 @@ Page({
       wx.stopPullDownRefresh();
     });
   },
-  goToSearch(){
+  goToSearch() {
     Prompt.toast("🔍搜索功能还能未开放💓");
-  }
+  },
 });

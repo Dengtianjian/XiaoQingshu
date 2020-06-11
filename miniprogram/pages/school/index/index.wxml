@@ -1,7 +1,7 @@
 <!-- pages/school.wxml -->
 <block wx:if="{{ pageLoadingCompleted }}">
   <block wx:if="{{ userIsLogin&&schoolInfo }}">
-    <NavigationBar pageScrollTop="{{ pageScrollTop }}" backgroundColor="white" opacity="0.8" defaultColor="#ffffff" downColor="#000000" hiddenReturnPage="{{ true }}">
+    <NavigationBar pageScrollTop="{{ pageScrollTop }}" backgroundColor="white" opacity="0.8" defaultColor="#ffffff" downColor="#000000" hiddenReturnPage="{{ true }}" hiddenBackHome="{{ true }}">
       <view class="switch-school" bind:tap="showSwitchSchoolPopup">
         <text class="qcicon qcicon-qiehuan switch-school-icon"></text>
         {{ schoolInfo['name'] }}
@@ -76,6 +76,7 @@
                   <PostCoverItem class="post-item" post="{{ item }}" type="{{ item.type }}" />
                 </block>
               </block>
+              <Loading finished="{{ postLoadFinished }}" loading="{{ postLoading }}" />
             </view>
           </block>
         </Tabs>
@@ -83,7 +84,7 @@
     </view>
   </block>
   <block wx:elif="{{ userIsLogin&&schoolInfo==null }}">
-    <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" />
+    <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" hiddenBackHome="{{ true }}" />
     <PagePrompt class="page-prompt" icon="/material/images/not_school.png" description="您还未加入任何一所学校呢">
       <view class="page-prompt-operate" bind:tap="goToSelectSchool">
         <button class="button-common">那就加入一所吧</button>
@@ -91,7 +92,7 @@
     </PagePrompt>
   </block>
   <block wx:elif="{{ userIsLogin==false }}">
-    <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" />
+    <NavigationBar pageTitle="学校" hiddenReturnPage="{{ true }}" hiddenBackHome="{{ true }}" />
     <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="您还未登录哦，登录后才可以查看自己的学校呢">
       <view class="page-prompt-operate">
         <button class="button-common" open-type="getUserInfo" bindgetuserinfo="getUserInfo">

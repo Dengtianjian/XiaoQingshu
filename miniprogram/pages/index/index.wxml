@@ -3,11 +3,11 @@
 <template is="skeleton" wx:if="{{ pageLoaded===false }}" />
 <block wx:elif="{{ pageLoaded }}">
   <!-- 顶部导航栏 -->
-  <NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.95">
+  <NavigationBar pageScrollTop="{{ pageScrollTop }}" opacity="0.95" hiddenBackHome="{{ true }}">
     <view class="search-entry" bind:tap="goToSearch"><text class="qcicon qcicon-search" />搜索笔记 / 问题 / 同学</view>
   </NavigationBar>
   <!-- 语录&签到 -->
-  <view class="quote-signin">
+  <view class="quote-signin" wx:if="{{ quotes.length>0 }}">
     <swiper class="quote-swiper" indicator-dots="{{false}}" autoplay="{{true}}" interval="{{50000}}" duration="{{500}}" vertical circular>
       <block wx:for="{{quotes}}" wx:key="_id">
         <swiper-item>
@@ -31,7 +31,7 @@
     </Tabs>
   </view>
   <!-- 发布内容入口 -->
-  <view class="publish-entrance" bindtap="displayPublishPopup" data-mode="show">
+  <view class="publish-entrance" bindtap="displayPublishPopup" data-mode="show" wx:if="{{ sorts.length>0 }}">
     <text class="publish-entrance-icon qcicon qcicon-editor"></text>
   </view>
   <view class="publish-type-select" hidden="{{ publish.hidden }}">

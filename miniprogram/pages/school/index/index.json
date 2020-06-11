@@ -5,6 +5,7 @@
     "Tabs":"/components/tabs/tabs",
     "PostCoverItem":"/components/postCoverItem/postCoverItem",
     "PagePrompt":"/components/pagePrompt/pagePrompt",
-    "Dialog":"/components/dialog/dialog"
+    "Dialog":"/components/dialog/dialog",
+    "Loading":"/components/loading/loading"
   }
 }

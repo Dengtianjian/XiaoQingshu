@@ -1,17 +1,18 @@
 <!-- pages/class/class.wxml -->
 <block wx:if="{{ pageLoadingCompleted }}">
   <block wx:if="{{ classInfo!=null }}">
-    <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" interval="{{ 20000 }}" defaultColor="#ffffff" hiddenReturnPage="{{ true }}">
+    <NavigationBar pageScrollTop="{{ scrollTop }}" crititcal="{{ 80 }}" interval="{{ 20000 }}" defaultColor="#ffffff" hiddenReturnPage="{{ true }}" hiddenBackHome="{{ true }}">
       <view class="grade">{{ classInfo['grade'] }}级</view>
+      <view class="class-number-id">班级数字:{{ classInfo['_numberid'] }}</view>
     </NavigationBar>
     <view class="class-info">
       <view class="class-info-head">
-        <navigator class="class-info-left" hover-class="none" open-type="navigate" url="/pages/class/edit_info/edit_info?classid={{ classInfo['_id'] }}">
+        <view class="class-info-left" bind:tap="goToEditClass">
           <view class="class-name">
             {{ classInfo['profession'] }}{{ classInfo['number']||'' }}班
           </view>
           <text class="class-quit qcicon qcicon-tuichu" catch:tap="quitClass"></text>
-        </navigator>
+        </view>
         <view class="class-info-right">
           <block wx:if="{{ newClassmate.has }}">
             <view class="class-new-classmate qcicon qcicon-smile" bindtap="displayNewClassmatePopup" data-flag="{{ false }}"></view>
@@ -108,7 +109,7 @@
     </view>
   </block>
   <block wx:if="{{ userIsLogin===false }}">
-    <NavigationBar pageTitle="班级" hiddenReturnPage="{{ true }}" />
+    <NavigationBar pageTitle="班级" hiddenReturnPage="{{ true }}" hiddenBackHome="{{ true }}" />
     <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="还未登录哦，登录后才可以查看自己所在的班级呢">
       <view class="page-prompt-operate">
         <button class="button-common" type="primary" open-type="getUserInfo" bindgetuserinfo="getUserInfo">
@@ -118,14 +119,14 @@
     </PagePrompt>
   </block>
   <block wx:if="{{ userIsLogin&&classInfo==null }}">
-    <NavigationBar pageTitle="班级" hiddenReturnPage="{{ true }}" />
+    <NavigationBar pageTitle="班级" hiddenReturnPage="{{ true }}" hiddenBackHome="{{ true }}" />
     <PagePrompt class="page-prompt" icon="/material/images/not_class.png" description="还未加入任何一个班级哦，请通过好友邀请或者输入班级ID申请加入吧">
       <form class="not-class-form page-prompt-operate" bindsubmit="searchClass">
         <input class="not-class-form-el" type="number" name="class_id" placeholder="班级ID" />
         <button class="not-class-form-submit button-common" type="primary" form-type="submit">
           搜索
         </button>
-        <view class="create-class-entry" bind:tap="goToBuildClass">创建班级</view>
+        <view class="create-class-entry" bind:tap="goToEditClass">创建班级</view>
       </form>
     </PagePrompt>
     <Dialog hidden="{{ joinClass['hiddenPopup'] }}" title="根据ID查询到了" height="440rpx" cancelButton="不是这个" confirmButton="是的，申请加入" textAlign="center" bind:cancel="hiddenJoinClassDialog" bind:confirm="confirmJoinClass">

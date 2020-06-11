@@ -99,42 +99,39 @@ Page({
       title: "从相册取出中",
       mask: true,
     });
-    Cloud.collection("school_class_album")
-      .where({
-        _classid: this.data.classId,
+
+    Cloud.cfunction("Class","getAlbumContent",{
+      _classid: this.data.classId,
         type: "photo",
-      })
-      .limit(15)
-      .skip(this.data.photo.page * 15)
-      .get()
-      .then((res) => {
-        wx.hideLoading();
-        wx.stopPullDownRefresh();
-        if (res.data.length == 0) {
-          this.setData({
-            "photo.finished": true,
-          });
-          return;
-        }
-        this.setData(
-          {
-            "photo.loadCount": this.data.photo.loadCount + 1,
-            "photo.page": this.data.photo.page + 1,
-            "photo.finished": res.data.length < 15,
-          },
-          () => {
-            let photosLength = this.data.photo.list.length;
-            let images = res.data;
-            images.forEach((item, index) => {
-              this.setData({
-                [`photo.list[${photosLength + index}]`]: item,
-              });
+        limit:15,
+        page:this.data.photo.page
+    }).then(photos=>{
+      wx.hideLoading();
+      wx.stopPullDownRefresh();
+      if (photos.length == 0) {
+        this.setData({
+          "photo.finished": true,
+        });
+        return;
+      }
+      this.setData(
+        {
+          "photo.loadCount": this.data.photo.loadCount + 1,
+          "photo.page": this.data.photo.page + 1,
+          "photo.finished": photos.length < 15,
+        },
+        () => {
+          let photosLength = this.data.photo.list.length;
+          photos.forEach((item, index) => {
+            this.setData({
+              [`photo.list[${photosLength + index}]`]: item,
             });
-            this.updateSwiperHeight();
-            this.getClassPhoto();
-          }
-        );
-      });
+          });
+          this.updateSwiperHeight();
+          this.getClassPhoto();
+        }
+      );
+    })
   },
   getClassVideo() {
     if (this.data.video.loadCount == 2) {
@@ -150,24 +147,21 @@ Page({
       title: "从相册取出中",
       mask: true,
     });
-    Cloud.collection("school_class_album")
-      .where({
-        _classid: this.data.classId,
+
+    Cloud.cfunction("Class","getAlbumContent",{
+      _classid: this.data.classId,
         type: "video",
-      })
-      .limit(15)
-      .skip(this.data.video.page * 15)
-      .get()
-      .then((DBVideos) => {
+        limit:15,
+        page:this.data.video.page
+    }).then((DBVideos) => {
         wx.hideLoading();
         wx.stopPullDownRefresh();
-        if (DBVideos.data.length == 0) {
+        if (DBVideos.length == 0) {
           this.setData({
             "video.finished": true,
           });
           return;
         }
-        DBVideos = DBVideos.data;
         this.setData(
           {
             "video.loadCount": this.data.video.loadCount + 1,

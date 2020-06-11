@@ -4,6 +4,7 @@ import Prompt from "../../../source/js/prompt";
 import Utils from "../../../source/js/utils";
 const App = getApp();
 Page({
+  sorts:null,
   /**
    * 页面的初始数据
    */
@@ -24,6 +25,8 @@ Page({
       all: [],
     },
     currentShowPostSort: "all",
+    postLoadFinished:false,
+    postLoading:false
   },
 
   /**
@@ -32,30 +35,33 @@ Page({
   async onLoad(options) {
     this.getUserInfo();
 
-    Cloud.collection("post_sort")
-      .get()
-      .then((res) => {
-        if (res["data"].length > 0) {
-          let sorts = res["data"];
-          let postTabs = this.data.postTabs;
-          let posts = this.data.posts;
-          let postLoad = this.postLoad;
-          sorts.forEach((item) => {
-            postTabs[item["identifier"]] = item["name"];
-            posts[item["identifier"]] = [];
-            postLoad[item["identifier"]] = {
-              count: 0,
-              page: 0,
-              finished: false,
-            };
-          });
-          this.postLoad = postLoad;
-          this.setData({
-            postTabs,
-            posts,
-          });
+    await Cloud.cfunction("Post", "getSort").then((res) => {
+      if (res['errMsg'] =="collection.get:ok") {
+        let sorts = res["data"];
+        if(sorts.length==0){
+          return;
         }
-      });
+
+        let postTabs = this.data.postTabs;
+        let posts = this.data.posts;
+        let postLoad = this.postLoad;
+        sorts.forEach((item) => {
+          postTabs[item["identifier"]] = item["name"];
+          posts[item["identifier"]] = [];
+          postLoad[item["identifier"]] = {
+            count: 0,
+            page: 0,
+            finished: false,
+          };
+        });
+        this.postLoad = postLoad;
+        this.setData({
+          postTabs,
+          posts,
+          sorts,
+        });
+      }
+    });
   },
   onPageScroll(e) {
     this.setData({
@@ -72,6 +78,12 @@ Page({
       this.setData({
         userIsLogin: true,
       });
+    }
+    if(!this.schoolInfo&&App.userInfo.school){
+      this.setData({
+        schoolInfo:App.userInfo.school
+      });
+      this.getPost();
     }
   },
   onReachBottom() {
@@ -103,23 +115,21 @@ Page({
     });
   },
   async getSchool() {
-    await Cloud.collection("school")
-      .where({
-        _id: this.data.currentSchool,
-      })
-      .get()
-      .then((res) => {
-        if (res["data"].length == 0) {
-          return;
-        }
-        let schoolInfo = res["data"][0];
-        App.userInfo.school = schoolInfo;
-        let setData = {
-          schoolInfo: schoolInfo,
-          "userInfo._default_school": schoolInfo["_id"],
-        };
-        this.setData(setData);
-      });
+    await Cloud.cfunction("School","getSchoolById",{
+      _schoolid:this.data.currentSchool,
+    }).then(res=>{
+      if (res.length == 0) {
+        return;
+      }
+      let schoolInfo = res[0];
+      App.userInfo.school = schoolInfo;
+      let setData = {
+        schoolInfo: schoolInfo,
+        "userInfo._default_school": schoolInfo["_id"],
+        [`joinedSchool.${schoolInfo["_id"]}`]:schoolInfo
+      };
+      this.setData(setData);
+    });
   },
   async getClass() {
     App.userInfo["class"] = null;
@@ -271,6 +281,15 @@ Page({
               });
             } else {
               setData[`joinedSchool.${selectSchool["_id"]}`] = "deleted";
+              let firstSchool=Object.keys(that.data.joinedSchool)[0];
+              that.setData({
+                currentSchool:firstSchool
+              });
+              App.userInfo["_default_school"] = firstSchool;
+              Cloud.cfunction("User", "saveUserInfo", {
+                _default_school: firstSchool,
+              });
+              that.confirmSwitchSchool();
             }
 
             that.setData(setData, () => {
@@ -307,8 +326,15 @@ Page({
     let currentShowPostSort = this.data.currentShowPostSort;
     let currentPageLoad = this.postLoad[currentShowPostSort];
     if (currentPageLoad.finished) {
+      this.setData({
+        postLoadFinished:true,
+        postLoading:false
+      });
       return;
     }
+    this.setData({
+      postLoading:true
+    });
     let currentPosts = this.data.posts[currentShowPostSort];
     await Cloud.cfunction("Post", "getPosts", {
       page: currentPageLoad.page,
@@ -317,6 +343,9 @@ Page({
     }).then((res) => {
       if (res.length < 5) {
         currentPageLoad.finished = true;
+        this.setData({
+          postLoadFinished:true
+        });
       } else {
         currentPageLoad.page++;
       }
@@ -361,6 +390,9 @@ Page({
         );
       }
       wx.stopPullDownRefresh();
+      this.setData({
+        postLoading:false
+      });
     });
   },
 });

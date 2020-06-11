@@ -1,6 +1,6 @@
 <template name="common_comment">
   <view class="comment-title">评论</view>
-  <view class="comment-list">
+  <view class="comment-list" >
     <block wx:for="{{ comments }}" wx:key="commentArrayIndex" wx:for-index="commentArrayIndex" wx:for-item="commentArray">
       <block wx:for="{{ commentArray }}" wx:key="index">
         <CommentItem class="comment-item" comment="{{ item }}" />
@@ -10,6 +10,9 @@
       </block>
     </block>
   </view>
+  <PagePrompt class="no-comment-prompt" icon="/material/images/no_comments.png" wx:if="{{ showCommentPrompt }}" imageMode="aspectFit">
+    <text class="no-comment-prompt-text">暂时还没有同学评论哦，赶快来抢个沙发吧</text>
+  </PagePrompt>
   <view class="comment-post-button" bind:tap="showCommentInputPopup">评论</view>
   <InputPopup hidden="{{ hideCommentInputPopup }}" submitButtonText="发送" bind:submit="commentPost" value="{{ commentContent }}" />
 </template>

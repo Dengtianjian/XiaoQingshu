@@ -5,6 +5,9 @@
     <view class="navigator-bar-return-page" wx:if="{{ hiddenReturnPage===false&&isHasBack }}" style="{{ defaultColor=='transparent'||defaultColor==backgroundColor?'color:black;':'' }}" >
       <Icon class="navigator-bar-return-page-icon " icon="qcicon-zuo" size="36rpx" bind:tap="returnToPreviousPage" wx:if="{{ true }}"></Icon>
     </view>
+    <view class="navigator-bar-back-home" style="{{ defaultColor=='transparent'||defaultColor==backgroundColor?'color:black;':'' }}" bind:tap="backHome" hidden="{{ hiddenBackHome }}" >
+      <Icon class="navigator-bar-return-page-icon " icon="qcicon-home" size="46rpx" bind:tap="returnToPreviousPage" wx:if="{{ true }}"></Icon>
+    </view>
     <block wx:if="{{ pageTitle!='' }}">
       <view class="navigator-bar-safe-content">{{ pageTitle }}</view>
     </block>

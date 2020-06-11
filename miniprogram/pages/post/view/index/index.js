@@ -11,6 +11,7 @@ Page({
    */
   data: {
     post: {},
+    pageLoaded: false,
   },
 
   /**
@@ -49,102 +50,125 @@ Page({
     this.getComment();
   },
   templateName: ["qa", "common"],
-  getPost() {
+  async getPost() {
     wx.showLoading({
       title: "全速加载中",
     });
 
-    Cloud.cfunction("Post", "getPost", {
+    await Cloud.cfunction("Post", "getPost", {
       postid: this.data.post._id,
-    }).then(async (post) => {
-      wx.hideLoading();
-      wx.stopPullDownRefresh();
-
-      let setData = { post };
-      post["date"] = Utils.formatDate(post["date"], "y年m月d");
-
-      await Cloud.cfunction("Post", "getSortByIdentifier", {
-        identifier: post["sort"]["identifier"],
-      })
-        .then((res) => {
-          setData["post"]["sort"] = res;
-          if (this.templateName.includes(res["identifier"])) {
-            setData["commentTemplateName"] = res["identifier"] + "_comment";
-          } else {
-            setData["commentTemplateName"] = "common_comment";
-          }
-        })
-        .catch((res) => {
-          if (res.error == 404) {
-            setData["post"]["sort"] = null;
-          }
-        });
-
-      await App.getUserInfo();
-      if (post["_authorid"] == App.userInfo["_id"]) {
-        let school = {};
-        if (App.userInfo["_default_school"]) {
-          school = {
-            name: App.userInfo["school"]["name"],
-          };
-        }
-        let schoolClass=App.userInfo["class"]?{}:null;
-        if(schoolClass){
-          schoolClass={
-            prefessional: App.userInfo["class"]["profession"]
-          }
-        }
-        setData["post"]["author"] = {
-          nickname: App.userInfo["nickname"],
-          avatar_url: App.userInfo["avatar_url"],
-          _id: App.userInfo["_userid"],
-          _default_school: App.userInfo["_default_school"],
-          class: schoolClass,
-          school,
+    })
+      .then(async (post) => {
+        let setData = {
+          pageLoaded: true,
         };
-      } else {
-        await Cloud.cfunction("User", "getUser", {
-          _openid: post["_authorid"],
-        }).then((user) => {
-          if (user.length == 0) {
-            setData["post"]["author"] = {
-              _id: null,
-              nickname: "同学被隐藏了",
-              avatar_url: "/material/images/anonymous_user.png",
+
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
+
+        setData["post"] = post;
+        post["date"] = Utils.formatDate(post["date"], "y年m月d");
+
+        await Cloud.cfunction("Post", "getSortByIdentifier", {
+          identifier: post["sort"]["identifier"],
+        })
+          .then((res) => {
+            setData["post"]["sort"] = res;
+            if (this.templateName.includes(res["identifier"])) {
+              setData["commentTemplateName"] = res["identifier"] + "_comment";
+            } else {
+              setData["commentTemplateName"] = "common_comment";
+            }
+          })
+          .catch((res) => {
+            if (res.error == 404) {
+              setData["post"]["sort"] = null;
+            }
+          });
+
+        await App.getUserInfo().catch((err) => {
+          console.log(err);
+        });
+        if (post["_authorid"] == App.userInfo["_id"]) {
+          let school = {};
+          if (App.userInfo["_default_school"]) {
+            school = {
+              name: App.userInfo["school"]["name"],
             };
-          } else {
-            setData["post"]["author"] = user;
+          }
+          let schoolClass = App.userInfo["class"] ? {} : null;
+          if (schoolClass) {
+            schoolClass = {
+              prefessional: App.userInfo["class"]["profession"],
+            };
+          }
+          setData["post"]["author"] = {
+            nickname: App.userInfo["nickname"],
+            avatar_url: App.userInfo["avatar_url"],
+            _id: App.userInfo["_userid"],
+            _default_school: App.userInfo["_default_school"],
+            class: schoolClass,
+            school,
+          };
+        } else {
+          await Cloud.cfunction("User", "getUser", {
+            _openid: post["_authorid"],
+          }).then((user) => {
+            if (user.length == 0) {
+              setData["post"]["author"] = {
+                _id: null,
+                nickname: "同学被隐藏了",
+                avatar_url: "/material/images/anonymous_user.png",
+              };
+            } else {
+              setData["post"]["author"] = user;
+            }
+          });
+        }
+
+        this.setData(setData);
+
+        if (App.userInfo.isLogin) {
+          Cloud.cfunction("Post", "getLikeByPostId", {
+            postid: post["_id"],
+          }).then((res) => {
+            if (res) {
+              this.setData({
+                [`post.isLike`]: true,
+              });
+            }
+          });
+          Cloud.cfunction("User", "getFavoriteByTypeId", {
+            contentid: post["_id"],
+            type: "post",
+          }).then((res) => {
+            if (res) {
+              this.setData({
+                [`post.isFavorite`]: true,
+              });
+            }
+          });
+        }
+
+        this.getComment();
+        wx.hideLoading();
+      })
+      .catch((err) => {
+        console.log(err);
+        Prompt.toast("加载失败,请稍后重试❤", {
+          success(){
+            setTimeout(()=>{
+              wx.navigateBack();
+            },1000);
           }
         });
-      }
-
-      this.setData(setData);
-
-      Cloud.cfunction("Post", "getLikeByPostId", {
-        postid: post["_id"],
-      }).then((res) => {
-        if (res) {
-          this.setData({
-            [`post.isLike`]: true,
-          });
-        }
       });
-      Cloud.cfunction("User", "getFavoriteByTypeId", {
-        contentid: post["_id"],
-        type: "post",
-      }).then((res) => {
-        if (res) {
-          this.setData({
-            [`post.isFavorite`]: true,
-          });
-        }
-      });
-
-      this.getComment();
-      wx.hideLoading();
-    });
   },
   likePost() {
+    if(App.userInfo.isLogin==false){
+      Prompt.toast("请登录后再点赞👍哦");
+      return;
+    }
     if (this.data.post.isLike) {
       Cloud.cfunction("Post", "cancelLikePost", {
         postid: this.data.post._id,
@@ -208,4 +232,7 @@ Page({
       urls: this.data.post.images,
     });
   },
+  followUser(){
+    Prompt.toast("抱歉🚩，关注功能还未开放哦");
+  }
 });

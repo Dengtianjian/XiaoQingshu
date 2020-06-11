@@ -31,6 +31,9 @@
   width:70rpx;
   text-align:left;
 }
+.navigator-bar-back-home {
+  width:50rpx;
+}
 .navigator-bar-safe-content {
   position:absolute;
   left:0;

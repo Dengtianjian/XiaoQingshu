@@ -1,7 +1,7 @@
 const cloud = require("wx-server-sdk");
 
 cloud.init({
-  env:"release-6zszw"
+  env: "release-6zszw",
 });
 
 const DB = cloud.database();
@@ -83,7 +83,10 @@ let functions = {
       });
     if (userInfoList.length > 0) {
       for (let i = 0; i < userInfoList.length; i++) {
-        let userInfo = Object.assign(userInfoList[i]["profile"][0], userInfoList[i]);
+        let userInfo = Object.assign(
+          userInfoList[i]["profile"][0],
+          userInfoList[i]
+        );
         delete userInfo["profile"];
 
         if (!userInfo["school"] || userInfo["school"] == null) {
@@ -150,8 +153,21 @@ let functions = {
               school: _.set(userInfo["school"]),
             },
           });
+        } else if (!userInfo["class"] && userInfo["_default_school"]) {
+          userInfo["class"] = await functions["getUserDefaultClass"](
+            userInfo["_id"],
+            userInfo["_default_school"]
+          );
+
+          if (userInfo["class"]) {
+            await User.doc(userInfo["_userid"]).update({
+              data: {
+                class: _.set(userInfo["class"]),
+              },
+            });
+          }
         }
-        userInfoList[i]=userInfo;
+        userInfoList[i] = userInfo;
       }
       return userInfoList;
     } else {

@@ -3,42 +3,39 @@ module.exports = {
     if (config.switchTab) {
       setTimeout(() => {
         wx.switchTab({
-          url: config.switchTab
+          url: config.switchTab,
         });
       }, config.duration);
     } else if (config.reLaunch) {
       setTimeout(() => {
         wx.reLaunch({
-          url: config.reLaunch
+          url: config.reLaunch,
         });
       }, config.duration);
     } else if (config.redirectTo) {
       setTimeout(() => {
         wx.redirectTo({
-          url: config.redirectTo
+          url: config.redirectTo,
         });
       }, config.duration);
     } else if (config.navigateTo) {
       setTimeout(() => {
         wx.navigateTo({
-          url: config.navigateTo
+          url: config.navigateTo,
         });
       }, config.duration);
     } else if (config.navigateBack) {
       setTimeout(() => {
-        if (typeof config.navigateBack == Boolean) {
-          wx.navigateBack();
-        } else if (typeof config.navigateBack == Object) {
-          wx.navigateBack(config.navigateBack);
-        }
+        console.log(config);
+        wx.navigateBack();
       }, config.duration);
     }
   },
   toast(title, conf = {}) {
-    let _this=this;
+    let _this = this;
     let config = {
       title,
-      icon:conf['icon']?conf['icon']:'none',
+      icon: conf["icon"] ? conf["icon"] : "none",
       success() {
         if (config.succeeded) {
           config.succeeded();
@@ -54,36 +51,36 @@ module.exports = {
           config.completed();
         }
         _this.navigate(config);
-      }
+      },
     };
     if (conf.success) {
-      config['succeeded'] = conf.success;
-      delete conf['success'];
+      config["succeeded"] = conf.success;
+      delete conf["success"];
     }
     if (conf.fail) {
-      config['failed'] = conf.fail;
-      delete conf['fail'];
+      config["failed"] = conf.fail;
+      delete conf["fail"];
     }
     if (conf.complete) {
-      config['completed'] = conf.complete;
-      delete conf['complete'];
+      config["completed"] = conf.complete;
+      delete conf["complete"];
     }
-    if(conf.duration){
-      config['duration']=conf.duration;
-      delete conf['duration'];
-    }else{
-      config['duration']=1500;
+    if (conf.duration) {
+      config["duration"] = conf.duration;
+      delete conf["duration"];
+    } else {
+      config["duration"] = 1500;
     }
     config = Object.assign(config, conf);
     wx.showToast(config);
   },
-  codeToast(error,code,message){
+  codeToast(error, code, message) {
     wx.hideToast();
-    let current=message[error][code];
-    if(typeof current == "object"){
-      this.toast(current['title'],current);
-    }else{
+    let current = message[error][code];
+    if (typeof current == "object") {
+      this.toast(current["title"], current);
+    } else {
       this.toast(current);
     }
-  }
-}
+  },
+};

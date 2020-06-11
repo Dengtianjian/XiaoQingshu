@@ -82,6 +82,7 @@ page {
   line-height:100rpx;
   font-size: 28rpx;
   color: var(--font-color);
+  overflow:hidden;
 }
 .favorites-browse-item-author {
   font-size: 24rpx;

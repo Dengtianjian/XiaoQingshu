@@ -32,6 +32,10 @@ Component({
     },
     width: String,
     height: String,
+    imageMode:{
+      type:String,
+      value:"aspectFill"
+    }
   },
 
   /**

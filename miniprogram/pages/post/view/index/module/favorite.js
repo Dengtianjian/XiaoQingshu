@@ -1,4 +1,5 @@
 import { Pagination,Cloud,Prompt } from "../../../../../Qing";
+const App=getApp();
 export default Behavior({
   FavoritePagination:null,
   data:{
@@ -36,6 +37,10 @@ export default Behavior({
       });
     },
     showFavoriteAlbum() {
+      if(App.userInfo.isLogin==false){
+        Prompt.toast("请登录后再收藏哦😊");
+        return;
+      }
       if (this.data.post.isFavorite) {
         Cloud.cfunction("User", "cancelFavorite", {
           type: "post",
@@ -55,6 +60,19 @@ export default Behavior({
       }
     },
     confirmFavorite() {
+      if (App.userInfo.isLogin == false) {
+        this.setData({
+          [`favorite.popupIsHide`]: true,
+        });
+        Prompt.toast("登录后才能收藏呢");
+        return;
+      }
+      if(this.data.favorite.albums.length==0||this.data.favorite.albums.length>0&&this.data.favorite.albums[0].length==0){
+        this.setData({
+          [`favorite.popupIsHide`]: true,
+        });
+        return;
+      }
       wx.showLoading({
         title: "存放到收藏夹中",
       });
@@ -76,7 +94,7 @@ export default Behavior({
           this.setData({
             [`post.isFavorite`]: true,
             [albumCountPath]: currentAlbum.count + 1,
-            [`post.popupIsHide`]: true,
+            [`favorite.popupIsHide`]: true,
           });
           Prompt.toast("嘻🤭嘻，收藏成功✨");
         })
@@ -93,6 +111,7 @@ export default Behavior({
                 success() {
                   that.setData({
                     [`post.isFavorite`]: true,
+                    [`favorite.popupIsHide`]: true,
                   });
                 },
               },

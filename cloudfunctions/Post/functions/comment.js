@@ -379,7 +379,7 @@ let functions = {
 
     let commentVote = await DB.collection("post_qa_comment_vote")
       .where({
-        _userid: wxContext.openid,
+        _userid: wxContext.OPENID,
         _commentid: _.in(commentId),
       })
       .get()

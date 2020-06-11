@@ -1,5 +1,6 @@
 // pages/post/select_topic/select_topic.js
 import Cloud from "../../../source/js/cloud";
+const App=getApp();
 Page({
   /**
    * 页面的初始数据
@@ -16,6 +17,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    if(App.userInfo.isLogin==false){
+      Prompt.toast("请登录后再发布，🦀🦀",{
+        navigateBack:true
+      });
+      return;
+    }
     this.getTopic();
   },
 

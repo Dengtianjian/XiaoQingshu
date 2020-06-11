@@ -3,6 +3,7 @@
   "usingComponents": {
     "NavigationBar":"/components/navigationBar/navigationBar",
     "Icon":"/components/icon/icon",
-    "Popup":"/components/popup/popup"
+    "Popup":"/components/popup/popup",
+    "PagePrompt":"/components/pagePrompt/pagePrompt"
   }
 }

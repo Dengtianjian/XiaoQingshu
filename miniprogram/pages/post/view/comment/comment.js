@@ -1,6 +1,6 @@
 // miniprogram/pages/post/view/comment/comment.js
-const { Cloud, Prompt, Utils,Pagination } = require("../../../../Qing");
-const App=getApp();
+const { Cloud, Prompt, Utils, Pagination } = require("../../../../Qing");
+const App = getApp();
 Page({
   ReplyPagination: null,
   /**
@@ -11,12 +11,12 @@ Page({
       _id: null,
     },
     replys: [],
-    hiddenInputReplyPopup:true,
-    commentContent:"",
-    inputContent:""
+    hiddenInputReplyPopup: true,
+    commentContent: "",
+    inputContent: "",
   },
 
-   /**
+  /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
@@ -25,7 +25,7 @@ Page({
     // commentId = "e2297d935ec22ea600cf367a72d36abf";
     // postId = "fddd30c55eacdb9d003d1f3344fa65f3";
 
-    this.ReplyPagination=new Pagination(this,"replys",2,false,6);
+    this.ReplyPagination = new Pagination(this, "replys", 2, false, 6);
 
     this.setData({
       comment: {
@@ -40,7 +40,7 @@ Page({
     this.getComment();
   },
 
-  onReachBottom(){
+  onReachBottom() {
     this.getReplys();
   },
 
@@ -52,7 +52,7 @@ Page({
       title: "加载中",
     });
     Cloud.cfunction("Post", "getComment", {
-      commentid: this.data.comment._id
+      commentid: this.data.comment._id,
     })
       .then((comment) => {
         wx.hideLoading();
@@ -82,71 +82,85 @@ Page({
   /**
    * 获取评论回复
    */
-  getReplys(){
-    if(this.ReplyPagination.isLoading()||this.ReplyPagination.isFinished()){
+  getReplys() {
+    if (this.ReplyPagination.isLoading() || this.ReplyPagination.isFinished()) {
       return;
     }
     this.ReplyPagination.setLoading(true);
 
-    Cloud.cfunction("Post","getCommentReply",{
-      commentid:this.data.comment._id,
-      page:this.ReplyPagination.getPage(),
-      limit:this.ReplyPagination.limit,
-    }).then(replys=>{
-      if(replys.length<this.ReplyPagination.limit){
-        this.ReplyPagination.setFinished(true);
-      }
-      replys.forEach(item=>{
-        item['date']=Utils.formatDate(item['date'],"y-m-d");
-      })
-      this.ReplyPagination.insert(replys);
-      this.ReplyPagination.setLoading(false);
-    }).catch(res=>{
-      console.log(res);
+    Cloud.cfunction("Post", "getCommentReply", {
+      commentid: this.data.comment._id,
+      page: this.ReplyPagination.getPage(),
+      limit: this.ReplyPagination.limit,
     })
+      .then((replys) => {
+        if (replys.length < this.ReplyPagination.limit) {
+          this.ReplyPagination.setFinished(true);
+        }
+        replys.forEach((item) => {
+          item["date"] = Utils.formatDate(item["date"], "y-m-d");
+        });
+        this.ReplyPagination.insert(replys);
+        this.ReplyPagination.setLoading(false);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   },
-  showCommentPopup({ currentTarget:{ dataset:{reply,type} } }){
-    if(reply){
-      reply.type=type;
-      this.reply=reply;
-    }else{
-      this.reply={
-        type
+  showCommentPopup({
+    currentTarget: {
+      dataset: { reply, type },
+    },
+  }) {
+    if (App.userInfo.isLogin == false) {
+      Prompt.toast("登录后才能回复评论呢");
+      return;
+    }
+    if (reply) {
+      reply.type = type;
+      this.reply = reply;
+    } else {
+      this.reply = {
+        type,
       };
     }
     this.setData({
-      hiddenInputReplyPopup:false
+      hiddenInputReplyPopup: false,
     });
   },
-  hideCommentPopup(){
+  hideCommentPopup() {
     this.setData({
-      hiddenInputReplyPopup:true,
-      inputContent:""
+      hiddenInputReplyPopup: true,
+      inputContent: "",
     });
   },
-  reply:{
-    type:"replyComment",
+  reply: {
+    type: "replyComment",
   },
-  async replyComment(e){
-    let content=e.detail.content;
+  async replyComment(e) {
+    if (App.userInfo.isLogin == false) {
+      Prompt.toast("登录后才能回复评论呢");
+      return;
+    }
+    let content = e.detail.content;
 
     wx.showLoading({
       title: "发送中",
     });
 
-    let replyReply={};
-    if(this.reply.type=="replyReply"){
-      replyReply['_replyid']=this.reply._id;
-      replyReply['reply_author']={
-        nickname:this.reply.author['nickname'],
-        _id:this.reply.author['_id']
+    let replyReply = {};
+    if (this.reply.type == "replyReply") {
+      replyReply["_replyid"] = this.reply._id;
+      replyReply["reply_author"] = {
+        nickname: this.reply.author["nickname"],
+        _id: this.reply.author["_id"],
       };
     }
     await Cloud.cfunction("Post", "replyComment", {
       content,
-      _commentid:this.data.comment["_id"],
+      _commentid: this.data.comment["_id"],
       _postid: this.data._post,
-      ...replyReply
+      ...replyReply,
     }).then((res) => {
       wx.hideLoading();
       Prompt.toast("回复成功", {
@@ -155,7 +169,7 @@ Page({
 
       this.ReplyPagination.insertNew({
         _id: res._replyid,
-        content:content,
+        content: content,
         commentid: this.data.comment["_id"],
         postid: this.data._post,
         date: Utils.formatDate(Date.now(), "y-m-d"),
@@ -164,10 +178,10 @@ Page({
           _id: App.userInfo["_id"],
           avatar_url: App.userInfo["avatar_url"],
           nickname: App.userInfo["nickname"],
-          school: App.userInfo["school"]
-        }
+          school: App.userInfo["school"],
+        },
       });
       this.hideCommentPopup();
     });
-  }
-})
+  },
+});

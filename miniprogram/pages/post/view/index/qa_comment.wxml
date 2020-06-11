@@ -20,7 +20,10 @@
       </block>
     </block>
   </view>
-  <navigator class="comment-post-button" hover-class="none" url="/pages/post/view/answer_question/answer_question?postid={{ postid }}" >
+  <PagePrompt class="no-comment-prompt" icon="/material/images/qa_answer_empty.png" imageMode="aspectFit" imageHeight="300rpx" wx:if="{{ showCommentPrompt }}">
+    <text class="no-comment-prompt-text">暂时还没有答案哦，赶快来帮助一下这位同学吧</text>
+  </PagePrompt>
+  <navigator class="comment-post-button" hover-class="none" url="/pages/post/view/answer_question/answer_question?postid={{ postid }}">
     回答问题
   </navigator>
   <InputPopup hidden="{{ hideCommentInputPopup }}" submitButtonText="发送" bind:submit="answerQuestion" value="{{ commentContent }}" />

@@ -1,5 +1,6 @@
 // miniprogram/pages/post/view/answer_question/answer_question.js
 import { Cloud,Prompt } from "../../../../Qing";
+const App=getApp();
 Page({
   /**
    * 页面的初始数据
@@ -16,8 +17,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    if(App.userInfo.isLogin==false){
+      Prompt.toast("请登录后再回答问题，🦀🦀",{
+        navigateBack:true
+      });
+      return;
+    }
     let postid = options.postid;
-    postid ="baada3ac5ee07048008d64d20578dec1";
+    // postid ="baada3ac5ee07048008d64d20578dec1";
 
     let platform = wx.getSystemInfoSync().platform;
 

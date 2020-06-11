@@ -25,7 +25,7 @@
     <block wx:for="{{ favorite }}" wx:for-item="favoriteArray" wx:for-index="favoriteArrayIndex" wx:key="favoriteArrayIndex">
       <block wx:for="{{ favoriteArray }}" wx:key="index">
         <view class="favorites-browse-item" hidden="{{ item=='deleted' }}">
-          <navigator class="favorites-browse-item-title" hover-class="none" open-type="navigate" url="/pages/post/view/view?postid={{ item._contentid }}">{{ item.post.title }}</navigator>
+          <navigator class="favorites-browse-item-title" hover-class="none" open-type="navigate" url="/pages/post/view/index/index?postid={{ item._contentid }}">{{ item.post.title }}</navigator>
           <text class="favorite-browse-item-remove qcicon qcicon-ashbin" bind:tap="removeFavorite" data-page="{{ favoriteArrayIndex }}" data-index="{{ index }}"></text>
           <!-- <view class="author-and-time-display">
             <text class="favorites-browse-item-author">{{ item.favoritesAuthor }}</text>

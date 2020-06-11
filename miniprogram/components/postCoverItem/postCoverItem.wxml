@@ -12,13 +12,21 @@
   </view>
   <view class="post-footer">
     <view class="post-attribute">
-      <view class="post-attribute-item post-attribute-item-type" >
+      <view class="post-attribute-item post-attribute-item-type">
         <text class="post-attribute-item-icon qcicon qcicon-{{ post['sort']['identifier'] }}"></text>
         <text class="post-attribute-item-name">{{ post['sort']['name'] }}</text>
       </view>
       <view class="post-attribute-item" wx:if="{{ post['topic'] }}">
         <text class="post-attribute-item-icon">#</text>
         <text class="post-attribute-item-name">{{ post['topic']['name'] }}</text>
+      </view>
+      <view class="post-attribute-item" wx:if="{{ post.note_profession }}">
+        <text class="post-attribute-item-icon qcicon qcicon-zhuanyejineng"></text>
+        <text class="post-attribute-item-name">{{ post.note_profession }}</text>
+      </view>
+      <view class="post-attribute-item" wx:if="{{ post.note_subject }}">
+        <text class="post-attribute-item-icon qcicon qcicon-shuben"></text>
+        <text class="post-attribute-item-name">{{ post.note_subject }}</text>
       </view>
     </view>
   </view>

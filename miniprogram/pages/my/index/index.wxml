@@ -1,6 +1,6 @@
 <!-- pages/my/index/index.wxml -->
 <block wx:if="{{ userInfo['isLogin'] }}">
-  <NavigationBar opacity="0.9" crititcal="50" pageScrollTop="{{ pageScrollTop }}" defaultColor="#ffffff" />
+  <NavigationBar opacity="0.9" crititcal="50" pageScrollTop="{{ pageScrollTop }}" defaultColor="#ffffff" hiddenBackHome="{{ true }}" />
   <!-- 背景图片 -->
   <view class="page-background" bindtap="showChangeBGImagePopup">
     <image class="page-default-background-image" lazy-load="{{true}}" src="{{ userInfo['space_bg_image']||'/material/images/space_default_bg.jpg' }}" mode="aspectFill"></image>
@@ -99,7 +99,7 @@
       <text class="quick-navigation-item-title">收藏</text>
       <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
     </navigator>
-    <block wx:for="{{ quickConfig.navigations }}">
+    <block wx:for="{{ quickConfig.navigations }}" wx:key="index">
       <navigator class="quick-navigation-item" open-type="navigate" hover-class="quick-navigation-item-hover">
         <Icon class="quick-navigation-item-icon" icon="{{ item['icon'] }}" size="50rpx"></Icon>
         <view class="quick-navigation-item-title">
@@ -112,7 +112,7 @@
   </view>
 </block>
 <block wx:else>
-  <NavigationBar hiddenReturnPage="{{ true }}" />
+  <NavigationBar hiddenReturnPage="{{ true }}" hiddenBackHome="{{ true }}" />
   <PagePrompt class="page-prompt" icon="/material/images/not_logged.png" description="您还未登录哦，登录后解锁更多功能">
     <view class="page-prompt-operate">
       <button class="button-common" open-type="getUserInfo" bindgetuserinfo="getUserInfo">

@@ -6,7 +6,19 @@ Component({
   properties: {
     icon:String,
     title:String,
-    description:String
+    description:String,
+    imageMode:{
+      type:String,
+      value:"aspectFill"
+    },
+    imageWidth:{
+      type:String,
+      value:"400rpx"
+    },
+    imageHeight:{
+      type:String,
+      value:"400rpx"
+    }
   },
 
   /**

@@ -1,6 +1,6 @@
 <!-- components/commentItem/commentItem.wxml -->
 <view class="comment-item">
-  <view class="comment-author">
+  <view class="comment-author" wx:if="{{ comment['author'] }}">
     <image class="comment-author-avatar" src="{{ comment['author']['avatar_url'] }}"></image>
     <navigator class="comment-author-info" hover-class="none" url="/pages/my/space/space?userid={{ comment['author']['_id'] }}">
       <view class="comment-author-nickname">{{ comment['author']['nickname'] }}</view>
@@ -12,12 +12,24 @@
       <slot name="commentOperate"></slot>
     </view>
   </view>
+  <view class="comment-author" wx:else>
+    <image class="comment-author-avatar" src="/material/images/anonymous_user.png"></image>
+    <view class="comment-author-info" >
+      <view class="comment-author-nickname">该同学被隐藏了</view>
+    </view>
+    <view class="comment-operate">
+      <slot name="commentOperate"></slot>
+    </view>
+  </view>
   <view class="comment-reply-author" wx:if="{{ comment['_reply_author'] }}" wx:if="{{ comment['reply_author'] }}">
-    回复 <navigator class="comment-reply-author-link" hover-class="none" url="/pages/my/space/space?userid={{ comment['reply_author']['_id'] }}">{{ comment['reply_author']['nickname'] }}</navigator>
+    回复
+    <navigator class="comment-reply-author-link" hover-class="none" url="/pages/my/space/space?userid={{ comment['reply_author']['_id'] }}">
+      {{ comment['reply_author']['nickname'] }}
+    </navigator>
   </view>
   <view class="comment-content">
     <slot name="commentContent"></slot>
-    <rich-text class="commentContentEditor" read-only nodes="{{ comment['content'] }}" ></rich-text>
+    <rich-text class="commentContentEditor" read-only nodes="{{ comment['content'] }}"></rich-text>
   </view>
   <view class="comment-bottom">
     <slot name="commentBottom-top"></slot>

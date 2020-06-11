@@ -133,20 +133,33 @@ Page({
         userIsLogin: true,
       });
     }
-    if (((this.data.classInfo == null) != App.userInfo.class) != null) {
-      if (App.userInfo.class) {
+
+    if (this.data.classInfo == null && App.userInfo.class != null) {
+      this.setData({
+        classInfo: App.userInfo.class,
+      });
+      this.updateStatistics();
+      this.updateNewClassmateList();
+      this.getClassStudent();
+      this.getClassPhoto();
+      wx.setNavigationBarColor({
+        frontColor: "#ffffff",
+        backgroundColor: "#000000",
+      });
+    } else if (this.data.classInfo != null && App.userInfo.class == null) {
+      this.setData({
+        classInfo: null,
+        statistics: [],
+        newClassmate: { has: false, hiddenPopup: true, list: null },
+        classmates: [],
+        classmateInfo: { hiddenPopup: true, info: null },
+        photos: [],
+      });
+    } else if (this.data.classInfo && App.userInfo.class) {
+      if (this.data.classInfo._id != App.userInfo.class._id) {
         this.setData({
-          classInfo: App.userInfo.class,
-        });
-        this.getClassInfo();
-      } else {
-        this.setData({
-          classInfo: null,
-          statistics: [],
+          ["classInfo._id"]: App.userInfo.class["_id"],
           newClassmate: { has: false, hiddenPopup: true, list: null },
-          classmates: [],
-          classmateInfo: { hiddenPopup: true, info: null },
-          photos: [],
         });
       }
     }
@@ -189,47 +202,41 @@ Page({
   },
   updateNewClassmateList() {
     if (this.data.classInfo["_adminid"] == App.userInfo["_userid"]) {
-      Cloud.collection("school_class_apply")
-        .where({
-          _classid: this.data.classInfo["_id"],
-        })
-        .count()
-        .then((res) => {
-          this.setData({
-            "newClassmate.has": res.total,
-          });
+      Cloud.cfunction("Class", "getClassApplyJoinedCount", {
+        _classid: this.data.classInfo["_id"],
+      }).then((count) => {
+        this.setData({
+          "newClassmate.has": count,
         });
+      });
     }
   },
   getClassInfo() {
-    Cloud.collection("school_class")
-      .where({
-        _id: this.data.classInfo._id,
-      })
-      .get()
-      .then((res) => {
-        wx.stopPullDownRefresh();
-        if (res.data.length > 0) {
-          this.updateStatistics();
-          this.updateNewClassmateList();
-          this.getClassStudent();
-          this.getClassPhoto();
-          wx.setNavigationBarColor({
-            frontColor: "#ffffff",
-            backgroundColor: "#000000",
-          });
-          App.userInfo.class = res.data[0];
-          this.setData({
-            classInfo: res.data[0],
-            pageLoadingCompleted: true,
-          });
-        } else {
-          this.setData({
-            classInfo: null,
-            pageLoadingCompleted: true,
-          });
-        }
-      });
+    Cloud.cfunction("Class", "getClassByClassId", {
+      _id: this.data.classInfo._id,
+    }).then((classInfo) => {
+      wx.stopPullDownRefresh();
+      if (classInfo) {
+        this.updateStatistics();
+        this.updateNewClassmateList();
+        this.getClassStudent();
+        this.getClassPhoto();
+        wx.setNavigationBarColor({
+          frontColor: "#ffffff",
+          backgroundColor: "#000000",
+        });
+        App.userInfo.class = classInfo;
+        this.setData({
+          classInfo,
+          pageLoadingCompleted: true,
+        });
+      } else {
+        this.setData({
+          classInfo: null,
+          pageLoadingCompleted: true,
+        });
+      }
+    });
   },
   displayClassmateInfo(e) {
     let dataset = e.currentTarget.dataset;
@@ -269,8 +276,20 @@ Page({
       let userInfo = e.detail.userInfo;
       await App.getUserInfo(userInfo)
         .then((userInfo) => {
-          this.setData({
+          let setData = {
             userIsLogin: true,
+          };
+          if (userInfo["class"]) {
+            setData["classInfo"] = userInfo["class"];
+          }
+          this.setData(setData);
+          this.updateStatistics();
+          this.updateNewClassmateList();
+          this.getClassStudent();
+          this.getClassPhoto();
+          wx.setNavigationBarColor({
+            frontColor: "#ffffff",
+            backgroundColor: "#000000",
           });
           wx.hideLoading();
         })
@@ -336,6 +355,7 @@ Page({
         Prompt.toast("提交申请成功，我们已经通知班级管理员审核，请耐心等候👌");
       })
       .catch((res) => {
+        const that = this;
         Prompt.codeToast(res.error, res.code, {
           403: {
             403001: {
@@ -351,7 +371,17 @@ Page({
           },
           409: {
             409001: "已经提交过申请，请勿重复提交",
-            409002: "已是该班级的同学了，请勿重复加入",
+            409002: {
+              title: "已是该班级的同学了，请勿重复加入",
+              success() {
+                that.setData({
+                  classInfo: {
+                    _id: that.data.joinClass.searchResult["_id"],
+                  },
+                });
+                that.getClassInfo();
+              },
+            },
           },
           500: {
             500001: "申请加入失败，请稍后重试",
@@ -413,23 +443,27 @@ Page({
     });
   },
   getClassPhoto() {
-    Cloud.collection("school_class_album")
-      .where({
-        _classid: this.data.classInfo["_id"],
-        type: "photo",
-      })
-      .limit(5)
-      .get()
-      .then((res) => {
-        this.setData({
-          photos: res["data"],
-        });
+    Cloud.cfunction("Class", "getAlbumContent", {
+      _classid: this.data.classInfo._id,
+      type: "photo",
+      limit: 10,
+    }).then((photos) => {
+      if (photos.length == 0) {
+        return;
+      }
+      this.setData({
+        photos,
       });
+    });
   },
-  goToBuildClass() {
+  goToEditClass() {
     let that = this;
+    let url = "/pages/class/edit_info/edit_info";
+    if (this.data.classInfo._id) {
+      url += "?classid=" + this.data.classInfo._id;
+    }
     wx.navigateTo({
-      url: "/pages/class/edit_info/edit_info",
+      url,
       events: {
         buildClass(data) {
           let _classid = data._classid;
@@ -439,13 +473,16 @@ Page({
           });
           that.getClassInfo();
         },
+        editClass(data) {
+          console.log(data);
+        },
       },
     });
   },
   quitClass() {
-    if(this.data.classInfo._adminid==App.userInfo._userid){
-      Prompt.toast("抱歉，暂不支持班级管理员退出班级",{
-        duration:2500
+    if (this.data.classInfo._adminid == App.userInfo._userid) {
+      Prompt.toast("抱歉，暂不支持班级管理员退出班级", {
+        duration: 2500,
       });
       return;
     }
@@ -453,7 +490,7 @@ Page({
       title: "Are you 确定?",
       content: "退出班级😢",
       cancelText: "按错了",
-      success:(result)=>{
+      success: (result) => {
         if (result.confirm) {
           Cloud.cfunction("Class", "quitClass", {
             classId: this.data.classInfo._id,

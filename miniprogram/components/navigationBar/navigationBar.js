@@ -21,6 +21,12 @@ Component({
         count: crititcal,
         isHasBack: pages.length > 1,
       });
+
+      if(this.data.hiddenBackHome!==true){
+        this.setData({
+          hiddenBackHome:false
+        });
+      }
     },
   },
 
@@ -60,6 +66,10 @@ Component({
       type: Boolean,
       value: false,
     },
+    hiddenBackHome:{
+      type:Boolean,
+      value:false
+    }
   },
   observers: {
     pageScrollTop(scrollTop) {
@@ -114,7 +124,7 @@ Component({
     barOpacity: 0,
     count: 0,
     isHasBack: false,
-    currentColor: "",
+    currentColor: ""
   },
 
   /**
@@ -128,7 +138,6 @@ Component({
     },
     debounce(func, wait) {
       let timeout;
-      let that = this;
 
       if (timeout) clearTimeout(timeout);
 
@@ -136,5 +145,10 @@ Component({
         func();
       }, wait);
     },
+    backHome(){
+      wx.switchTab({
+        url:"/pages/index/index"
+      });
+    }
   },
 });

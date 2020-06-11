@@ -1,0 +1,122 @@
+<!--
+此文件为开发者工具生成，生成时间: 2020/6/10 下午3:21:47
+使用方法：
+1. 在"pages\post\view\index\index.wxml"中使用`include`指令引入此模板，
+2. 在"pages\post\view\index\index.wxss"中使用`import`指令引入"pages\post\view\index\index.skeleton.wxss"
+3. 书写对应的逻辑，来控制骨架屏的显示与隐藏
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<view class="sk-container">
+  <view is="components/navigationBar/navigationBar">
+    <view class="navigationBar--navigation-bar" style="height: 60px;background:white">
+      <view style="height: 20px;"></view>
+      <view class="navigationBar--navigator-bar-safe-area" style="height:44px;color:#000000;">
+        <view class="navigationBar--navigator-bar-return-page" style="true">
+          <view is="components/icon/icon" class="navigationBar--navigator-bar-return-page-icon sk-image" color="#EFEFEF"><text class="icon--icon-font icon--qcicon icon--qcicon-zuo sk-pseudo sk-pseudo-circle" style="font-size:18px;"></text></view>
+        </view>
+      </view>
+      <view class="navigationBar--navigation-bar-background" style="height: 60px;background:#ffffff;opacity:0;"></view>
+    </view>
+    <view class="navigationBar--navigation-bar-placeholder" style="height: 60px;"></view>
+  </view>
+  <view class="page-container">
+    <view is="components/PostStatus/PostStatus" class="post-status">
+      <view class="PostStatus--post-status-wrap"></view>
+    </view>
+    <view class="author">
+      <image class="author-avatar sk-image"></image>
+      <navigator class="author-info" hover-class="none" open-type="navigate">
+        <view class="author-nickname sk-transparent sk-text-14-2857-615 sk-text" style="background-size: 7.84439% 1.225rem;">😶</view>
+        <view class="author-school sk-transparent sk-text-14-2857-862 sk-text" style="background-size: 37.8635% 0.875rem;">TA还未加入一家学校</view>
+      </navigator>
+      <view class="author-attention sk-transparent sk-text-25-0000-806 sk-text" style="background-size: 40% 1.25rem; background-position-x: 50%;">
+        关注
+      </view>
+    </view>
+    <view class="post" style="border: none;">
+      <view class="post-title sk-transparent sk-text-14-2857-686 sk-text" style="background-size: 83.4783% 1.575rem;">在大学里怎样保持饱满的精神状态？</view>
+      <rich-text class="post-content sk-transparent sk-text-20-8333-355 sk-text" nodes="我理解的饱满的精神状态是“把每一天都当成最后一天来过”，请问该如何避免在大学里堕落？">我理解的饱满的精神状态是“把每一天都当成最后一天来过”，请问该如何避免在大学里堕落？</rich-text>
+      <view class="post-images"></view>
+      <view class="post-attribute">
+        <view is="components/badge/badge" class="post-attribute-item">
+          <view class="badge--badge" style="background:rgba(25, 119, 202, 0.11);color:var(--main-color);"><text class="badge--badge-icon badge--qcicon badge--qcicon-qa sk-pseudo sk-pseudo-circle"></text><text class="badge--badge-text sk-transparent sk-text-14-2857-834 sk-text" style="background-size: 100% 1.05rem;">问答</text></view>
+        </view>
+      </view>
+      <view class="post-operate">
+        <view class="post-operate-item"><text class="post-operate-item-icon qcicon qcicon-share sk-pseudo sk-pseudo-circle"></text><button class="post-operate-item-text post-operate-share-button sk-transparent sk-button sk-pseudo sk-pseudo-circle" open-type="share">
+          分享
+        </button></view>
+        <view class="post-operate-item"><text class="post-operate-item-icon qcicon qcicon-favorites sk-pseudo sk-pseudo-circle"></text><text class="post-operate-item-text sk-transparent sk-text-30-0000-588 sk-text" style="background-size: 100% 2.1875rem; background-position-x: 50%;">收藏</text></view>
+        <view
+          class="post-operate-item"><text class="post-operate-item-icon qcicon qcicon-good sk-pseudo sk-pseudo-circle"></text><text class="post-operate-item-text sk-transparent sk-text-30-0000-9 sk-text" style="background-size: 100% 2.1875rem; background-position-x: 50%;">点赞 </text></view>
+    </view>
+    <view class="post-publish-date sk-transparent sk-text-14-2857-738 sk-text" style="background-size: 23.2745% 1.05rem; background-position-x: 50%;">2020年06月10</view>
+    <view class="comment">
+      <view class="comment-title sk-transparent sk-text-14-2857-744 sk-text" style="background-size: 9.27536% 1.4rem;">评论</view>
+      <view class="comment-list">
+        <view is="components/commentItem/commentItem" class="comment-item">
+          <view class="comment-item commentItem--comment-item">
+            <view class="comment-author commentItem--comment-author">
+              <image class="comment-author-avatar commentItem--comment-author-avatar sk-image"></image>
+              <navigator class="comment-author-info commentItem--comment-author-info" hover-class="none">
+                <view class="comment-author-nickname commentItem--comment-author-nickname sk-transparent sk-text-14-2857-782 sk-text" style="background-size: 5.77851% 1.05rem;">😊</view>
+                <view class="comment-author-school commentItem--comment-author-school sk-transparent sk-text-14-2857-644 sk-text" style="background-size: 32.5493% 0.875rem;">
+                  TA还未加入一家学校
+                </view>
+              </navigator>
+              <view class="comment-operate commentItem--comment-operate"></view>
+            </view>
+            <view class="comment-content commentItem--comment-content">
+              <rich-text class="commentContentEditor commentItem--commentContentEditor sk-transparent sk-text-14-2857-874 sk-text" nodes="英语很重要，很重要，永远不要放弃当你感到很迷茫的时候就去健身跑步🏃吧图书馆有很多书和数据库，请好好利用加油💪">英语很重要，很重要，永远不要放弃当你感到很迷茫的时候就去健身跑步🏃吧图书馆有很多书和数据库，请好好利用加油💪</rich-text>
+            </view>
+            <view class="comment-bottom commentItem--comment-bottom">
+              <view class="comment-bottom-left commentItem--comment-bottom-left">
+                <view class="comment-publish-date commentItem--comment-publish-date sk-transparent sk-text-14-2857-836 sk-text" style="background-size: 99.9766% 1.05rem;">2020-06-10</view>
+              </view>
+              <view class="comment-bottom-right commentItem--comment-bottom-right"><text class="comment-like commentItem--comment-like"><text class="comment-like-icon commentItem--comment-like-icon qcicon commentItem--qcicon qcicon-good commentItem--qcicon-good sk-pseudo sk-pseudo-circle"></text><text class="comment-like-text commentItem--comment-like-text"></text></text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="qa-comment-item-bottom">
+          <view class="comment-vote">
+            <view class="comment-vote-item comment-vote-agree comment-vote-is-selected sk-transparent sk-text-14-2857-465 sk-text" data-index="0" data-page="2" style="background-size: 100% 1.05rem;">
+              已赞同
+            </view>
+            <view class="comment-vote-item sk-transparent sk-opacity" data-index="0" data-page="2" hidden="true">
+              👎
+            </view>
+          </view>
+          <navigator class="comment-item-view-reply sk-transparent sk-text-14-2857-20 sk-text" data-arrayindex="2" data-index="0" style="background-size: 100% 1.05rem; background-position-x: 100%;">
+            查看详情 &amp; 回复
+          </navigator>
+        </view>
+        <view is="components/commentItem/commentItem" class="comment-item">
+          <view class="comment-item commentItem--comment-item">
+            <view class="comment-author commentItem--comment-author">
+              <image class="comment-author-avatar commentItem--comment-author-avatar sk-image"></image>
+              <navigator class="comment-author-info commentItem--comment-author-info" hover-class="none">
+                <view class="comment-author-nickname commentItem--comment-author-nickname sk-transparent sk-text-14-2857-143 sk-text" style="background-size: 5.77851% 1.05rem;">😶</view>
+                <view class="comment-author-school commentItem--comment-author-school sk-transparent sk-text-14-2857-86 sk-text" style="background-size: 32.5493% 0.875rem;">
+                  TA还未加入一家学校
+                </view>
+              </navigator>
+              <view class="comment-operate commentItem--comment-operate"></view>
+            </view>
+            <view class="comment-content commentItem--comment-content">
+              <rich-text class="commentContentEditor commentItem--commentContentEditor" nodes="true"></rich-text>
+            </view>
+            <view class="comment-bottom commentItem--comment-bottom"></view>
+          </view>
+        </view>
+        <view class="qa-comment-item-bottom"></view>
+      </view>
+      <navigator class="comment-post-button sk-transparent sk-text-26-6667-115 sk-text" hover-class="none" style="border: none; background-size: 14.9333% 1.875rem; background-position-x: 50%;">
+        回答问题
+      </navigator>
+      <view is="components/inputPopup/inputPopup"></view>
+    </view>
+  </view>
+</view>
+</view>

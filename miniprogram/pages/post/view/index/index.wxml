@@ -1,6 +1,7 @@
 <!-- miniprogram/pages/post/view/index/index.wxml -->
 <navigationBar opacity="0.8" backgroundColor="#ffffff" />
-<view class="page-container">
+<include src="./index.skeleton.wxml" wx:if="{{ !pageLoaded }}" />
+<view class="page-container" wx:if="{{ pageLoaded }}">
   <PostStatus class="post-status" status="{{ post.status }}" checkResult="{{ post.checkResult }}" />
   <view class="author">
     <image class="author-avatar" src="{{ post.author.avatar_url }}"></image>
@@ -17,7 +18,7 @@
     <view class="author-info" wx:else>
       <view class="author-nickname">{{ post.author.nickname }}</view>
     </view>
-    <view class="author-attention {{ post.author.isAttention?'author-attention-yes':'' }}" wx:if="{{ post.author._id }}">
+    <view class="author-attention {{ post.author.isAttention?'author-attention-yes':'' }}" wx:if="{{ post.author._id }}" bind:tap="followUser">
       {{ post.author.isAttention?'已关注':'关注' }}
     </view>
   </view>
@@ -32,6 +33,8 @@
     <view class="post-attribute">
       <Badge class="post-attribute-item" icon="qcicon-{{ post.sort.identifier }}" text="{{ post.sort.name }}" color="var(--main-color)" background="rgba(25, 119, 202, 0.11)"></Badge>
       <Badge class="post-attribute-item" icon="#" text="{{ post.topic.name }}" wx:if="{{ post.topic }}" />
+      <Badge class="post-attribute-item" icon="qcicon-zhuanyejineng" text="{{ post.note_profession }}" wx:if="{{ post.note_profession }}" />
+      <Badge class="post-attribute-item" icon="qcicon-shuben" text="{{ post.note_subject }}" wx:if="{{ post.note_subject }}" />
     </view>
     <view class="post-operate">
       <view class="post-operate-item">
@@ -55,7 +58,7 @@
     <import src="common_comment.wxml" />
     <import src="qa_comment.wxml" />
     <view class="comment">
-      <template is="{{ commentTemplateName }}" data="{{ ...{postid:post._id,comments,hideCommentInputPopup,commentContent} }}" />
+      <template is="{{ commentTemplateName }}" data="{{ ...{postid:post._id,comments,hideCommentInputPopup,commentContent,showCommentPrompt} }}" />
     </view>
   </view>
 </view>
@@ -72,5 +75,6 @@
         </view>
       </block>
     </block>
+    <view class="album-empty" wx:if="{{ favorite.albums.length>0&&favorite.albums[0].length==0 }}">还未有收藏夹哦，请创建后再收藏</view>
   </scroll-view>
 </Dialog>

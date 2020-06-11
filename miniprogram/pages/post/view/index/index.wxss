@@ -1,5 +1,5 @@
 /* miniprogram/pages/post/view/index/index.wxss */
-
+@import "index.skeleton.wxss";
 .page-container {
   margin:10rpx var(--container-padding);
 }
@@ -148,8 +148,19 @@
 .ablum-item-select {
   color: var(--main-color);
 }
+.album-empty {
+  height:100rpx;
+  line-height:100rpx;
+  width:100%;
+  text-align:center;
+  font-size:24rpx;
+  color:var(--font-color2);
+}
 
 /* 评论 */
+.comment {
+  margin-top:30rpx;
+}
 .comment-list {
   margin:20rpx 0 60rpx;
 }
@@ -161,6 +172,15 @@
   margin: 10rpx 0 30rpx 80rpx;
   color: var(--main-color);
   font-size: 24rpx;
+}
+.no-comment-prompt {
+  display:block;
+  margin:80rpx 0 140rpx;
+  text-align:center;
+}
+.no-comment-prompt-text {
+  font-size:28rpx;
+  color:var(--font-light-color);
 }
 
 /* 问答评论 */

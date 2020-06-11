@@ -23,3 +23,9 @@
   justify-content: space-around;
   margin-top:30rpx;
 }
+.dialog-operate-item {
+  flex:1;
+}
+.dialog-operate-item + button {
+  margin-left:20rpx!important;
+}

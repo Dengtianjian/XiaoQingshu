@@ -1,7 +1,7 @@
 // components/commentItem/commentItem.js
 import Cloud from "../../source/js/cloud";
 import Prompt from "../../source/js/prompt";
-import Uitils from "../../source/js/utils";
+const App=getApp();
 Component({
   options: {
     multipleSlots: true,
@@ -20,9 +20,7 @@ Component({
     },
   },
   lifetimes: {
-    attached() {
 
-    },
   },
 
   /**
@@ -36,6 +34,10 @@ Component({
   commentContentEditorContext: null,
   methods: {
     async like() {
+      if(App.userInfo.isLogin==false){
+        Prompt.toast("请登录后再点赞哦");
+        return;
+      }
       if (this.data.comment.isLike) {
         await Cloud.cfunction("Post", "cancelLikeComment", {
           commentid: this.data.comment._id,

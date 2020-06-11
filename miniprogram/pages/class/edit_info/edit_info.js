@@ -41,49 +41,39 @@ Page({
       return;
     }
 
+    console.log(options);
+
     if (!options.classid) {
       wx.setNavigationBarTitle({
         title: "创建班级",
       });
       let date = new Date();
-    let dateString = `${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()}`;
+      let dateString = `${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()}`;
 
-    this.setData({
-      buildDate: dateString
-    });
+      this.setData({
+        buildDate: dateString,
+      });
     } else {
       wx.setNavigationBarTitle({
         title: "编辑班级信息",
       });
-      let classInfo = await Cloud.collection("school_class")
-        .where({
-          _id: options["classid"],
-        })
-        .field({
-          build_date:true,
-          allow_join:true,
-          number:true,
-          profession:true,
-          _id:true,
-          _adminid:true
-        })
-        .get()
-        .then((res) => {
-          return res["data"];
-        });
-      if (classInfo.length == 0) {
-        Prompt.toast("班级不存在，或者正在审核中", {
-          switchTab: "/pages/class/index/index",
-        });
-        return;
-      }
-      classInfo=classInfo[0];
+      let classInfo = await Cloud.cfunction("Class", "getClassByClassId", {
+        _id: this.data.classInfo._id,
+      }).then((classInfo) => {
+        if (classInfo) {
+          return classInfo;
+        } else {
+          Prompt.toast("班级不存在😟", {
+            switchTab: "/pages/class/index/index",
+          });
+        }
+      });
       this.setData({
         classId: options["classid"],
         classInfo,
-        buildDate:Utils.formatDate(classInfo['build_date'],"y-m-d")
+        buildDate: Utils.formatDate(classInfo["build_date"], "y-m-d"),
       });
     }
   },
@@ -99,35 +89,36 @@ Page({
   },
 
   saveClassInfo(e) {
-    let that=this;
+    let that = this;
     let value = e.detail.value;
     let profession = value.profession;
     let buildDate = Date.parse(value.build_date);
     let gradeNumber = value.grade_number;
     let allowJoin = Boolean(value.allow_join);
-    Cloud.cfunction("Class", "saveClassInfo", {
-      _classid: this.data.classId,
+
+    let classInfo = {
       profession,
-      buildDate,
-      gradeNumber,
+      build_date: buildDate,
+      number: gradeNumber,
       _schoolid: App.userInfo["_default_school"],
       allow_join: allowJoin,
-    })
+      grade: new Date(buildDate).getFullYear(),
+    };
+    Cloud.cfunction("Class", "saveClassInfo", classInfo)
       .then((res) => {
+        const eventChannel = that.getOpenerEventChannel();
         if (this.data.classId) {
+          App["userInfo"]["class"] = Object.assign(
+            this.data.classInfo,
+            classInfo
+          );
+          eventChannel.emit("editClass", classInfo);
           Prompt.toast("保存成功", {
             switchTab: "/pages/class/index/index",
           });
         } else {
-          // let pages=getCurrentPages();
-          // let prvePage=pages[pages.length-2];
-          // prvePage.data.classInfo={
-          //   _id:res['_classid']
-          // };
-          // prvePage.getClassInfo();
-          const eventChannel=that.getOpenerEventChannel();
-          eventChannel.emit("buildClass",{
-            _classid:res['_classid']
+          eventChannel.emit("buildClass", {
+            _classid: res["_classid"],
           });
           Prompt.toast("创建成功", {
             switchTab: "/pages/class/index/index",

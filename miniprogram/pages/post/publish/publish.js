@@ -25,6 +25,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
+    if(App.userInfo.isLogin==false){
+      Prompt.toast("请登录后再发布，🦀🦀",{
+        navigateBack:true
+      });
+      return;
+    }
     let setData = {
       currentSort: options.identifier,
       schoolEntry: options.school,

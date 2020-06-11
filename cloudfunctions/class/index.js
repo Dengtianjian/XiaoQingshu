@@ -4,7 +4,7 @@ const Response = require("./response");
 const cloud = require("wx-server-sdk");
 
 cloud.init({
-  env:"release-6zszw"
+  env: "release-6zszw",
 });
 
 const DB = cloud.database();
@@ -46,13 +46,13 @@ let functions = {
    * @return 班级和学校的数据
    */
   async getClassByNumberId(event) {
-    let schoolId=event._schoolid;
-    let numberId=event._numberid;
-    let match={
+    let schoolId = event._schoolid;
+    let numberId = event._numberid;
+    let match = {
       _numberid: parseInt(numberId),
     };
-    if(schoolId){
-      match["_schoolid"]=schoolId;
+    if (schoolId) {
+      match["_schoolid"] = schoolId;
     }
     let result = await DB.collection("school_class")
       .aggregate()
@@ -124,13 +124,17 @@ let functions = {
     })
       .get()
       .then((res) => res["data"]);
-      if(classInfo.length==0){
-        return Response.error(404,404001,"班级不存在");
-      }
-      classInfo=classInfo[0];
-      if(classInfo['allow_join']===false){
-        return Response.error(403,403001,"本班级仅允许邀请加入的呢，不开放申请加入，请联系班级管理员");
-      }
+    if (classInfo.length == 0) {
+      return Response.error(404, 404001, "班级不存在");
+    }
+    classInfo = classInfo[0];
+    if (classInfo["allow_join"] === false) {
+      return Response.error(
+        403,
+        403001,
+        "本班级仅允许邀请加入的呢，不开放申请加入，请联系班级管理员"
+      );
+    }
 
     let applyResult = await DB.collection("school_class_apply")
       .add({
@@ -411,7 +415,11 @@ let functions = {
     classInfo = classInfo[0];
 
     /* 加入班级 */
-    let joinClassResult =await joinClass(_userid, classInfo["_schoolid"], _classid);
+    let joinClassResult = await joinClass(
+      _userid,
+      classInfo["_schoolid"],
+      _classid
+    );
     //已经加入了
     if (joinClassResult.error && joinClassResult.code == 409001) {
       /*更新班级同学数量*/
@@ -449,7 +457,7 @@ let functions = {
     let joinClassSchoolLog = await DB.collection("user_joined_school")
       .where({
         _schoolid: classInfo["_schoolid"],
-        _userid
+        _userid,
       })
       .get()
       .then((res) => {
@@ -683,22 +691,52 @@ let functions = {
     };
   },
   /* 退出班级 */
-  async quitClass(event){
-    const wxContext=cloud.getWXContext();
-    let classId=event.classId;
+  async quitClass(event) {
+    const wxContext = cloud.getWXContext();
+    let classId = event.classId;
     await Class.where({
-      _id:classId
+      _id: classId,
     }).update({
-      data:{
-        students:_.inc(-1)
-      }
+      data: {
+        students: _.inc(-1),
+      },
     });
-    await DB.collection("user_joined_class").where({
-      _classid:classId,
-      _userid:wxContext.OPENID
-    }).remove();
+    await DB.collection("user_joined_class")
+      .where({
+        _classid: classId,
+        _userid: wxContext.OPENID,
+      })
+      .remove();
 
     return Response.result(true);
+  },
+  async getClassApplyJoinedCount(event) {
+    let _classid = event._classid;
+
+    let result= await DB.collection("school_class_apply")
+      .where({
+        _classid,
+      })
+      .count()
+      .then(r=>r['total']);
+
+      return result;
+  },
+  async getAlbumContent(event){
+    let _classid=event._classid;
+    let limit=event.limit||15;
+    let page=event.page||0;
+    let type=event.type||"photo";
+
+    let result=await DB.collection('school_class_album').where({
+      _classid,
+      type
+    })
+    .limit(limit)
+    .skip(page*limit)
+    .get().then(res=>res['data']);
+
+    return result;
   }
 };
 
@@ -717,7 +755,9 @@ exports.main = async (event, context) => {
     "deleteAlbumContent",
     "inviteAgreeJoinClass",
     "getClassByClassId",
-    "quitClass"
+    "quitClass",
+    "getClassApplyJoinedCount",
+    "getAlbumContent"
   ];
   let method = event.method;
   if (!methods.includes(method)) {

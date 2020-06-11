@@ -3,7 +3,7 @@ const cloud = require("wx-server-sdk");
 const Response = require("./response");
 
 cloud.init({
-  env:"release-6zszw"
+  env: "release-6zszw",
 });
 
 const DB = cloud.database();
@@ -209,7 +209,9 @@ let functions = {
           },
         })
         .then((res) => res["result"]["data"]);
-      schools = arrayToObject(schools, "_id");
+      if (schools&&schools.length > 0) {
+        schools = arrayToObject(schools, "_id");
+      }
 
       let topics = await DB.collection("post_topic")
         .where({
@@ -228,8 +230,8 @@ let functions = {
       sort = arrayToObject(sort, "identifier");
 
       posts.forEach((item) => {
-        if (item["_school"]) {
-          item["school"] = schools[item["_school"]];
+        if (schools&&item["_school"]) {
+          item["school"] = schools[item["_school"]]||null;
         }
         if (item["topic"]) {
           item["topic"] = topics[item["topic"]];
@@ -274,10 +276,10 @@ let functions = {
       sort = sort[0];
       whereQuery["sort"] = sort["identifier"];
     }
-    if(school){
+    if (school) {
       whereQuery["_school"] = school;
-    }else if(school===null){
-      whereQuery["_school"] ="";
+    } else if (school === null) {
+      whereQuery["_school"] = "";
     }
     if (status) {
       whereQuery["status"] = status;
@@ -295,7 +297,7 @@ let functions = {
     let users = [];
     let sorts = [];
     let topics = [];
-    if(posts.length==0){
+    if (posts.length == 0) {
       return [];
     }
     posts.forEach((item) => {
@@ -322,6 +324,7 @@ let functions = {
         return res["result"];
       });
     users = arrayToObject(users, "_id");
+    console.log(users);
 
     // 帖子分类
     sorts = await DB.collection("post_sort")

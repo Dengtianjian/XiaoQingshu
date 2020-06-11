@@ -33,16 +33,17 @@ Page({
     favorites: {},
     selectAlbum: null,
     albums: null,
+    hasAlbums:true
   },
   onReachBottom() {
     this.getFavoriteAlbum();
   },
   favoriteLoad: {},
   getFavoriteAlbum(e) {
-    if (AlbumPagination.isLoading() || AlbumPagination.isFinished()) {
+    if (this.AlbumPagination.isLoading() || this.AlbumPagination.isFinished()) {
       return;
     }
-    AlbumPagination.setLoading();
+    this.AlbumPagination.setLoading();
     wx.showLoading({
       title: "加载中",
     });
@@ -50,17 +51,22 @@ Page({
     Cloud.cfunction("User", "getAlbums", {
       page: this.favoriteLoad.page,
       limit: 11,
-      page: AlbumPagination.getPage(),
+      page: this.AlbumPagination.getPage(),
     }).then((albums) => {
       wx.hideLoading();
       albums.forEach((item) => {
         item["date"] = Utils.formatDate(item["date"], "y-m-d");
       });
       if (albums.length < 11) {
-        AlbumPagination.setFinished();
+        this.AlbumPagination.setFinished();
+        if(this.AlbumPagination.getPage()==0&&albums.length==0){
+          this.setData({
+            hasAlbums:false
+          });
+        }
       }
-      AlbumPagination.insert(albums);
-      AlbumPagination.setLoading(false);
+      this.AlbumPagination.insert(albums);
+      this.AlbumPagination.setLoading(false);
     });
   },
   showCreateFavoritePopup() {

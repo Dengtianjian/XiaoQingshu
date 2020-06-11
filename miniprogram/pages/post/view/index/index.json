@@ -9,6 +9,7 @@
     "navigationBar":"/components/navigationBar/navigationBar",
     "Dialog":"/components/dialog/dialog",
     "PostStatus":"/components/PostStatus/PostStatus",
-    "InputPopup":"/components/inputPopup/inputPopup"
+    "InputPopup":"/components/inputPopup/inputPopup",
+    "PagePrompt":"/components/pagePrompt/pagePrompt"
   }
 }

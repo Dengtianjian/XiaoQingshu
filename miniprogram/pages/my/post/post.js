@@ -15,6 +15,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad (options) {
+
+    if(App.userInfo['isLogin']==false){
+      wx.switchTab({
+        url:"/pages/my/index/index"
+      });
+      return;
+    }
+
     this.PostPagination=new Pagination(this,"posts");
     await App.getUserInfo();
     this.getUserPost();
