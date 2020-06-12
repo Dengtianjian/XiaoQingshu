@@ -44,6 +44,7 @@ Page({
           this.postLoad = postLoad;
           setData["postTabs"] = postTabs;
           setData["posts"] = posts;
+          setData["sorts"] = sorts;
         }
       }
     });
