@@ -14,6 +14,15 @@ const Class = DB.collection("school_class");
 let functions = {
   async getClassByClassId(event) {
     let _classid = event._classid;
+
+    if(!_classid){
+      return {
+        error: 404,
+        code: 404001,
+        message: "班级不存在",
+      };
+    }
+
     let result = await DB.collection("school_class")
       .aggregate()
       .match({
@@ -172,10 +181,11 @@ let functions = {
     const _ = DB.command;
     let _classid = event._classid;
     let profession = String(event.profession).trim();
-    let buildDate = parseInt(event.buildDate);
-    let gradeNumber = parseInt(event.gradeNumber);
+    let buildDate = parseInt(event.build_date);
+    let gradeNumber = parseInt(event.number);
     let _schoolid = event._schoolid;
     let allowJoin = Boolean(event.allow_join);
+    let grade=event.grade;
 
     let userInfo = await DB.collection("user")
       .where({
@@ -222,7 +232,7 @@ let functions = {
             _schoolid,
             album_count: 0,
             build_date: buildDate,
-            grade: new Date(buildDate).getFullYear(),
+            grade,
             number: gradeNumber,
             profession,
             students: 1,

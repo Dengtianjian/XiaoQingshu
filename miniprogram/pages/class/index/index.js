@@ -213,14 +213,10 @@ Page({
   },
   getClassInfo() {
     Cloud.cfunction("Class", "getClassByClassId", {
-      _id: this.data.classInfo._id,
+      _classid: this.data.classInfo._id,
     }).then((classInfo) => {
       wx.stopPullDownRefresh();
       if (classInfo) {
-        this.updateStatistics();
-        this.updateNewClassmateList();
-        this.getClassStudent();
-        this.getClassPhoto();
         wx.setNavigationBarColor({
           frontColor: "#ffffff",
           backgroundColor: "#000000",
@@ -230,6 +226,11 @@ Page({
           classInfo,
           pageLoadingCompleted: true,
         });
+
+        this.updateStatistics();
+        this.updateNewClassmateList();
+        this.getClassStudent();
+        this.getClassPhoto();
       } else {
         this.setData({
           classInfo: null,
@@ -459,7 +460,7 @@ Page({
   goToEditClass() {
     let that = this;
     let url = "/pages/class/edit_info/edit_info";
-    if (this.data.classInfo._id) {
+    if (this.data.classInfo&&this.data.classInfo._id) {
       url += "?classid=" + this.data.classInfo._id;
     }
     wx.navigateTo({
@@ -474,7 +475,10 @@ Page({
           that.getClassInfo();
         },
         editClass(data) {
-          console.log(data);
+          that.setData({
+            pageLoadingCompleted: false,
+          });
+          that.getClassInfo();
         },
       },
     });

@@ -4,7 +4,7 @@ import Prompt from "../../../source/js/prompt";
 import Utils from "../../../source/js/utils";
 const App = getApp();
 Page({
-  sorts:null,
+  sorts: null,
   /**
    * 页面的初始数据
    */
@@ -25,8 +25,8 @@ Page({
       all: [],
     },
     currentShowPostSort: "all",
-    postLoadFinished:false,
-    postLoading:false
+    postLoadFinished: false,
+    postLoading: false
   },
 
   /**
@@ -36,9 +36,9 @@ Page({
     this.getUserInfo();
 
     await Cloud.cfunction("Post", "getSort").then((res) => {
-      if (res['errMsg'] =="collection.get:ok") {
+      if (res['errMsg'] == "collection.get:ok") {
         let sorts = res["data"];
-        if(sorts.length==0){
+        if (sorts.length == 0) {
           return;
         }
 
@@ -79,9 +79,9 @@ Page({
         userIsLogin: true,
       });
     }
-    if(!this.schoolInfo&&App.userInfo.school){
+    if (!this.schoolInfo && App.userInfo.school) {
       this.setData({
-        schoolInfo:App.userInfo.school
+        schoolInfo: App.userInfo.school
       });
       this.getPost();
     }
@@ -99,8 +99,7 @@ Page({
     });
     App.getUserInfo(userInfo).then((userInfo) => {
       wx.hideLoading();
-      this.setData(
-        {
+      this.setData({
           userIsLogin: userInfo.isLogin,
           schoolInfo: userInfo["school"],
           currentSchool: userInfo["school"] ? userInfo["school"]["_id"] : null,
@@ -115,9 +114,9 @@ Page({
     });
   },
   async getSchool() {
-    await Cloud.cfunction("School","getSchoolById",{
-      _schoolid:this.data.currentSchool,
-    }).then(res=>{
+    await Cloud.cfunction("School", "getSchoolById", {
+      _schoolid: this.data.currentSchool,
+    }).then(res => {
       if (res.length == 0) {
         return;
       }
@@ -126,7 +125,7 @@ Page({
       let setData = {
         schoolInfo: schoolInfo,
         "userInfo._default_school": schoolInfo["_id"],
-        [`joinedSchool.${schoolInfo["_id"]}`]:schoolInfo
+        [`joinedSchool.${schoolInfo["_id"]}`]: schoolInfo
       };
       this.setData(setData);
     });
@@ -134,8 +133,8 @@ Page({
   async getClass() {
     App.userInfo["class"] = null;
     await Cloud.cfunction("Class", "getClassBySchoolId", {
-      _schoolid: this.data.currentSchool,
-    })
+        _schoolid: this.data.currentSchool,
+      })
       .then((res) => {
         App.userInfo["class"] = res;
       })
@@ -169,15 +168,16 @@ Page({
     });
   },
   async confirmSwitchSchool() {
-    if (this.data.schoolInfo!=null&&this.data.currentSchool == this.data.schoolInfo["_id"]) {
-      let setData = { hideSwitchSchoolPopup: true };
+    if (this.data.schoolInfo != null && this.data.currentSchool == this.data.schoolInfo["_id"]) {
+      let setData = {
+        hideSwitchSchoolPopup: true
+      };
       if (Utils.getType(this.data.joinedSchool) == "Object") {
         if (
           !this.data.joinedSchool.hasOwnProperty(this.data.schoolInfo["_id"]) ||
           this.data.joinedSchool[this.data.schoolInfo["_id"]] == "deleted"
         ) {
-          setData = Object.assign(
-            {
+          setData = Object.assign({
               [`joinedSchool.${this.data.schoolInfo["_id"]}`]: {
                 _id: this.data.schoolInfo["_id"],
                 logo: this.data.schoolInfo["logo"],
@@ -233,8 +233,7 @@ Page({
       events: {
         changeSchool(data) {
           let _schoolid = data._schoolid;
-          that.setData(
-            {
+          that.setData({
               currentSchool: _schoolid,
             },
             () => {
@@ -270,7 +269,15 @@ Page({
             let setData = {
               hideSwitchSchoolPopup: true,
             };
-            if (Object.keys(that.data.joinedSchool).length == 1) {
+
+            let notDeleted = 0;
+            for (let key in that.data.joinedSchool) {
+              if (that.data.joinedSchool[key] != 'deleted') {
+                notDeleted++;
+              }
+            }
+
+            if (notDeleted <= 1) {
               setData["schoolInfo"] = null;
               setData["currentSchool"] = null;
               setData["joinedSchool"] = [];
@@ -278,14 +285,14 @@ Page({
               App.userInfo["school"] = null;
               Cloud.cfunction("User", "saveUserInfo", {
                 _default_school: "",
-                school:null,
-                class:null
+                school: null,
+                class: null
               });
             } else {
               setData[`joinedSchool.${selectSchool["_id"]}`] = "deleted";
-              let firstSchool=Object.keys(that.data.joinedSchool)[0];
+              let firstSchool = Object.keys(that.data.joinedSchool)[0];
               that.setData({
-                currentSchool:firstSchool
+                currentSchool: firstSchool
               });
               App.userInfo["_default_school"] = firstSchool;
               Cloud.cfunction("User", "saveUserInfo", {
@@ -303,11 +310,14 @@ Page({
     });
   },
   postLoad: {
-    all: { count: 0, page: 0, finished: false },
+    all: {
+      count: 0,
+      page: 0,
+      finished: false
+    },
   },
   postTabChange(e) {
-    this.setData(
-      {
+    this.setData({
         currentShowPostSort: e.detail.current,
       },
       () => {
@@ -329,13 +339,13 @@ Page({
     let currentPageLoad = this.postLoad[currentShowPostSort];
     if (currentPageLoad.finished) {
       this.setData({
-        postLoadFinished:true,
-        postLoading:false
+        postLoadFinished: true,
+        postLoading: false
       });
       return;
     }
     this.setData({
-      postLoading:true
+      postLoading: true
     });
     let currentPosts = this.data.posts[currentShowPostSort];
     await Cloud.cfunction("Post", "getPosts", {
@@ -346,7 +356,7 @@ Page({
       if (res.length < 5) {
         currentPageLoad.finished = true;
         this.setData({
-          postLoadFinished:true
+          postLoadFinished: true
         });
       } else {
         currentPageLoad.page++;
@@ -357,8 +367,7 @@ Page({
         if (current.length == 5) {
           currentPageLoad.count += 1;
           current = res;
-          this.setData(
-            {
+          this.setData({
               [`${postPath}[${currentPageLoad.count}]`]: current,
             },
             () => {
@@ -368,8 +377,7 @@ Page({
             }
           );
         } else {
-          this.setData(
-            {
+          this.setData({
               [`${postPath}[${currentPageLoad.count}]`]: current,
             },
             () => {
@@ -380,8 +388,7 @@ Page({
           );
         }
       } else {
-        this.setData(
-          {
+        this.setData({
             [`${postPath}[0]`]: res,
           },
           () => {
@@ -393,7 +400,7 @@ Page({
       }
       wx.stopPullDownRefresh();
       this.setData({
-        postLoading:false
+        postLoading: false
       });
     });
   },

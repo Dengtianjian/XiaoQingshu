@@ -41,8 +41,6 @@ Page({
       return;
     }
 
-    console.log(options);
-
     if (!options.classid) {
       wx.setNavigationBarTitle({
         title: "创建班级",
@@ -60,7 +58,7 @@ Page({
         title: "编辑班级信息",
       });
       let classInfo = await Cloud.cfunction("Class", "getClassByClassId", {
-        _id: this.data.classInfo._id,
+        _classid:options.classid,
       }).then((classInfo) => {
         if (classInfo) {
           return classInfo;
@@ -104,6 +102,10 @@ Page({
       allow_join: allowJoin,
       grade: new Date(buildDate).getFullYear(),
     };
+
+    if(this.data.classId){
+      classInfo['_classid']=this.data.classId
+    }
     Cloud.cfunction("Class", "saveClassInfo", classInfo)
       .then((res) => {
         const eventChannel = that.getOpenerEventChannel();
