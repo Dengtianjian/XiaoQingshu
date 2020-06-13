@@ -278,8 +278,8 @@ let functions = {
     }
     if (school) {
       whereQuery["_school"] = school;
-    } else if (school === null) {
-      whereQuery["_school"] = "";
+    } else {
+      whereQuery["_school"] = _.in(["",null]);
     }
     if (status) {
       whereQuery["status"] = status;
@@ -289,7 +289,7 @@ let functions = {
       .where(whereQuery)
       .limit(limit)
       .skip(limit * page)
-      .orderBy("date", "desc")
+      .orderBy("date", "asc")
       .get()
       .then((res) => {
         return res["data"];
@@ -324,7 +324,6 @@ let functions = {
         return res["result"];
       });
     users = arrayToObject(users, "_id");
-    console.log(users);
 
     // 帖子分类
     sorts = await DB.collection("post_sort")
