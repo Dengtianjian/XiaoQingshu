@@ -133,13 +133,20 @@ Page({
     const that=this;
     this.answerEditorContext.getContents({
       async success(res){
+        if(res.text.length<10){
+          Prompt.toast("答案最少输入10字");
+          return;
+        }
+        wx.showLoading({
+          title: "发送中",
+        });
         let content=res.html;
         // let files=content.match(/(?<=(src="))[^"]*?(?=")/ig);
         let files=[];
         let imgReg=/<img.*?(?:>|\/>)/gi;
         let imgs=content.match(imgReg);
         if(imgs){
-          let srcReg=/src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+          let srcReg=/data-local=[\'\"]?([^\'\"]*)[\'\"]?/i;
           for(let i=0;i<imgs.length;i++){
             let src=imgs[i].match(srcReg);
 
@@ -147,7 +154,7 @@ Page({
           }
         }
         if(files&&files.length>0){
-          let fileList=await Cloud.uploadFile(files).then(res=>res);
+          let fileList=await Cloud.uploadFile(files,"post/").then(res=>res);
           await wx.cloud.getTempFileURL({
             fileList
           }).then(res=>{
@@ -158,9 +165,6 @@ Page({
           });
         }
 
-        wx.showLoading({
-          title: "发送中",
-        });
         Cloud.cfunction("Post", "saveAnswer", {
           content,
           postid: that.data.postid,
