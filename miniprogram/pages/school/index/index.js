@@ -278,6 +278,8 @@ Page({
               App.userInfo["school"] = null;
               Cloud.cfunction("User", "saveUserInfo", {
                 _default_school: "",
+                school:null,
+                class:null
               });
             } else {
               setData[`joinedSchool.${selectSchool["_id"]}`] = "deleted";
