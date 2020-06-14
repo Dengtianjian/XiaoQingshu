@@ -17,7 +17,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    let _classid = options._classid;
+    let _classid = options.classid;
 
     this.setData({
       classId:_classid
@@ -68,6 +68,9 @@ Page({
   },
 
   async getClassInfo(){
+    wx.showLoading({
+      title:"获取班级信息中"
+    });
     await Cloud.cfunction("Class", "getClassByClassId", {
       _classid:this.data.classId,
     })
@@ -75,6 +78,7 @@ Page({
         this.setData({
           classInfo: res,
         });
+        wx.hideLoading();
       })
       .catch((res) => {
         Prompt.codeToast(res.error, res.code, {
@@ -93,6 +97,7 @@ Page({
       title: "📝登记信息中",
       mask: true,
     });
+   
     Cloud.cfunction("Class", "inviteAgreeJoinClass", {
       _classid: classInfo["_id"],
       _schoolid: classInfo["_schoolid"],
