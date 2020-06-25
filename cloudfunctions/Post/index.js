@@ -221,13 +221,13 @@ let functions = {
         .then((res) => res["data"]);
       topics = arrayToObject(topics, "_id");
 
-      let sort = await DB.collection("post_sort")
-        .where({
-          identifier: _.in(sortIdentifier),
-        })
-        .get()
-        .then((res) => res["data"]);
-      sort = arrayToObject(sort, "identifier");
+      // let sort = await DB.collection("post_sort")
+      //   .where({
+      //     identifier: _.in(sortIdentifier),
+      //   })
+      //   .get()
+      //   .then((res) => res["data"]);
+      // sort = arrayToObject(sort, "identifier");
 
       posts.forEach((item) => {
         if (schools&&item["_school"]) {
@@ -236,7 +236,7 @@ let functions = {
         if (item["topic"]) {
           item["topic"] = topics[item["topic"]];
         }
-        item["sort"] = sort[item["sort"]];
+        // item["sort"] = sort[item["sort"]];
         // item["author"] = users[item["_authorid"]];
       });
 
