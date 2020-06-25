@@ -6,6 +6,14 @@ class Pagination {
   dataName = null;
   startHeaderIndex = 0;
   limit = 5;
+  /**
+   *
+   * @param {object} pageThis 页面指向的this
+   * @param {string} dataName data对象面的属性名称
+   * @param {number} startHeaderIndex 起始索引
+   * @param {boolean} key 是否使用键值区分页面
+   * @param {number} limit 每次更新的数量
+   */
   constructor(
     pageThis,
     dataName,
