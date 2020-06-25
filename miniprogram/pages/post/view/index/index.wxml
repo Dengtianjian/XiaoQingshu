@@ -5,7 +5,7 @@
   <PostStatus class="post-status" status="{{ post.status }}" checkResult="{{ post.checkResult }}" />
   <view class="author">
     <image class="author-avatar" src="{{ post.author.avatar_url }}"></image>
-    <navigator class="author-info" open-type="navigate" hover-class="none" url="/pages/my/space/space?userid={{ post.author._id }}" wx:if="{{ post.author._id }}">
+    <navigator class="author-info" open-type="navigate" hover-class="none" url="/subpages/my/space/space?userid={{ post.author._id }}" wx:if="{{ post.author._id }}">
       <view class="author-nickname">{{ post.author.nickname }}</view>
       <view class="author-school">
         <block wx:if="{{ post.author._default_school }}">

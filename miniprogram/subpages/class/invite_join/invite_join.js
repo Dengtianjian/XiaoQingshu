@@ -60,7 +60,7 @@ Page({
     let albumCount = this.data.classInfo.album_count;
     let title = `已经有 ${students} 位同学👬加入同学录啦。还有 ${albumCount} 张同学们的丑照🤭在里面`;
     let path =
-      "/pages/class/invite_join/invite_join?classid=" + this.data.classInfo._id;
+      "/subpages/class/invite_join/invite_join?classid=" + this.data.classInfo._id;
     return {
       title,
       path,
@@ -97,7 +97,7 @@ Page({
       title: "📝登记信息中",
       mask: true,
     });
-   
+
     Cloud.cfunction("Class", "inviteAgreeJoinClass", {
       _classid: classInfo["_id"],
       _schoolid: classInfo["_schoolid"],

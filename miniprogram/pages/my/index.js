@@ -1,5 +1,5 @@
 // pages/my/index/index.js
-import Cloud from "../../../source/js/cloud";
+import Cloud from "../../source/js/cloud";
 const App = getApp();
 Page({
   /**
@@ -66,7 +66,7 @@ Page({
         {
           icon: "/material/temp/1.png",
           title: "主页",
-          url: "/pages/my/space/space?userid=" + App.userInfo["_openid"],
+          url: "/subpages/my/space/space?userid=" + App.userInfo["_openid"],
         },
         {
           icon: "/material/temp/2.png",
@@ -76,12 +76,12 @@ Page({
         {
           icon: "/material/temp/3.png",
           title: "资料",
-          url: "/pages/my/edit_profile/edit_profile",
+          url: "/subpages/my/edit_profile/edit_profile",
         },
         {
           icon: "/material/temp/4.png",
           title: "消息",
-          url: "/pages/my/notification/notification",
+          url: "/subpages/my/notification/notification",
         },
         {
           icon: "/material/temp/5.png",
@@ -96,7 +96,7 @@ Page({
         {
           icon: "/material/temp/7.png",
           title: "收藏",
-          url: "/pages/my/favorites/favorites",
+          url: "/subpages/my/favorites/favorites",
         },
         {
           icon: "/material/temp/8.png",

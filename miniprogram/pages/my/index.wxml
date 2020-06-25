@@ -71,22 +71,22 @@
   };
 </wxs>
   <view class="quick-navigation">
-    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/space/space" hover-class="quick-navigation-item-hover">
+    <navigator class="quick-navigation-item" open-type="navigate" url="/subpages/my/space/space" hover-class="quick-navigation-item-hover">
       <Icon class="quick-navigation-item-icon" icon="/material/temp/1.png" size="50rpx"></Icon>
       <text class="quick-navigation-item-title">主页</text>
       <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
     </navigator>
-    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/post/post" hover-class="quick-navigation-item-hover">
+    <navigator class="quick-navigation-item" open-type="navigate" url="/subpages/my/post/post" hover-class="quick-navigation-item-hover">
       <Icon class="quick-navigation-item-icon" icon="/material/temp/2.png" size="50rpx"></Icon>
       <text class="quick-navigation-item-title">帖子</text>
       <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
     </navigator>
-    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/edit_profile/edit_profile" hover-class="quick-navigation-item-hover">
+    <navigator class="quick-navigation-item" open-type="navigate" url="/subpages/my/edit_profile/edit_profile" hover-class="quick-navigation-item-hover">
       <Icon class="quick-navigation-item-icon" icon="/material/temp/3.png" size="50rpx"></Icon>
       <text class="quick-navigation-item-title">资料</text>
       <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
     </navigator>
-    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/notification/notification" hover-class="quick-navigation-item-hover">
+    <navigator class="quick-navigation-item" open-type="navigate" url="/subpages/my/notification/notification" hover-class="quick-navigation-item-hover">
       <Icon class="quick-navigation-item-icon" icon="/material/temp/4.png" size="50rpx"></Icon>
       <view class="quick-navigation-item-title">
         消息
@@ -94,7 +94,7 @@
       </view>
       <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>
     </navigator>
-    <navigator class="quick-navigation-item" open-type="navigate" url="/pages/my/favorites/favorites" hover-class="quick-navigation-item-hover">
+    <navigator class="quick-navigation-item" open-type="navigate" url="/subpages/my/favorites/favorites" hover-class="quick-navigation-item-hover">
       <Icon class="quick-navigation-item-icon" icon="/material/temp/7.png" size="50rpx"></Icon>
       <text class="quick-navigation-item-title">收藏</text>
       <text class="quick-navigation-item-right-arrow qcicon qcicon-arrow-right"></text>

@@ -24,7 +24,6 @@ Page({
     let setData = {
       pageLoaded: true,
     };
-    await App.getUserInfo();
     await Cloud.cfunction("Post", "getSort").then((res) => {
       if (res["errMsg"] == "collection.get:ok") {
         let sorts = res["data"];
@@ -51,6 +50,7 @@ Page({
 
     this.setData(setData);
     this.getPost();
+    App.getUserInfo();
   },
   onReady() {
     this.getQuotes();

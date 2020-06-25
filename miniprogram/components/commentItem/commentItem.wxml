@@ -2,7 +2,7 @@
 <view class="comment-item">
   <view class="comment-author" wx:if="{{ comment['author'] }}">
     <image class="comment-author-avatar" src="{{ comment['author']['avatar_url'] }}"></image>
-    <navigator class="comment-author-info" hover-class="none" url="/pages/my/space/space?userid={{ comment['author']['_id'] }}">
+    <navigator class="comment-author-info" hover-class="none" url="/subpages/my/space/space?userid={{ comment['author']['_id'] }}">
       <view class="comment-author-nickname">{{ comment['author']['nickname'] }}</view>
       <view class="comment-author-school">
         {{ comment['author']['school']?comment['author']['school']['name']:'TA还未加入一家学校' }}
@@ -23,7 +23,7 @@
   </view>
   <view class="comment-reply-author" wx:if="{{ comment['_reply_author'] }}" wx:if="{{ comment['reply_author'] }}">
     回复
-    <navigator class="comment-reply-author-link" hover-class="none" url="/pages/my/space/space?userid={{ comment['reply_author']['_id'] }}">
+    <navigator class="comment-reply-author-link" hover-class="none" url="/subpages/my/space/space?userid={{ comment['reply_author']['_id'] }}">
       {{ comment['reply_author']['nickname'] }}
     </navigator>
   </view>

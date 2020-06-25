@@ -54,7 +54,7 @@
       </swiper>
     </view>
     <view class="radius-container">
-      <navigator open-type="navigate" hover-class="none" url="/pages/class/album/album?classid={{ classInfo['_id'] }}">
+      <navigator open-type="navigate" hover-class="none" url="/subpages/class/album/album?classid={{ classInfo['_id'] }}">
         <view class="album-entry" >
           <image class="album-entry-images" src="/material/images/class_album_entry.png" mode="aspectFill" />
         </view>
@@ -65,7 +65,7 @@
         </view> -->
       </navigator>
       <view class="classmate">
-        <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/pages/class/edit_my_info/edit_my_info">
+        <!-- <navigator class="classmate-item edit-my-info" hover-class="none" open-type="navigate" url="/subpages/class/edit_my_info/edit_my_info">
         编辑我的信息
       </navigator> -->
         <view class="classmate-item" wx:for="{{ classmates }}" bindtap="displayClassmateInfo" data-index="{{ index }}" data-flag="{{ false }}" wx:key="index">

@@ -5,7 +5,7 @@
 <import src="./type/likePost.wxml" />
 <template name="user">
   <view class="notification-user-item">
-    <navigator class="notification-user-head" hover-class="none" url="/pages/my/space/space?userid={{ _sender }}">
+    <navigator class="notification-user-head" hover-class="none" url="/subpages/my/space/space?userid={{ _sender }}">
       <Icon class="notification-user-avatar" icon="{{ parameter['user_avatar'] }}" size="78rpx"></Icon>
       <view class="notification-user-info">
         <view class="notification-user-nickname">{{ parameter['user_nickname'] }}</view>

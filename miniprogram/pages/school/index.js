@@ -1,7 +1,7 @@
 // pages/school.js
-import Cloud from "../../../source/js/cloud";
-import Prompt from "../../../source/js/prompt";
-import Utils from "../../../source/js/utils";
+import Cloud from "../../source/js/cloud";
+import Prompt from "../../source/js/prompt";
+import Utils from "../../source/js/utils";
 const App = getApp();
 Page({
   sorts: null,
@@ -229,7 +229,7 @@ Page({
   goToSelectSchool() {
     let that = this;
     wx.navigateTo({
-      url: "/pages/school/select_school/select_school",
+      url: "/subpages/school/select_school/select_school",
       events: {
         changeSchool(data) {
           let _schoolid = data._schoolid;

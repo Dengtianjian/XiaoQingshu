@@ -1,25 +1,44 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/class/invite_join/invite_join",
-    "pages/my/post/post",
     "pages/post/view/answer_question/answer_question",
     "pages/post/view/index/index",
     "pages/post/view/comment/comment",
-    "pages/class/index/index",
-    "pages/school/index/index",
     "pages/post/publish/publish",
-    "pages/my/index/index",
-    "pages/my/notification/notification",
-    "pages/my/space/space",
-    "pages/my/favorites/favorites",
     "pages/post/select_topic/select_topic",
-    "pages/school/select_school/select_school",
-    "pages/my/edit_profile/edit_profile",
-    "pages/class/album/album",
-    "pages/class/edit_info/edit_info",
     "pages/test/test",
-    "pages/class/edit_my_info/edit_my_info"
+    "pages/school/index",
+    "pages/class/index",
+    "pages/my/index"
+  ],
+  "subpackages": [
+    {
+      "root": "subpages/school",
+      "name": "school",
+      "pages": [
+        "select_school/select_school"
+      ]
+    },
+    {
+      "root": "subpages/class",
+      "name": "classA",
+      "pages": [
+        "edit_info/edit_info",
+        "album/album",
+        "invite_join/invite_join"
+      ]
+    },
+    {
+      "root": "subpages/my",
+      "name": "my",
+      "pages": [
+        "notification/notification",
+        "space/space",
+        "favorites/favorites",
+        "edit_profile/edit_profile",
+        "post/post"
+      ]
+    }
   ],
   "window": {
     "navigationStyle": "custom",
@@ -38,19 +57,19 @@
         "text": "广场"
       },
       {
-        "pagePath": "pages/school/index/index",
+        "pagePath": "pages/school/index",
         "iconPath": "/material/tabbar/school.png",
         "selectedIconPath": "/material/tabbar/school_selected.png",
         "text": "学校"
       },
       {
-        "pagePath": "pages/class/index/index",
+        "pagePath": "pages/class/index",
         "iconPath": "/material/tabbar/class.png",
         "selectedIconPath": "/material/tabbar/class_selected.png",
         "text": "班级"
       },
       {
-        "pagePath": "pages/my/index/index",
+        "pagePath": "pages/my/index",
         "iconPath": "/material/tabbar/my.png",
         "selectedIconPath": "/material/tabbar/my_selected.png",
         "text": "自己"
