@@ -1,9 +1,10 @@
 //index.js
-import { Cloud, Prompt } from "../../Qing";
+import { Cloud, Prompt, Pagination } from "../../Qing";
 const App = getApp();
 Page({
   data: {
     pageLoaded: false,
+    postPagination: null,
     sorts: null,
     postTabs: {
       all: "全部",
@@ -14,13 +15,15 @@ Page({
       hidden: true,
       postType: [],
     },
-    posts: {
-      all: [],
-    },
+    posts:null,
+    postLoadFinished:false,
+    postLoading:false,
     currentShowPostSort: "all",
     quotes: [],
   },
   async onLoad() {
+    this.postPagination = new Pagination(this, "posts", 0, true, 5);
+    this.postPagination.setKeyData("all");
     let setData = {
       pageLoaded: true,
     };
@@ -28,21 +31,15 @@ Page({
       if (res["errMsg"] == "collection.get:ok") {
         let sorts = res["data"];
         if (sorts.length > 0) {
+          sorts.forEach((item) => {
+            this.postPagination.setKeyData(item["identifier"]);
+          });
+
           let postTabs = this.data.postTabs;
-          let posts = this.data.posts;
-          let postLoad = this.postLoad;
           sorts.forEach((item) => {
             postTabs[item["identifier"]] = item["name"];
-            posts[item["identifier"]] = [];
-            postLoad[item["identifier"]] = {
-              count: 0,
-              page: 0,
-              finished: false,
-            };
           });
-          this.postLoad = postLoad;
           setData["postTabs"] = postTabs;
-          setData["posts"] = posts;
           setData["sorts"] = sorts;
         }
       }
@@ -62,18 +59,11 @@ Page({
   },
   onPullDownRefresh() {
     let currentShowPostSort = this.data.currentShowPostSort;
-    this.postLoad[currentShowPostSort] = { count: 0, page: 0, finished: false };
-    this.setData(
-      {
-        [`posts.${currentShowPostSort}`]: [],
-      },
-      () => {
-        this.getPost();
-      }
-    );
+    this.postPagination.removeKey(currentShowPostSort);
+    this.getPost();
   },
   onReachBottom() {
-    if (this.postLoad[this.data.currentShowPostSort].finished === false) {
+    if (this.postPagination.isFinished(this.data.currentShowPostSort) === false) {
       this.getPost();
     }
   },
@@ -92,22 +82,15 @@ Page({
       });
     });
   },
-  postLoad: {
-    all: { count: 0, page: 0, finished: false },
-  },
   postTabChange(e) {
     this.setData(
       {
         currentShowPostSort: e.detail.current,
+        postLoadFinished:this.postPagination.isFinished(e.detail.current)
       },
       () => {
         if (
-          !this.data.posts[this.data.currentShowPostSort][
-            this.postLoad[this.data.currentShowPostSort].count
-          ] ||
-          this.data.posts[this.data.currentShowPostSort][
-            this.postLoad[this.data.currentShowPostSort].count
-          ].length == 0
+          this.postPagination.getPage(e.detail.current)==0
         ) {
           this.getPost();
         }
@@ -116,62 +99,35 @@ Page({
   },
   async getPost() {
     let currentShowPostSort = this.data.currentShowPostSort;
-    let currentPageLoad = this.postLoad[currentShowPostSort];
-    if (currentPageLoad.finished) {
+    if (
+      this.postPagination.isLoading(currentShowPostSort) ||
+      this.postPagination.isFinished(currentShowPostSort)
+    ) {
       return;
     }
-    let currentPosts = this.data.posts[currentShowPostSort];
+    this.postPagination.setLoading(true,currentShowPostSort);
+    this.setData({
+      postLoading:true
+    });
     await Cloud.cfunction("Post", "getPosts", {
-      page: currentPageLoad.page,
+      page: this.postPagination.getPage(currentShowPostSort),
       sort: currentShowPostSort == "all" ? null : currentShowPostSort,
       status: "normal",
       school: null,
     }).then((res) => {
-      if (res.length < 5) {
-        currentPageLoad.finished = true;
-      } else {
-        currentPageLoad.page++;
+      if (res.length < this.postPagination.limit) {
+        this.postPagination.setFinished(true, currentShowPostSort);
       }
-      let postPath = `posts.${currentShowPostSort}`;
-      if (currentPosts.length > 0) {
-        let current = currentPosts[currentPageLoad.count];
-        if (current.length == 5) {
-          currentPageLoad.count += 1;
-          current = res;
-          this.setData(
-            {
-              [`${postPath}[${currentPageLoad.count}]`]: current,
-            },
-            () => {
-              this.setData({
-                updateSwiperHeight: true,
-              });
-            }
-          );
-        } else {
-          this.setData(
-            {
-              [`${postPath}[${currentPageLoad.count}]`]: current,
-            },
-            () => {
-              this.setData({
-                updateSwiperHeight: true,
-              });
-            }
-          );
-        }
-      } else {
-        this.setData(
-          {
-            [`${postPath}[0]`]: res,
-          },
-          () => {
-            this.setData({
-              updateSwiperHeight: true,
-            });
-          }
-        );
-      }
+
+      this.postPagination.insert(res, currentShowPostSort);
+      this.setData({
+        updateSwiperHeight: true,
+        postLoading:false,
+        postLoadFinished:this.postPagination.isFinished(currentShowPostSort)
+      });
+
+      this.postPagination.setLoading(false,currentShowPostSort);
+
       wx.stopPullDownRefresh();
     });
   },

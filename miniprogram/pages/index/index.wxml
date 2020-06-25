@@ -29,6 +29,7 @@
         </view>
       </block>
     </Tabs>
+     <Loading finished="{{ postLoadFinished }}" loading="{{ postLoading }}" />
   </view>
   <!-- 发布内容入口 -->
   <view class="publish-entrance" bindtap="displayPublishPopup" data-mode="show" wx:if="{{ sorts.length>0 }}">

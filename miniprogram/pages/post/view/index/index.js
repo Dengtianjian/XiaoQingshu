@@ -59,17 +59,19 @@ Page({
       postid: this.data.post._id,
     })
       .then(async (post) => {
-        let setData = {
-
-        };
+        let setData = {};
 
         wx.hideLoading();
         wx.stopPullDownRefresh();
 
-        post["date"] = Utils.formatDate(post["date"], "y年m月d");
+        if (post["date"]) {
+          console.log(post["date"]);
+          post["date"] = Utils.formatDate(post["date"], "y年m月d");
+        }
+
         this.setData({
           pageLoaded: true,
-          post
+          post,
         });
 
         await Cloud.cfunction("Post", "getSortByIdentifier", {
@@ -159,16 +161,16 @@ Page({
       .catch((err) => {
         console.log(err);
         Prompt.toast("加载失败,请稍后重试❤", {
-          success(){
-            setTimeout(()=>{
+          success() {
+            setTimeout(() => {
               wx.navigateBack();
-            },1000);
-          }
+            }, 1000);
+          },
         });
       });
   },
   likePost() {
-    if(App.userInfo.isLogin==false){
+    if (App.userInfo.isLogin == false) {
       Prompt.toast("请登录后再点赞👍哦");
       return;
     }
@@ -235,7 +237,7 @@ Page({
       urls: this.data.post.images,
     });
   },
-  followUser(){
+  followUser() {
     Prompt.toast("抱歉🚩，关注功能还未开放哦");
-  }
+  },
 });
