@@ -5,7 +5,7 @@
       <block wx:for="{{ commentArray }}" wx:key="index">
         <CommentItem class="comment-item" comment="{{ item }}" />
         <navigator class="comment-item-view-reply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}" url="/pages/post/view/comment/comment?commentid={{ item._id }}&postid={{ item._post }}">
-          查看回复
+          查看回复 {{ item.replies }}
         </navigator>
       </block>
     </block>

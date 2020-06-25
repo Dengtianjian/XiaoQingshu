@@ -7,14 +7,14 @@
         <view class="qa-comment-item-bottom">
           <view class="comment-vote">
             <view class="comment-vote-item comment-vote-agree {{ item.isAgree?'comment-vote-is-selected':'' }}" bind:tap="agreeAnswer" data-page="{{ commentArrayIndex }}" data-index="{{ index }}" hidden="{{ item.isDisagree }}">
-              {{ item.isAgree?'已赞同':'赞同' }}
+              {{ item.isAgree?'已赞同 '+item.agree:'赞同' }}
             </view>
             <view class="comment-vote-item {{ item.isDisagree?'comment-vote-is-selected':'' }}" hidden="{{ item.isAgree }}" bind:tap="disagreeAnswer" data-page="{{ commentArrayIndex }}" data-index="{{ index }}">
-              {{ item.isDisagree?'已反对':'👎' }}
+              {{ item.isDisagree?'已反对 '+item.disagree:'👎' }}
             </view>
           </view>
           <navigator class="comment-item-view-reply" data-index="{{ index }}" data-arrayindex="{{ commentArrayIndex }}" url="/pages/post/view/comment/comment?commentid={{ item._id }}&postid={{ item._postid }}">
-            查看详情 & 回复
+            查看详情 & 回复 {{ item.replies }}
           </navigator>
         </view>
       </block>
