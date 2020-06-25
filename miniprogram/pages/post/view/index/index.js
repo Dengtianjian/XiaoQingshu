@@ -60,20 +60,23 @@ Page({
     })
       .then(async (post) => {
         let setData = {
-          pageLoaded: true,
+
         };
 
         wx.hideLoading();
         wx.stopPullDownRefresh();
 
-        setData["post"] = post;
         post["date"] = Utils.formatDate(post["date"], "y年m月d");
+        this.setData({
+          pageLoaded: true,
+          post
+        });
 
         await Cloud.cfunction("Post", "getSortByIdentifier", {
-          identifier: post["sort"]["identifier"],
+          identifier: post["sort"],
         })
           .then((res) => {
-            setData["post"]["sort"] = res;
+            setData["post.sort"] = res;
             if (this.templateName.includes(res["identifier"])) {
               setData["commentTemplateName"] = res["identifier"] + "_comment";
             } else {
@@ -82,7 +85,7 @@ Page({
           })
           .catch((res) => {
             if (res.error == 404) {
-              setData["post"]["sort"] = null;
+              setData["post.sort"] = null;
             }
           });
 
@@ -102,7 +105,7 @@ Page({
               prefessional: App.userInfo["class"]["profession"],
             };
           }
-          setData["post"]["author"] = {
+          setData["post.author"] = {
             nickname: App.userInfo["nickname"],
             avatar_url: App.userInfo["avatar_url"],
             _id: App.userInfo["_userid"],
@@ -115,13 +118,13 @@ Page({
             _openid: post["_authorid"],
           }).then((user) => {
             if (user.length == 0) {
-              setData["post"]["author"] = {
+              setData["post.author"] = {
                 _id: null,
                 nickname: "同学被隐藏了",
                 avatar_url: "/material/images/anonymous_user.png",
               };
             } else {
-              setData["post"]["author"] = user;
+              setData["post.author"] = user;
             }
           });
         }
