@@ -2,7 +2,8 @@
   {{ content }}
   <view class="post-body-images {{ images.length==1?'post-body-images-single':'post-body-images-multi' }}" hidden="{{ !images }}">
     <block wx:for="{{ images }}" wx:key="index">
-      <image class="post-body-image-item" src="{{ item }}" mode="aspectFill" lazy-load></image>
+      <image class="post-body-image-item" src="{{ item }}" mode="aspectFill" lazy-load wx:if="{{ index<8 }}"></image>
     </block>
+    <view class="post-body-image-item post-body-image-more" wx:if="{{ images.length>8 }}">+{{ images.length-8 }}</view>
   </view>
 </template>
