@@ -54,6 +54,14 @@
   color:var(--font-light-color);
   font-size:24rpx;
 }
+.comment-bottom-left {
+  flex-grow:1;
+}
+.comment-bottom-right {
+  flex-grow:2;
+  display:flex;
+  justify-content: flex-end;
+}
 .comment-like-yes {
   color:var(--main-color);
 }

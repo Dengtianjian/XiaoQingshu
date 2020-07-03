@@ -1,15 +1,20 @@
-<!--miniprogram/pages/post/view/comment/comment.wxml-->
+<!-- miniprogram/pages/post/view/comment/comment.wxml -->
 <navigationBar opacity="0.8" backgroundColor="#ffffff" />
 <CommentItem class="comment" comment="{{ comment }}" />
-
 <view class="comment-reply">
-  <block wx:for="{{ replys }}" wx:key="index" wx:for-item="replyPage">
-    <block wx:for="{{ replyPage }}" wx:key="index" >
+  <block wx:for="{{ replys }}" wx:key="replyPageCount" wx:for-item="replyPage" wx:for-index="replyPageCount">
+    <block wx:for="{{ replyPage }}" wx:key="index">
       <CommentItem class="comment-reply-item" comment="{{ item }}" showLike="{{ false }}">
-        <text class="qcicon qcicon-comments" slot="commentBottom-right" bind:tap="showCommentPopup" data-type="replyReply" data-reply="{{ item }}" />
+        <view class="comment-bottom-right" slot="commentBottom-right">
+          <view class="delete-comment" bind:tap="deleteComment" data-type="replyReply" data-reply="{{ item }}">
+            删除
+          </view>
+          <text class="qcicon qcicon-comments" bind:tap="showCommentPopup" data-replyid="{{ item._id }}" data-page="{{ replyPageCount }}" data-index="{{ index }}" />
+        </view>
       </CommentItem>
     </block>
   </block>
 </view>
+<PagePrompt icon="/material/images/no_comments.png" wx:if="{{ replyCount===0 }}" imageMode="aspectFit" title="暂时还没有同学回复评论哦😞"></PagePrompt>
 <view class="comment-reply-operate-item comment-reply-button qcicon qcicon-suggest" bind:tap="showCommentPopup" data-type="replyComment" data-reply="{{ null }}"></view>
 <InputPopup hidden="{{ hiddenInputReplyPopup }}" bind:submit="replyComment" submitButtonText="发送" value="{{ inputContent }}" />

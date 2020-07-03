@@ -11,6 +11,7 @@ Page({
       _id: null,
     },
     replys: [],
+    replyCount: 0,
     hiddenInputReplyPopup: true,
     commentContent: "",
     inputContent: "",
@@ -22,8 +23,8 @@ Page({
   onLoad: function (options) {
     let commentId = options.commentid;
     let postId = options.postid;
-    // commentId = "e2297d935ec22ea600cf367a72d36abf";
-    // postId = "fddd30c55eacdb9d003d1f3344fa65f3";
+    commentId = "ab79f8175ee4feb7000b0c99707be174";
+    postId = "ab79f8175ee3b5e800040cd43e7710bf";
 
     this.ReplyPagination = new Pagination(this, "replys", 2, false, 6);
 
@@ -102,9 +103,12 @@ Page({
         });
         this.ReplyPagination.insert(replys);
         this.ReplyPagination.setLoading(false);
+        this.setData({
+          replyCount: this.data.replyCount + replys.length,
+        });
       })
-      .catch((res) => {
-        console.log(res);
+      .catch((err) => {
+        console.log(err);
       });
   },
   showCommentPopup({
@@ -181,7 +185,27 @@ Page({
           school: App.userInfo["school"],
         },
       });
+      this.setData({
+        replyCount: this.data.replyCount + 1,
+      });
       this.hideCommentPopup();
     });
   },
+  deleteComment({ target:{ dataset:{ replyid,page,index } } }){
+    const that=this;
+    wx.showModal({
+      title:"确定要删除这条评论吗？",
+      success(res){
+        if(res.confirm){
+          that.ReplyPagination.removeItem(index,page);
+          that.setData({
+            replyCount: that.data.replyCount + -1,
+          });
+          wx.showToast({
+            title:"删除成功"
+          });
+        }
+      }
+    })
+  }
 });

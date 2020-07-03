@@ -7,6 +7,13 @@
   display:block;
   margin-bottom:40rpx;
 }
+.comment-bottom-right {
+  display:flex;
+  justify-content: flex-end;
+}
+.delete-comment {
+  margin-right:10rpx;
+}
 
 /* 回复 */
 .comment-reply {
